@@ -542,6 +542,22 @@ async function saveJson(filename, newData) {
 }
 
 // ══════════════════════════════════════════════════════════════
+// SITEMAP — rebuild sitemap.xml from current articles/books so new
+// content is discoverable by Google & AI search engines
+// ══════════════════════════════════════════════════════════════
+async function updateSitemap() {
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    const enc = u => 'https://dradisak.com/' + u.split('/').map(encodeURIComponent).join('/');
+    const rows = ['<url><loc>https://dradisak.com/</loc><lastmod>'+today+'</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>'];
+    articles.forEach(a => { if (a.url && a.url.trim()) rows.push('<url><loc>'+enc(a.url.trim())+'</loc><lastmod>'+today+'</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>'); });
+    books.forEach(b => { if (b.readUrl && b.readUrl.trim()) rows.push('<url><loc>'+enc(b.readUrl.trim())+'</loc><lastmod>'+today+'</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>'); });
+    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  ' + rows.join('\n  ') + '\n</urlset>\n';
+    await saveFile('sitemap.xml', xml);
+  } catch(e) { console.warn('sitemap update skipped:', e); }
+}
+
+// ══════════════════════════════════════════════════════════════
 // INIT & LOAD
 // ══════════════════════════════════════════════════════════════
 async function init() {
@@ -1049,9 +1065,10 @@ async function submitForm() {
       let url = newItem._existingUrl || '';
       if (newItem._body) {
         if (!url || !url.startsWith('articles/')) url = `articles/art-${Date.now()}.html`;
+        newItem.url = url;  // set before generating so canonical/og:url/JSON-LD are correct
         await saveFile(url, generateArticlePage(newItem));
       }
-      newItem.url = newItem._body ? url : url; // keep existing page link even if editor untouched
+      newItem.url = url; // keep existing page link even if editor untouched
     } else {
       let readUrl = newItem._existingReadUrl || '';
       let pdfUrl  = newItem._existingPdfUrl  || '';
@@ -1062,6 +1079,7 @@ async function submitForm() {
       } else if (newItem._body) {
         // (2) composed eBook → generate page
         if (!readUrl || !readUrl.startsWith('books/')) readUrl = `books/book-${Date.now()}.html`;
+        newItem.readUrl = readUrl;  // set before generating so canonical/og:url/JSON-LD are correct
         await saveFile(readUrl, generateBookPage(newItem));
       }
       // (3) uploaded PDF
@@ -1081,6 +1099,7 @@ async function submitForm() {
     if (index >= 0) arr[index] = saveItem; else arr.push(saveItem);
 
     await saveJson(type === 'article' ? 'articles.json' : 'books.json', arr);
+    await updateSitemap();
     closeForm();
     renderLists();
     toast('บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที ✓', 'success');
@@ -1113,6 +1132,7 @@ async function deleteItem(type, index) {
   const filename = type === 'article' ? 'articles.json' : 'books.json';
   try {
     await saveJson(filename, type === 'article' ? articles : books);
+    await updateSitemap();
     renderLists();
     toast('ลบเรียบร้อยแล้ว', 'success');
   } catch(e) {
@@ -1220,14 +1240,28 @@ function generateArticlePage(a) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${esc(a.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
+<title>${esc(a.title)} | คลินิกรักษ์สมองหมออดิศักดิ์ เชียงใหม่</title>
 <meta name="description" content="${esc(a.desc)}">
+<meta name="keywords" content="${esc(a.cat)}, บทความสุขภาพสมอง, ${esc(a.title)}, นพ.อดิศักดิ์ กิตติสาเรศ, คลินิกรักษ์สมอง, ระบบประสาท เชียงใหม่">
+<meta name="author" content="นพ.อดิศักดิ์ กิตติสาเรศ">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<link rel="canonical" href="https://dradisak.com/${encodeURI(a.url||'')}">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="คลินิกรักษ์สมองหมออดิศักดิ์">
+<meta property="og:url" content="https://dradisak.com/${encodeURI(a.url||'')}">
 <meta property="og:title" content="${esc(a.title)}">
 <meta property="og:description" content="${esc(a.desc)}">
-<meta property="og:image" content="https://dradisak.com/favicon.png">
+<meta property="og:image" content="https://dradisak.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(a.title)}">
+<meta name="twitter:description" content="${esc(a.desc)}">
+<meta name="twitter:image" content="https://dradisak.com/og-image.jpg">
+<script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":["MedicalWebPage","Article"],"headline":a.title,"description":a.desc,"inLanguage":"th","about":a.cat,"articleSection":a.cat,"image":"https://dradisak.com/og-image.jpg","url":"https://dradisak.com/"+(a.url||''),"mainEntityOfPage":"https://dradisak.com/"+(a.url||''),"author":{"@type":"Physician","name":"นพ.อดิศักดิ์ กิตติสาเรศ","url":"https://dradisak.com"},"publisher":{"@type":"MedicalClinic","name":"คลินิกรักษ์สมองหมออดิศักดิ์","logo":{"@type":"ImageObject","url":"https://dradisak.com/favicon.png"}},"isPartOf":{"@type":"WebSite","name":"คลินิกรักษ์สมองหมออดิศักดิ์","url":"https://dradisak.com"}})}<\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1392,14 +1426,28 @@ function generateBookPage(b) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${esc(b.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
+<title>${esc(b.title)} | ${esc(b.series||'Brain Care Series')} · คลินิกรักษ์สมองหมออดิศักดิ์</title>
 <meta name="description" content="${esc(b.desc)}">
+<meta name="keywords" content="${esc(b.title)}, ${esc(b.series||'Brain Care Series')}, หนังสือสุขภาพสมอง, eBook, นพ.อดิศักดิ์ กิตติสาเรศ, คลินิกรักษ์สมอง เชียงใหม่">
+<meta name="author" content="นพ.อดิศักดิ์ กิตติสาเรศ">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<link rel="canonical" href="https://dradisak.com/${encodeURI(b.readUrl||'')}">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="book">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="คลินิกรักษ์สมองหมออดิศักดิ์">
+<meta property="og:url" content="https://dradisak.com/${encodeURI(b.readUrl||'')}">
 <meta property="og:title" content="${esc(b.title)}">
 <meta property="og:description" content="${esc(b.desc)}">
-<meta property="og:image" content="https://dradisak.com/favicon.png">
+<meta property="og:image" content="https://dradisak.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(b.title)}">
+<meta name="twitter:description" content="${esc(b.desc)}">
+<meta name="twitter:image" content="https://dradisak.com/og-image.jpg">
+<script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":"Book","name":b.title,"description":b.desc,"inLanguage":"th","bookFormat":"https://schema.org/EBook","image":"https://dradisak.com/og-image.jpg","url":"https://dradisak.com/"+(b.readUrl||''),"author":{"@type":"Physician","name":"นพ.อดิศักดิ์ กิตติสาเรศ","url":"https://dradisak.com"},"publisher":{"@type":"MedicalClinic","name":"คลินิกรักษ์สมองหมออดิศักดิ์","logo":{"@type":"ImageObject","url":"https://dradisak.com/favicon.png"}}})}<\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
