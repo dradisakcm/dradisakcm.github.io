@@ -645,11 +645,16 @@ function switchTab(name, btn) {
 // ══════════════════════════════════════════════════════════════
 // FORM — OPEN / CLOSE
 // ══════════════════════════════════════════════════════════════
-function openForm(type, index = -1) {
+async function openForm(type, index = -1) {
   try {
     editMode = { type, index };
     const isEdit = index >= 0;
     const data = isEdit ? (type === 'article' ? articles[index] : books[index]) : null;
+    // reset transient upload state
+    window._editPrefill = { body:'', audio:'' };
+    window._audioDataUrl = '';
+    window._bookHtmlUpload = '';
+    window._bookPdfUpload = '';
     document.getElementById('formTitle').textContent =
       isEdit ? (type === 'article' ? 'แก้ไขบทความ' : 'แก้ไขหนังสือ')
              : (type === 'article' ? 'เพิ่มบทความใหม่' : 'เพิ่มหนังสือใหม่');
@@ -658,6 +663,31 @@ function openForm(type, index = -1) {
     initGradientPicker(type, data);
     document.getElementById('formPanel').classList.add('open');
     document.getElementById('dimmer').classList.add('show');
+
+    // ── Load existing generated content for edit pre-fill ──
+    const pageUrl = isEdit
+      ? (type === 'article' ? (data.url || '') : (data.readUrl || ''))
+      : '';
+    if (pageUrl && (pageUrl.startsWith('articles/') || pageUrl.startsWith('books/'))) {
+      toast('กำลังโหลดเนื้อหาเดิม…', '');
+      try {
+        const html = await fetchFileText(pageUrl);
+        const parts = extractParts(html);
+        window._editPrefill = parts;
+        if (parts.body && window._quill) window._quill.root.innerHTML = parts.body;
+        if (parts.audio) {
+          window._audioDataUrl = parts.audio;
+          const prev = document.getElementById('audioPreview');
+          if (prev) {
+            document.getElementById('audioName').textContent = '(ไฟล์เสียงเดิม)';
+            prev.style.display = 'flex';
+          }
+        }
+        if (parts.body || parts.audio) toast('โหลดเนื้อหาเดิมเรียบร้อย ✓', 'success');
+      } catch(fe) {
+        console.warn('prefill load failed', fe);
+      }
+    }
   } catch(err) {
     toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
     console.error('openForm error:', err);
@@ -735,6 +765,8 @@ function buildArticleForm(d) {
 
 function buildBookForm(d) {
   const v = d || {};
+  const curRead = v.readUrl ? escHtml(v.readUrl) : '';
+  const curPdf  = v.pdfUrl  ? escHtml(v.pdfUrl)  : '';
   return `
     <div class="field-row">
       <div class="field">
@@ -754,17 +786,56 @@ function buildBookForm(d) {
       <label>คำอธิบาย *</label>
       <textarea id="fDesc" placeholder="คำอธิบายหนังสือ">${escHtml(v.desc||'')}</textarea>
     </div>
+
     <div class="field">
-      <label>สีพื้นหลังปกหนังสือ</label>
+      <label>เนื้อหา eBook <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(เขียนเอง — แทรกรูปได้ / ไม่บังคับถ้าจะอัปโหลดไฟล์แทน)</span></label>
+      <div id="quillEditor"></div>
+      <p class="editor-hint">💡 เขียนเนื้อหาหนังสือที่นี่ ระบบจะสร้างหน้าอ่านออนไลน์ให้อัตโนมัติ พร้อมปุ่มปรับขนาดตัวอักษรและฟังเสียง</p>
+    </div>
+
+    <div class="field">
+      <label>หรือ อัปโหลดไฟล์ eBook (HTML) <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(ถ้ามีไฟล์หน้าอ่านอยู่แล้ว)</span></label>
+      <label class="audio-upload-label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        เลือกไฟล์ HTML
+        <input type="file" id="fBookHtml" accept=".html,text/html" style="display:none">
+      </label>
+      <div id="htmlPreview" style="margin-top:8px;padding:10px 14px;background:rgba(14,138,132,.08);border-radius:10px;border:1.5px solid rgba(14,138,132,.25);font-size:13px;color:var(--teal-deep);${v.readUrl?'display:flex':'display:none'};align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+        <span id="htmlName">${curRead || 'ไฟล์ eBook'}</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>ไฟล์ PDF <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(สำหรับปุ่มดาวน์โหลด — ไม่บังคับ)</span></label>
+      <label class="audio-upload-label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        เลือกไฟล์ PDF
+        <input type="file" id="fBookPdf" accept="application/pdf,.pdf" style="display:none">
+      </label>
+      <div id="pdfPreview" style="margin-top:8px;padding:10px 14px;background:rgba(184,146,79,.1);border-radius:10px;border:1.5px solid rgba(184,146,79,.3);font-size:13px;color:#8a6a2f;${v.pdfUrl?'display:flex':'display:none'};align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="pdfName">${curPdf || 'ไฟล์ PDF'}</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>ไฟล์เสียงประกอบ <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(ไม่บังคับ — ถ้าไม่อัปโหลดจะใช้ระบบอ่านเสียงอัตโนมัติ)</span></label>
+      <label class="audio-upload-label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        เลือกไฟล์เสียง (MP3, M4A, WAV…)
+        <input type="file" id="fAudio" accept="audio/*" style="display:none">
+      </label>
+      <div id="audioPreview" style="margin-top:8px;padding:10px 14px;background:rgba(14,138,132,.08);border-radius:10px;border:1.5px solid rgba(14,138,132,.25);font-size:13px;color:var(--teal-deep);display:none;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span id="audioName">ไฟล์เสียง</span>
+        <button type="button" onclick="window._audioDataUrl='';document.getElementById('audioPreview').style.display='none';document.getElementById('fAudio').value=''" style="margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:16px">✕</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>สีพื้นหลังปก</label>
       <div class="grad-picker" id="gradPicker"></div>
-    </div>
-    <div class="field">
-      <label>ไฟล์ eBook (.html)</label>
-      <input type="text" id="fReadUrl" value="${escHtml(v.readUrl||'')}" placeholder="Brain Care Series เล่ม 2 - eBook.html">
-    </div>
-    <div class="field">
-      <label>ไฟล์ PDF</label>
-      <input type="text" id="fPdfUrl" value="${escHtml(v.pdfUrl||'')}" placeholder="Brain Care Series เล่ม 2.pdf">
     </div>
     <div class="field">
       <label class="field-check">
@@ -817,12 +888,12 @@ function initGradientPicker(type, data) {
     if (row) row.style.display = catSel.value === '__custom' ? 'block' : 'none';
   });
 
-  // Init Quill editor (article only)
-  if (type === 'article' && document.getElementById('quillEditor')) {
+  // ── Init Quill editor (both articles & books) ──
+  if (document.getElementById('quillEditor')) {
     setTimeout(() => {
       window._quill = new Quill('#quillEditor', {
         theme: 'snow',
-        placeholder: 'เขียนเนื้อหาบทความที่นี่...',
+        placeholder: 'เขียนเนื้อหาที่นี่…',
         modules: {
           toolbar: [
             [{ header: 2 }, { header: 3 }, { header: false }],
@@ -833,7 +904,6 @@ function initGradientPicker(type, data) {
           ]
         }
       });
-      // Custom image handler: file picker → base64 embed
       window._quill.getModule('toolbar').addHandler('image', () => {
         const inp = document.createElement('input');
         inp.type = 'file'; inp.accept = 'image/*';
@@ -844,7 +914,6 @@ function initGradientPicker(type, data) {
             const range = window._quill.getSelection(true) || { index: 0 };
             window._quill.insertEmbed(range.index, 'image', e.target.result);
             window._quill.setSelection(range.index + 1);
-            // Scroll to image so user can see it
             setTimeout(() => {
               const imgs = document.querySelectorAll('#quillEditor .ql-editor img');
               if (imgs.length) imgs[imgs.length-1].scrollIntoView({ behavior:'smooth', block:'center' });
@@ -855,13 +924,14 @@ function initGradientPicker(type, data) {
         };
         inp.click();
       });
-      // Pre-fill content when editing
-      if (data && data._body) window._quill.root.innerHTML = data._body;
+      // Pre-fill from existing content (set by openForm fetch, may arrive before/after)
+      if (window._editPrefill && window._editPrefill.body) {
+        window._quill.root.innerHTML = window._editPrefill.body;
+      }
     }, 60);
   }
 
-  // Audio file upload handler
-  window._audioDataUrl = (data && data._audio) ? data._audio : '';
+  // ── Audio file upload handler (shared) ──
   window._audioName = '';
   const fAudio = document.getElementById('fAudio');
   if (fAudio) {
@@ -877,11 +947,41 @@ function initGradientPicker(type, data) {
       };
       reader.readAsDataURL(file);
     });
-    // Show existing audio if editing
-    if (data && data._audio) {
-      document.getElementById('audioName').textContent = '(ไฟล์เสียงเดิม)';
-      document.getElementById('audioPreview').style.display = 'flex';
-    }
+  }
+
+  // ── Book: upload eBook HTML file ──
+  const fBookHtml = document.getElementById('fBookHtml');
+  if (fBookHtml) {
+    fBookHtml.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        window._bookHtmlUpload = ev.target.result;  // text
+        const prev = document.getElementById('htmlPreview');
+        document.getElementById('htmlName').textContent = file.name;
+        prev.style.display = 'flex';
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // ── Book: upload PDF file ──
+  const fBookPdf = document.getElementById('fBookPdf');
+  if (fBookPdf) {
+    fBookPdf.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const sizeMB = file.size / 1048576;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        // strip data:...;base64, prefix
+        window._bookPdfUpload = String(ev.target.result).split(',')[1] || '';
+        const prev = document.getElementById('pdfPreview');
+        document.getElementById('pdfName').textContent = file.name + ' (' + sizeMB.toFixed(1) + ' MB)';
+        prev.style.display = 'flex';
+        if (sizeMB > 25) toast('ไฟล์ PDF ใหญ่มาก (' + sizeMB.toFixed(1) + ' MB) อาจอัปโหลดไม่สำเร็จ', 'warn');
+      };
+      reader.readAsDataURL(file);
+    });
   }
 }
 
@@ -917,6 +1017,10 @@ async function submitForm() {
   if (!editMode) return;
   const { type, index } = editMode;
 
+  const bodyHtml = window._quill ? window._quill.root.innerHTML.trim() : '';
+  const hasContent = bodyHtml && bodyHtml !== '<p><br></p>' && bodyHtml !== '<p></p>';
+  const audioDataUrl = window._audioDataUrl || '';
+
   let newItem, error;
   if (type === 'article') {
     const cat = document.getElementById('fCat').value === '__custom'
@@ -927,60 +1031,78 @@ async function submitForm() {
     const readMin = parseInt(document.getElementById('fReadMin').value) || 5;
     const featured = document.getElementById('fFeatured').checked;
     const gradient = getGradient('article');
-    const bodyHtml = window._quill ? window._quill.root.innerHTML.trim() : '';
-    const hasContent = bodyHtml && bodyHtml !== '<p><br></p>';
-    const audioDataUrl = window._audioDataUrl || '';
-    if (!cat)   error = 'กรุณาเลือกหมวดหมู่';
+    if (!cat)        error = 'กรุณาเลือกหมวดหมู่';
     else if (!title) error = 'กรุณากรอกชื่อบทความ';
     else if (!desc)  error = 'กรุณากรอกคำอธิบาย';
-    else newItem = { cat, title, desc, readMin, gradient, url: '', featured, _body: hasContent ? bodyHtml : '', _audio: audioDataUrl };
+    else newItem = {
+      cat, title, desc, readMin, gradient, url:'', featured,
+      _body: hasContent ? bodyHtml : '',
+      _audio: audioDataUrl,
+      _existingUrl: (index >= 0 ? (articles[index].url || '') : '')
+    };
   } else {
     const series = document.getElementById('fSeries').value.trim() || 'Brain Care Series';
     const num    = document.getElementById('fNum').value.trim();
     const title  = document.getElementById('fTitle').value.trim();
     const desc   = document.getElementById('fDesc').value.trim();
-    const readUrl = document.getElementById('fReadUrl').value.trim();
-    const pdfUrl  = document.getElementById('fPdfUrl').value.trim();
-    const ready   = document.getElementById('fReady').checked;
+    const ready  = document.getElementById('fReady').checked;
     const gradient = getGradient('book');
-    if (!title) error = 'กรุณากรอกชื่อหนังสือ';
-    else if (!desc) error = 'กรุณากรอกคำอธิบาย';
-    else newItem = { series, num, title, desc, gradient, readUrl, pdfUrl, ready };
+    if (!title)      error = 'กรุณากรอกชื่อหนังสือ';
+    else if (!desc)  error = 'กรุณากรอกคำอธิบาย';
+    else newItem = {
+      series, num, title, desc, gradient, readUrl:'', pdfUrl:'', ready,
+      _body: hasContent ? bodyHtml : '',
+      _audio: audioDataUrl,
+      _existingReadUrl: (index >= 0 ? (books[index].readUrl || '') : ''),
+      _existingPdfUrl:  (index >= 0 ? (books[index].pdfUrl  || '') : '')
+    };
   }
-
   if (error) { toast(error, 'warn'); return; }
 
-  // Update in-memory array
-  const arr = type === 'article' ? articles : books;
-  if (index >= 0) arr[index] = newItem;
-  else arr.push(newItem);
-
-  // Save to GitHub
   setSaving(true);
   try {
-    if (type === 'article' && newItem._body) {
-      // Generate & push article HTML page
-      const ts = newItem.url && newItem.url.startsWith('articles/') ? newItem.url : `articles/art-${Date.now()}.html`;
-      const articleHtml = generateArticlePage(newItem);
-      await saveFile(ts, articleHtml);
-      newItem.url = ts;
-    } else if (type === 'article' && !newItem._body) {
-      newItem.url = newItem.url || ''; // keep empty = "เร็วๆ นี้"
+    if (type === 'article') {
+      let url = newItem._existingUrl || '';
+      if (newItem._body) {
+        if (!url || !url.startsWith('articles/')) url = `articles/art-${Date.now()}.html`;
+        await saveFile(url, generateArticlePage(newItem));
+      }
+      newItem.url = newItem._body ? url : url; // keep existing page link even if editor untouched
+    } else {
+      let readUrl = newItem._existingReadUrl || '';
+      let pdfUrl  = newItem._existingPdfUrl  || '';
+      // (1) uploaded eBook HTML takes priority
+      if (window._bookHtmlUpload) {
+        if (!readUrl || !readUrl.startsWith('books/')) readUrl = `books/book-${Date.now()}.html`;
+        await saveFile(readUrl, window._bookHtmlUpload);
+      } else if (newItem._body) {
+        // (2) composed eBook → generate page
+        if (!readUrl || !readUrl.startsWith('books/')) readUrl = `books/book-${Date.now()}.html`;
+        await saveFile(readUrl, generateBookPage(newItem));
+      }
+      // (3) uploaded PDF
+      if (window._bookPdfUpload) {
+        if (!pdfUrl || !pdfUrl.startsWith('books/')) pdfUrl = `books/book-${Date.now()}.pdf`;
+        await saveFile(pdfUrl, window._bookPdfUpload, true);
+      }
+      newItem.readUrl = readUrl;
+      newItem.pdfUrl  = pdfUrl;
     }
-    // Strip internal _body before saving to json (keep json small)
-    const saveItem = Object.assign({}, newItem);
-    delete saveItem._body;
-    delete saveItem._audio;
-    if (index >= 0) arr[index] = saveItem; else { arr.pop(); arr.push(saveItem); }
 
-    await saveJson(type === 'article' ? 'articles.json' : 'books.json', type === 'article' ? articles : books);
+    // strip internal fields before writing JSON
+    const saveItem = Object.assign({}, newItem);
+    ['_body','_audio','_existingUrl','_existingReadUrl','_existingPdfUrl'].forEach(k => delete saveItem[k]);
+
+    const arr = type === 'article' ? articles : books;
+    if (index >= 0) arr[index] = saveItem; else arr.push(saveItem);
+
+    await saveJson(type === 'article' ? 'articles.json' : 'books.json', arr);
     closeForm();
     renderLists();
-    toast(newItem._body ? 'เผยแพร่บทความแล้ว! เว็บจะอัปเดตใน ~60 วินาที ✓' : 'บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที', 'success');
+    toast('บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที ✓', 'success');
   } catch(e) {
-    toast(e.message, 'error');
-    if (index >= 0) arr[index] = (type === 'article' ? articles : books)[index];
-    else arr.pop();
+    toast('บันทึกไม่สำเร็จ: ' + e.message, 'error');
+    console.error('submitForm error:', e);
   } finally {
     setSaving(false);
   }
@@ -999,7 +1121,8 @@ function setSaving(on) {
 // ══════════════════════════════════════════════════════════════
 async function deleteItem(type, index) {
   const arr = type === 'article' ? articles : books;
-  const name = arr[index].title;
+  const item = arr[index];
+  const name = item.title;
   if (!confirm(`ลบ "${name}" ?\nการลบนี้ไม่สามารถกู้คืนได้`)) return;
 
   arr.splice(index, 1);
@@ -1009,8 +1132,7 @@ async function deleteItem(type, index) {
     renderLists();
     toast('ลบเรียบร้อยแล้ว', 'success');
   } catch(e) {
-    // revert
-    arr.splice(index, 0, name);
+    arr.splice(index, 0, item); // revert with the real object
     toast('ลบไม่สำเร็จ: ' + e.message, 'error');
   }
 }
@@ -1035,21 +1157,59 @@ function escHtml(s) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// SAVE FILE (for article HTML pages)
+// FILE HELPERS (GitHub Contents API — works for files of any size)
 // ══════════════════════════════════════════════════════════════
-async function saveFile(path, htmlContent) {
-  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${encodeURIComponent(path)}`;
-  let sha = null;
-  const getRes = await fetch(url, { headers: ghHeaders() });
-  if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
-  const b64 = btoa(unescape(encodeURIComponent(htmlContent)));
-  const body = { message: `อัปเดตบทความ: ${path}`, content: b64 };
+function pathEnc(p) { return String(p).split('/').map(encodeURIComponent).join('/'); }
+
+// Get a file's SHA via directory listing (works regardless of file size)
+async function getFileSha(path) {
+  const idx = path.lastIndexOf('/');
+  const dir  = idx >= 0 ? path.slice(0, idx) : '';
+  const name = idx >= 0 ? path.slice(idx + 1) : path;
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${dir ? pathEnc(dir) : ''}`;
+  const res = await fetch(url, { headers: ghHeaders() });
+  if (!res.ok) return null;
+  const list = await res.json();
+  if (!Array.isArray(list)) return null;
+  const f = list.find(x => x.name === name);
+  return f ? f.sha : null;
+}
+
+// Fetch a file's text content via raw media type (handles >1MB files)
+async function fetchFileText(path) {
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${pathEnc(path)}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${ghToken()}`, 'Accept': 'application/vnd.github.raw' }
+  });
+  if (!res.ok) return null;
+  return await res.text();
+}
+
+// Extract editor content + audio from a previously generated page
+function extractParts(html) {
+  if (!html) return { body:'', audio:'' };
+  let body = '';
+  const m = html.match(/<!--\s*(?:ARTICLE-|BOOK-)?CONTENT-START\s*-->([\s\S]*?)<!--\s*(?:ARTICLE-|BOOK-)?CONTENT-END\s*-->/);
+  if (m) body = m[1].trim();
+  let audio = '';
+  const am = html.match(/<audio[^>]*src="(data:audio[^"]*)"/);
+  if (am) audio = am[1];
+  return { body, audio };
+}
+
+// Write a file (text → utf8 base64, or pass isBase64=true for pre-encoded binary)
+async function saveFile(path, content, isBase64) {
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${pathEnc(path)}`;
+  const sha = await getFileSha(path);
+  const b64 = isBase64 ? content : btoa(unescape(encodeURIComponent(content)));
+  const body = { message: `อัปเดตไฟล์: ${path}`, content: b64 };
   if (sha) body.sha = sha;
   const putRes = await fetch(url, { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
   if (!putRes.ok) {
     const err = await putRes.json().catch(()=>({}));
     throw new Error(err.message || `HTTP ${putRes.status}`);
   }
+  return putRes.json();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1057,6 +1217,20 @@ async function saveFile(path, htmlContent) {
 // ══════════════════════════════════════════════════════════════
 function generateArticlePage(a) {
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const hasAudio = !!(a._audio && a._audio.startsWith('data:audio'));
+
+  const mediaHTML = hasAudio
+    ? '<div class="audio-player-wrap">'
+      + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังบทความ (ไฟล์เสียง)</div>'
+      + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + a._audio + '"></audio>'
+      + '</div>'
+    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังบทความ</button>'
+      + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
+      + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
+      + '<div id="tts-label">พร้อมเล่น</div>'
+      + '<select id="tts-speed"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>'
+      + '<button id="tts-close">✕</button></div></div>';
+
   return `<!DOCTYPE html>
 <html lang="th">
 <head>
@@ -1071,7 +1245,7 @@ function generateArticlePage(a) {
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);background:var(--paper);line-height:1.85;-webkit-font-smoothing:antialiased}
 .top-bar{position:sticky;top:0;z-index:100;background:rgba(251,249,245,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(14,34,51,.08);padding:12px 24px;display:flex;align-items:center;gap:16px}
-.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-size:14px;font-weight:500;text-decoration:none;transition:.2s}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-size:14px;font-weight:500;text-decoration:none}
 .back-btn:hover{color:var(--teal-deep)}
 .top-bar .clinic-name{font-size:13px;color:var(--ink-soft);font-family:'Noto Serif Thai',serif}
 .read-bar{height:3px;background:linear-gradient(90deg,var(--teal),var(--glow));position:fixed;top:0;left:0;width:0%;z-index:200;transition:width .1s linear}
@@ -1082,7 +1256,7 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-meta svg{flex-shrink:0}
 .art-desc{font-size:17px;color:var(--ink-soft);line-height:1.7;border-left:3px solid var(--teal);padding-left:16px;font-style:italic}
 .art-divider{max-width:780px;margin:32px auto;border:none;border-top:1px solid rgba(14,34,51,.1)}
-.art-body{max-width:720px;margin:0 auto;padding:0 24px 80px}
+.art-body{max-width:720px;margin:0 auto;padding:0 24px 100px}
 .art-body h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#4338ca;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(67,56,202,.18)}
 .art-body h3{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:600;color:var(--teal-deep);margin:28px 0 10px}
 .art-body p{margin-bottom:16px;font-size:16px;line-height:1.85}
@@ -1091,12 +1265,13 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:20px 0;font-style:italic;color:var(--ink-soft)}
 .art-body img{max-width:100%;border-radius:14px;margin:20px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
 .art-body a{color:var(--teal);text-decoration:underline}
-.art-footer{max-width:720px;margin:0 auto;padding:0 24px 60px}
-.back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none;transition:.2s}
-.back-home:hover{background:var(--teal-deep);transform:translateY(-1px)}
-/* TTS */
-#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px;transition:.25s}
-#tts-fab:hover{background:var(--teal-deep);transform:translateY(-2px)}
+.art-footer{max-width:720px;margin:0 auto;padding:0 24px 90px}
+.back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none}
+.back-home:hover{background:var(--teal-deep)}
+.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
+.audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
+#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px}
+#tts-fab:hover{background:var(--teal-deep)}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
@@ -1107,15 +1282,13 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 #tts-speed{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;padding:4px 8px;font-size:11px;cursor:pointer}
 #tts-speed option{background:#0e1a28}
 #tts-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;padding:0 4px}
-</style>
+.tts-hl{background:rgba(67,210,200,.18);border-radius:4px}
+<\/style>
 </head>
 <body>
 <div class="read-bar" id="readBar"></div>
 <div class="top-bar">
-  <a href="../index.html" class="back-btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    กลับหน้าหลัก
-  </a>
+  <a href="../index.html" class="back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>กลับหน้าหลัก</a>
   <span class="clinic-name">คลินิกรักษ์สมองหมออดิศักดิ์</span>
 </div>
 <div class="hero">
@@ -1123,8 +1296,7 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
   <h1 class="art-title">${esc(a.title)}</h1>
   <div class="art-meta">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-    อ่าน ${a.readMin || 5} นาที
-    &nbsp;·&nbsp;
+    อ่าน ${a.readMin || 5} นาที &nbsp;·&nbsp;
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     นพ.อดิศักดิ์ กิตติสาเรศ
   </div>
@@ -1137,45 +1309,11 @@ ${a._body || ''}
 <!-- ARTICLE-CONTENT-END -->
 </article>
 <div class="art-footer">
-  <a href="../index.html" class="back-home">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-    กลับหน้าคลินิก
-  </a>
+  <a href="../index.html" class="back-home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับหน้าคลินิก</a>
 </div>
-\${a._audio ? \`
-<div class="audio-player-wrap">
-  <div class="audio-label">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-    ฟังบทความ (ไฟล์เสียง)
-  </div>
-  <audio controls style="width:100%;border-radius:10px;margin-top:6px" src="\${a._audio}"></audio>
-</div>
-\` : \`
-<button id="tts-fab">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-  ฟังบทความ
-</button>
-<div id="tts-bar">
-  <div id="tts-track"><div id="tts-fill"></div></div>
-  <div id="tts-controls">
-    <button id="tts-play-btn">▶</button>
-    <button id="tts-stop-btn">⏹</button>
-    <div id="tts-label">พร้อมเล่น</div>
-    <select id="tts-speed"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
-    <button id="tts-close">✕</button>
-  </div>
-</div>
-\`}
-<\/style>
-<style>
-.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
-.audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:4px;font-family:'Noto Serif Thai',serif}
-<\/style>
+${mediaHTML}
 <script>
-window.addEventListener('scroll',()=>{
-  const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;
-  document.getElementById('readBar').style.width=(s/m*100)+'%';
-},{passive:true});
+window.addEventListener('scroll',()=>{const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;document.getElementById('readBar').style.width=(s/m*100)+'%';},{passive:true});
 (function(){
   const nodes=[...document.querySelectorAll('.art-body h2,.art-body h3,.art-body p')].filter(n=>n.textContent.trim().length>3);
   let cur=-1,playing=false,speed=1,thVoice=null;
@@ -1186,18 +1324,155 @@ window.addEventListener('scroll',()=>{
     nodes[i].classList.add('tts-hl');nodes[i].scrollIntoView({behavior:'smooth',block:'center'});
     updateUI();const u=new SpeechSynthesisUtterance(nodes[i].textContent.trim());
     u.lang='th-TH';u.rate=speed;if(thVoice)u.voice=thVoice;
-    u.onend=()=>{if(playing)speak(cur+1);};u.onerror=()=>{if(playing)speak(cur+1);};
+    u.onend=()=>{if(playing)speak(cur+1);};u.onerror=()=>{if(playing)speak(cur+1);}
     speechSynthesis.cancel();speechSynthesis.speak(u);}
   function play(){playing=true;speak(cur<0?0:cur);}
   function pause(){playing=false;speechSynthesis.cancel();updateUI();}
   function stop(){playing=false;cur=-1;speechSynthesis.cancel();document.querySelectorAll('.tts-hl').forEach(e=>e.classList.remove('tts-hl'));updateUI();}
-  function updateUI(){
-    const b=document.getElementById('tts-play-btn');if(b)b.textContent=playing?'⏸':'▶';
+  function updateUI(){const b=document.getElementById('tts-play-btn');if(b)b.textContent=playing?'⏸':'▶';
     const f=document.getElementById('tts-fill');if(f)f.style.width=(cur>=0?(cur/(nodes.length-1))*100:0)+'%';
     const l=document.getElementById('tts-label');if(l)l.textContent=cur>=0?nodes[cur].textContent.trim().slice(0,50)+'…':'พร้อมเล่น';}
-  document.getElementById('tts-track')?.addEventListener('click',e=>{
-    const r=e.currentTarget.getBoundingClientRect(),p=(e.clientX-r.left)/r.width,i=Math.round(p*(nodes.length-1));
-    playing=true;speak(Math.max(0,Math.min(i,nodes.length-1)));});
+  document.getElementById('tts-track')?.addEventListener('click',e=>{const r=e.currentTarget.getBoundingClientRect(),p=(e.clientX-r.left)/r.width,i=Math.round(p*(nodes.length-1));playing=true;speak(Math.max(0,Math.min(i,nodes.length-1)));});
+  document.getElementById('tts-play-btn')?.addEventListener('click',()=>playing?pause():play());
+  document.getElementById('tts-stop-btn')?.addEventListener('click',stop);
+  document.getElementById('tts-close')?.addEventListener('click',()=>{stop();document.getElementById('tts-bar').classList.remove('open');document.getElementById('tts-fab').style.display='flex';});
+  document.getElementById('tts-speed')?.addEventListener('change',e=>{speed=parseFloat(e.target.value);if(playing){speechSynthesis.cancel();speak(cur);}});
+  document.getElementById('tts-fab')?.addEventListener('click',()=>{document.getElementById('tts-bar').classList.add('open');document.getElementById('tts-fab').style.display='none';if(!playing)play();});
+  updateUI();
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// GENERATE BOOK (eBook) PAGE — reading layout + font-size + audio/TTS
+// ══════════════════════════════════════════════════════════════
+function generateBookPage(b) {
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const hasAudio = !!(b._audio && b._audio.startsWith('data:audio'));
+
+  const mediaHTML = hasAudio
+    ? '<div class="audio-player-wrap">'
+      + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังหนังสือ (ไฟล์เสียง)</div>'
+      + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + b._audio + '"></audio>'
+      + '</div>'
+    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังหนังสือ</button>'
+      + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
+      + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
+      + '<div id="tts-label">พร้อมเล่น</div>'
+      + '<select id="tts-speed"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>'
+      + '<button id="tts-close">✕</button></div></div>';
+
+  return `<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${esc(b.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
+<meta name="description" content="${esc(b.desc)}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E2233;--ink-soft:#46596A;--teal:#0E8A84;--teal-deep:#0A5F5B;--glow:#43D2C8;--paper:#FBF9F5;--paper-2:#F3EFE8;--gold:#B8924F;--fs:1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);background:var(--paper);line-height:1.9;-webkit-font-smoothing:antialiased}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(251,249,245,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(14,34,51,.08);padding:12px 24px;display:flex;align-items:center;gap:16px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-size:14px;font-weight:500;text-decoration:none}
+.back-btn:hover{color:var(--teal-deep)}
+.top-bar .clinic-name{font-size:13px;color:var(--ink-soft);font-family:'Noto Serif Thai',serif}
+.read-bar{height:3px;background:linear-gradient(90deg,var(--teal),var(--glow));position:fixed;top:0;left:0;width:0%;z-index:200;transition:width .1s linear}
+.hero{padding:56px 24px 36px;max-width:760px;margin:0 auto;text-align:center}
+.series-badge{display:inline-block;background:rgba(184,146,79,.12);color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.1em;padding:4px 16px;border-radius:999px;margin-bottom:14px;font-family:'Noto Serif Thai',serif}
+.book-title{font-family:'Noto Serif Thai',serif;font-size:clamp(26px,4.2vw,40px);font-weight:700;line-height:1.3;color:var(--ink);margin-bottom:10px}
+.book-num{font-size:14px;color:var(--ink-soft);font-family:'Noto Serif Thai',serif}
+.book-desc{font-size:16px;color:var(--ink-soft);line-height:1.7;margin-top:14px;max-width:600px;margin-left:auto;margin-right:auto}
+.art-divider{max-width:760px;margin:28px auto;border:none;border-top:1px solid rgba(14,34,51,.1)}
+.art-body{max-width:720px;margin:0 auto;padding:0 24px 120px;font-size:calc(17px * var(--fs))}
+.art-body h2{font-family:'Noto Serif Thai',serif;font-size:calc(23px * var(--fs));font-weight:700;color:#4338ca;margin:38px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(67,56,202,.18)}
+.art-body h3{font-family:'Noto Serif Thai',serif;font-size:calc(19px * var(--fs));font-weight:600;color:var(--teal-deep);margin:30px 0 10px}
+.art-body p{margin-bottom:18px;line-height:1.95}
+.art-body ul,.art-body ol{margin:0 0 18px 26px}
+.art-body li{margin-bottom:8px;line-height:1.85}
+.art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:22px 0;font-style:italic;color:var(--ink-soft)}
+.art-body img{max-width:100%;border-radius:14px;margin:22px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
+.art-body a{color:var(--teal);text-decoration:underline}
+.art-footer{max-width:720px;margin:0 auto;padding:0 24px 90px;text-align:center}
+.back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none}
+.back-home:hover{background:var(--teal-deep)}
+/* Font-size widget */
+#fs-widget{position:fixed;bottom:20px;left:20px;z-index:500;background:#fff;border:1px solid rgba(14,34,51,.12);border-radius:50px;padding:6px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 18px rgba(14,34,51,.15)}
+#fs-widget button{width:34px;height:34px;border:none;background:var(--paper-2);border-radius:50%;color:var(--ink);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#fs-widget button:hover{background:var(--teal);color:#fff}
+#fs-widget .fs-label{font-size:12px;color:var(--ink-soft);padding:0 4px;min-width:34px;text-align:center}
+/* Audio player */
+.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
+.audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
+/* TTS */
+#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px}
+#tts-fab:hover{background:var(--teal-deep)}
+#tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
+#tts-bar.open{transform:translateY(0)}
+#tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
+#tts-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--glow));border-radius:3px;pointer-events:none;transition:width .3s linear}
+#tts-controls{display:flex;align-items:center;gap:10px}
+#tts-play-btn,#tts-stop-btn{background:none;border:1.5px solid rgba(255,255,255,.3);border-radius:50%;width:34px;height:34px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+#tts-label{flex:1;font-size:13px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#tts-speed{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;padding:4px 8px;font-size:11px;cursor:pointer}
+#tts-speed option{background:#0e1a28}
+#tts-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;padding:0 4px}
+<\/style>
+</head>
+<body>
+<div class="read-bar" id="readBar"></div>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>กลับหน้าหลัก</a>
+  <span class="clinic-name">คลินิกรักษ์สมองหมออดิศักดิ์</span>
+</div>
+<div class="hero">
+  <div class="series-badge">${esc(b.series||'Brain Care Series')}</div>
+  <h1 class="book-title">${esc(b.title)}</h1>
+  <div class="book-num">${esc(b.num||'')}</div>
+  <p class="book-desc">${esc(b.desc)}</p>
+</div>
+<hr class="art-divider">
+<article class="art-body">
+<!-- BOOK-CONTENT-START -->
+${b._body || ''}
+<!-- BOOK-CONTENT-END -->
+</article>
+<div class="art-footer">
+  <a href="../index.html" class="back-home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับหน้าคลินิก</a>
+</div>
+<div id="fs-widget">
+  <button onclick="fsAdj(-1)">A−</button>
+  <span class="fs-label" id="fsLabel">100%</span>
+  <button onclick="fsAdj(1)">A+</button>
+</div>
+${mediaHTML}
+<script>
+var FS_LEVELS=[0.85,0.92,1,1.12,1.26],fsIdx=2;
+function fsAdj(d){fsIdx=Math.max(0,Math.min(FS_LEVELS.length-1,fsIdx+d));document.documentElement.style.setProperty('--fs',FS_LEVELS[fsIdx]);document.getElementById('fsLabel').textContent=Math.round(FS_LEVELS[fsIdx]*100)+'%';}
+window.addEventListener('scroll',()=>{const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;document.getElementById('readBar').style.width=(s/m*100)+'%';},{passive:true});
+(function(){
+  const nodes=[...document.querySelectorAll('.art-body h2,.art-body h3,.art-body p')].filter(n=>n.textContent.trim().length>3);
+  let cur=-1,playing=false,speed=1,thVoice=null;
+  function fv(){const v=speechSynthesis.getVoices();thVoice=v.find(x=>x.lang.startsWith('th'))||null;}
+  speechSynthesis.onvoiceschanged=fv;fv();
+  function speak(i){if(i<0||i>=nodes.length){stop();return;}cur=i;
+    document.querySelectorAll('.tts-hl').forEach(e=>e.classList.remove('tts-hl'));
+    nodes[i].classList.add('tts-hl');nodes[i].scrollIntoView({behavior:'smooth',block:'center'});
+    updateUI();const u=new SpeechSynthesisUtterance(nodes[i].textContent.trim());
+    u.lang='th-TH';u.rate=speed;if(thVoice)u.voice=thVoice;
+    u.onend=()=>{if(playing)speak(cur+1);};u.onerror=()=>{if(playing)speak(cur+1);}
+    speechSynthesis.cancel();speechSynthesis.speak(u);}
+  function play(){playing=true;speak(cur<0?0:cur);}
+  function pause(){playing=false;speechSynthesis.cancel();updateUI();}
+  function stop(){playing=false;cur=-1;speechSynthesis.cancel();document.querySelectorAll('.tts-hl').forEach(e=>e.classList.remove('tts-hl'));updateUI();}
+  function updateUI(){const b=document.getElementById('tts-play-btn');if(b)b.textContent=playing?'⏸':'▶';
+    const f=document.getElementById('tts-fill');if(f)f.style.width=(cur>=0?(cur/(nodes.length-1))*100:0)+'%';
+    const l=document.getElementById('tts-label');if(l)l.textContent=cur>=0?nodes[cur].textContent.trim().slice(0,50)+'…':'พร้อมเล่น';}
+  document.getElementById('tts-track')?.addEventListener('click',e=>{const r=e.currentTarget.getBoundingClientRect(),p=(e.clientX-r.left)/r.width,i=Math.round(p*(nodes.length-1));playing=true;speak(Math.max(0,Math.min(i,nodes.length-1)));});
   document.getElementById('tts-play-btn')?.addEventListener('click',()=>playing?pause():play());
   document.getElementById('tts-stop-btn')?.addEventListener('click',stop);
   document.getElementById('tts-close')?.addEventListener('click',()=>{stop();document.getElementById('tts-bar').classList.remove('open');document.getElementById('tts-fab').style.display='flex';});
