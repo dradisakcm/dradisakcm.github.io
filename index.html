@@ -532,7 +532,11 @@ html[lang="en"] .social-content h3{font-family:var(--f-en-head)}
 .art-search input::placeholder{color:var(--ink-soft);opacity:.7}
 .art-card.hidden{display:none}
 /* TTS button on article cards */
-.art-audio{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft)}
+.art-read-btn{margin-top:16px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);color:#fff;border-radius:999px;padding:11px 18px;font-size:14px;font-weight:600;letter-spacing:.01em;box-shadow:0 4px 14px rgba(14,138,132,.30);transition:transform .25s,box-shadow .3s}
+.art-read-btn svg{transition:transform .25s}
+.art-card:hover .art-read-btn{box-shadow:0 8px 22px rgba(14,138,132,.45);transform:translateY(-1px)}
+.art-card:hover .art-read-btn svg{transform:translateX(3px)}
+.art-audio{margin-top:10px;padding-top:0;border-top:none}
 .art-audio-btn{width:100%;justify-content:center;background:none;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.2s;white-space:nowrap}
 .art-audio-btn:hover{background:var(--teal);color:#fff}
 .art-audio-btn.disabled{border-color:var(--line-soft);color:var(--ink-soft);opacity:.55;cursor:not-allowed}
@@ -1518,6 +1522,8 @@ function renderArticles(data, append=false) {
     const audioBtn = hasAudio
       ? `<button class="art-audio-btn" onclick="openAudio(event,'${String(a.audioUrl).replace(/'/g,"\\'")}')">${audioSvg} ฟังเสียงอ่าน</button>`
       : `<button class="art-audio-btn disabled" disabled aria-disabled="true" title="ยังไม่มีเสียงอ่าน">${audioSvg} ฟังเสียงอ่าน</button>`;
+    const arrowSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+    const readBtn = hasUrl ? `<span class="art-read-btn">อ่านบทความ ${arrowSvg}</span>` : '';
     return `${tag}
       <div class="art-cover"><div class="mesh" style="background:${a.gradient}"></div>
         <span class="cat">${a.cat}</span>${badge}
@@ -1529,6 +1535,7 @@ function renderArticles(data, append=false) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           อ่าน ${a.readMin} นาที
         </div>
+        ${readBtn}
         <div class="art-audio">${audioBtn}</div>
       </div>${closeTag}`;
   }).join('');

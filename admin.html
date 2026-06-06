@@ -1224,10 +1224,10 @@ function generateArticlePage(a) {
   const hasAudio = !!(a._audio && a._audio.startsWith('data:audio'));
 
   const mediaHTML = hasAudio
-    ? '<div class="audio-player-wrap">'
-      + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังบทความ (ไฟล์เสียง)</div>'
-      + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + a._audio + '"></audio>'
-      + '</div>'
+    ? '<button id="audio-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังบทความ</button>'
+      + '<div id="audio-bar"><div class="audio-bar-head"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> ฟังบทความ (เสียงบรรยาย)</span><button id="audio-close" aria-label="ปิด">✕</button></div>'
+      + '<audio id="art-audio-el" controls src="' + a._audio + '"></audio></div>'
+      + '<script>(function(){var f=document.getElementById("audio-fab"),b=document.getElementById("audio-bar"),c=document.getElementById("audio-close"),a=document.getElementById("art-audio-el");if(f&&b){f.addEventListener("click",function(){b.classList.add("open");f.style.display="none";if(a){a.play().catch(function(){});}});if(c){c.addEventListener("click",function(){b.classList.remove("open");f.style.display="flex";if(a){a.pause();}});}}})();<\/script>'
     : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังเสียงอ่านบทความ</button>'
       + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
       + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
@@ -1314,6 +1314,17 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 #tts-fab:hover{transform:translateY(-2px)}
 @keyframes fabPulse{0%,100%{box-shadow:0 8px 26px rgba(14,138,132,.4)}50%{box-shadow:0 8px 32px rgba(14,138,132,.6),0 0 0 7px rgba(67,210,200,.16)}}
 @media(max-width:480px){.fnav-btn{width:100%;justify-content:center}.share-btn{padding:9px 13px;font-size:13px}#tts-fab{padding:12px 18px;font-size:14px}}
+/* Floating audio button + slide-up player (embedded narration) */
+#audio-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
+#audio-fab svg{width:19px;height:19px}
+#audio-fab:hover{transform:translateY(-2px)}
+#audio-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:14px 18px calc(16px + env(safe-area-inset-bottom));transform:translateY(110%);transition:.35s cubic-bezier(.4,0,.2,1)}
+#audio-bar.open{transform:translateY(0)}
+.audio-bar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font-size:13.5px;font-family:'Noto Serif Thai',serif;color:rgba(255,255,255,.85)}
+.audio-bar-head span{display:flex;align-items:center;gap:7px}
+#audio-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;line-height:1;cursor:pointer;padding:0 4px}
+#audio-bar audio{width:100%;height:40px}
+@media(max-width:480px){#audio-fab{padding:12px 18px;font-size:14px}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
@@ -1414,7 +1425,7 @@ function generateBookPage(b) {
       + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังหนังสือ (ไฟล์เสียง)</div>'
       + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + b._audio + '"></audio>'
       + '</div>'
-    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังเสียงอ่านหนังสือ</button>'
+    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span class="fab-txt">ฟังหนังสือ</span></button>'
       + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
       + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
       + '<div id="tts-label">พร้อมเล่น</div>'
@@ -1501,12 +1512,13 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 /* Audio player */
 .audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
 .audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
-/* TTS */
-#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
-#tts-fab svg{width:19px;height:19px}
+/* TTS — compact so it never overlaps the A−/A+ font-size widget (bottom-left) */
+#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:9px 17px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(14,138,132,.4);display:flex;align-items:center;gap:7px;animation:fabPulse 2.6s ease-in-out infinite}
+#tts-fab svg{width:17px;height:17px}
 #tts-fab:hover{transform:translateY(-2px)}
-@keyframes fabPulse{0%,100%{box-shadow:0 8px 26px rgba(14,138,132,.4)}50%{box-shadow:0 8px 32px rgba(14,138,132,.6),0 0 0 7px rgba(67,210,200,.16)}}
-@media(max-width:480px){#tts-fab{padding:12px 18px;font-size:14px}}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 20px rgba(14,138,132,.38)}50%{box-shadow:0 6px 26px rgba(14,138,132,.55),0 0 0 6px rgba(67,210,200,.15)}}
+@media(max-width:600px){#tts-fab{bottom:18px;right:14px;padding:8px 13px;font-size:12px}#fs-widget{bottom:18px;left:14px}}
+@media(max-width:430px){#tts-fab .fab-txt{display:none}#tts-fab{padding:11px;border-radius:50%}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
