@@ -701,7 +701,20 @@ function buildArticleForm(d) {
     <div class="field">
       <label>เนื้อหาบทความ <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(ไม่บังคับ — ถ้ายังไม่มีเว็บจะแสดง "เร็วๆ นี้")</span></label>
       <div id="quillEditor"></div>
-      <p class="editor-hint">💡 แทรกรูปได้โดยกดไอคอน 🖼 ในแถบ toolbar ด้านบน</p>
+      <p class="editor-hint">💡 แทรกรูปได้โดยกดไอคอน 🖼 ในแถบ toolbar — รูปจะปรากฏในกล่องเนื้อหาพร้อมกรอบสีเขียว</p>
+    </div>
+    <div class="field">
+      <label>ไฟล์เสียงบทความ <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(ไม่บังคับ — ถ้าไม่อัปโหลดจะใช้ระบบอ่านเสียงอัตโนมัติ)</span></label>
+      <label class="audio-upload-label" id="audioUploadLabel">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        เลือกไฟล์เสียง (MP3, M4A, WAV…)
+        <input type="file" id="fAudio" accept="audio/*" style="display:none">
+      </label>
+      <div id="audioPreview" style="display:none;margin-top:8px;padding:10px 14px;background:rgba(14,138,132,.08);border-radius:10px;border:1.5px solid rgba(14,138,132,.25);font-size:13px;color:var(--teal-deep);display:none;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span id="audioName">ไฟล์เสียง</span>
+        <button onclick="window._audioDataUrl='';window._audioName='';document.getElementById('audioPreview').style.display='none';document.getElementById('fAudio').value=''" style="margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:16px">✕</button>
+      </div>
     </div>
     <div class="field">
       <label>สีพื้นหลังการ์ด</label>
@@ -826,6 +839,12 @@ function initGradientPicker(type, data) {
             const range = window._quill.getSelection(true) || { index: 0 };
             window._quill.insertEmbed(range.index, 'image', e.target.result);
             window._quill.setSelection(range.index + 1);
+            // Scroll to image so user can see it
+            setTimeout(() => {
+              const imgs = document.querySelectorAll('#quillEditor .ql-editor img');
+              if (imgs.length) imgs[imgs.length-1].scrollIntoView({ behavior:'smooth', block:'center' });
+              toast('แทรกรูปแล้ว! รูปปรากฏในกล่องเนื้อหาด้านบน (มีกรอบเขียว)', 'success');
+            }, 100);
           };
           reader.readAsDataURL(file);
         };
@@ -834,6 +853,30 @@ function initGradientPicker(type, data) {
       // Pre-fill content when editing
       if (d && d._body) window._quill.root.innerHTML = d._body;
     }, 60);
+  }
+
+  // Audio file upload handler
+  window._audioDataUrl = (d && d._audio) ? d._audio : '';
+  window._audioName = '';
+  const fAudio = document.getElementById('fAudio');
+  if (fAudio) {
+    fAudio.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        window._audioDataUrl = ev.target.result;
+        window._audioName = file.name;
+        const prev = document.getElementById('audioPreview');
+        document.getElementById('audioName').textContent = file.name;
+        prev.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    });
+    // Show existing audio if editing
+    if (d && d._audio) {
+      document.getElementById('audioName').textContent = '(ไฟล์เสียงเดิม)';
+      document.getElementById('audioPreview').style.display = 'flex';
+    }
   }
 }
 
@@ -881,10 +924,11 @@ async function submitForm() {
     const gradient = getGradient('article');
     const bodyHtml = window._quill ? window._quill.root.innerHTML.trim() : '';
     const hasContent = bodyHtml && bodyHtml !== '<p><br></p>';
+    const audioDataUrl = window._audioDataUrl || '';
     if (!cat)   error = 'กรุณาเลือกหมวดหมู่';
     else if (!title) error = 'กรุณากรอกชื่อบทความ';
     else if (!desc)  error = 'กรุณากรอกคำอธิบาย';
-    else newItem = { cat, title, desc, readMin, gradient, url: '', featured, _body: hasContent ? bodyHtml : '' };
+    else newItem = { cat, title, desc, readMin, gradient, url: '', featured, _body: hasContent ? bodyHtml : '', _audio: audioDataUrl };
   } else {
     const series = document.getElementById('fSeries').value.trim() || 'Brain Care Series';
     const num    = document.getElementById('fNum').value.trim();
@@ -921,6 +965,7 @@ async function submitForm() {
     // Strip internal _body before saving to json (keep json small)
     const saveItem = Object.assign({}, newItem);
     delete saveItem._body;
+    delete saveItem._audio;
     if (index >= 0) arr[index] = saveItem; else { arr.pop(); arr.push(saveItem); }
 
     await saveJson(type === 'article' ? 'articles.json' : 'books.json', type === 'article' ? articles : books);
@@ -1033,7 +1078,7 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-desc{font-size:17px;color:var(--ink-soft);line-height:1.7;border-left:3px solid var(--teal);padding-left:16px;font-style:italic}
 .art-divider{max-width:780px;margin:32px auto;border:none;border-top:1px solid rgba(14,34,51,.1)}
 .art-body{max-width:720px;margin:0 auto;padding:0 24px 80px}
-.art-body h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--ink);margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(14,138,132,.15)}
+.art-body h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#4338ca;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(67,56,202,.18)}
 .art-body h3{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:600;color:var(--teal-deep);margin:28px 0 10px}
 .art-body p{margin-bottom:16px;font-size:16px;line-height:1.85}
 .art-body ul,.art-body ol{margin:0 0 16px 24px}
@@ -1092,6 +1137,15 @@ ${a._body || ''}
     กลับหน้าคลินิก
   </a>
 </div>
+\${a._audio ? \`
+<div class="audio-player-wrap">
+  <div class="audio-label">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    ฟังบทความ (ไฟล์เสียง)
+  </div>
+  <audio controls style="width:100%;border-radius:10px;margin-top:6px" src="\${a._audio}"></audio>
+</div>
+\` : \`
 <button id="tts-fab">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
   ฟังบทความ
@@ -1106,6 +1160,12 @@ ${a._body || ''}
     <button id="tts-close">✕</button>
   </div>
 </div>
+\`}
+<\/style>
+<style>
+.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
+.audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:4px;font-family:'Noto Serif Thai',serif}
+<\/style>
 <script>
 window.addEventListener('scroll',()=>{
   const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;
