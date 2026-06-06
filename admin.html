@@ -6,6 +6,7 @@
 <title>Admin Panel — คลินิกรักษ์สมองหมออดิศักดิ์</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -692,16 +693,14 @@ function buildArticleForm(d) {
       <label>คำอธิบาย *</label>
       <textarea id="fDesc" placeholder="คำอธิบายสั้นๆ 1-2 บรรทัด">${escHtml(v.desc||'')}</textarea>
     </div>
-    <div class="field-row">
-      <div class="field">
-        <label>เวลาอ่าน (นาที) *</label>
-        <input type="number" id="fReadMin" value="${v.readMin||5}" min="1" max="60">
-      </div>
-      <div class="field">
-        <label>ลิงก์บทความ</label>
-        <input type="url" id="fUrl" value="${escHtml(v.url||'')}" placeholder="articles/ชื่อไฟล์.html">
-        <small>ว่างไว้ = แสดง "เร็วๆ นี้"</small>
-      </div>
+    <div class="field">
+      <label>เวลาอ่าน (นาที) *</label>
+      <input type="number" id="fReadMin" value="${v.readMin||5}" min="1" max="60" style="max-width:120px">
+    </div>
+    <div class="field">
+      <label>เนื้อหาบทความ <span style="font-weight:400;color:var(--ink-soft);font-size:12px">(ไม่บังคับ — ถ้ายังไม่มีเว็บจะแสดง "เร็วๆ นี้")</span></label>
+      <div id="quillEditor"></div>
+      <p class="editor-hint">💡 แทรกรูปได้โดยกดไอคอน 🖼 ในแถบ toolbar ด้านบน</p>
     </div>
     <div class="field">
       <label>สีพื้นหลังการ์ด</label>
@@ -798,6 +797,43 @@ function initGradientPicker(type, data) {
     const row = document.getElementById('fCatCustomRow');
     if (row) row.style.display = catSel.value === '__custom' ? 'block' : 'none';
   });
+
+  // Init Quill editor (article only)
+  if (type === 'article' && document.getElementById('quillEditor')) {
+    setTimeout(() => {
+      window._quill = new Quill('#quillEditor', {
+        theme: 'snow',
+        placeholder: 'เขียนเนื้อหาบทความที่นี่...',
+        modules: {
+          toolbar: [
+            [{ header: 2 }, { header: 3 }, { header: false }],
+            ['bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'link', 'image'],
+            ['clean']
+          ]
+        }
+      });
+      // Custom image handler: file picker → base64 embed
+      window._quill.getModule('toolbar').addHandler('image', () => {
+        const inp = document.createElement('input');
+        inp.type = 'file'; inp.accept = 'image/*';
+        inp.onchange = () => {
+          const file = inp.files[0]; if (!file) return;
+          const reader = new FileReader();
+          reader.onload = e => {
+            const range = window._quill.getSelection(true) || { index: 0 };
+            window._quill.insertEmbed(range.index, 'image', e.target.result);
+            window._quill.setSelection(range.index + 1);
+          };
+          reader.readAsDataURL(file);
+        };
+        inp.click();
+      });
+      // Pre-fill content when editing
+      if (d && d._body) window._quill.root.innerHTML = d._body;
+    }, 60);
+  }
 }
 
 function updateGrad(type) {
@@ -840,13 +876,14 @@ async function submitForm() {
     const title = document.getElementById('fTitle').value.trim();
     const desc  = document.getElementById('fDesc').value.trim();
     const readMin = parseInt(document.getElementById('fReadMin').value) || 5;
-    const url   = document.getElementById('fUrl').value.trim();
     const featured = document.getElementById('fFeatured').checked;
     const gradient = getGradient('article');
+    const bodyHtml = window._quill ? window._quill.root.innerHTML.trim() : '';
+    const hasContent = bodyHtml && bodyHtml !== '<p><br></p>';
     if (!cat)   error = 'กรุณาเลือกหมวดหมู่';
     else if (!title) error = 'กรุณากรอกชื่อบทความ';
     else if (!desc)  error = 'กรุณากรอกคำอธิบาย';
-    else newItem = { cat, title, desc, readMin, gradient, url, featured };
+    else newItem = { cat, title, desc, readMin, gradient, url: '', featured, _body: hasContent ? bodyHtml : '' };
   } else {
     const series = document.getElementById('fSeries').value.trim() || 'Brain Care Series';
     const num    = document.getElementById('fNum').value.trim();
@@ -871,14 +908,26 @@ async function submitForm() {
   // Save to GitHub
   setSaving(true);
   try {
-    const filename = type === 'article' ? 'articles.json' : 'books.json';
-    await saveJson(filename, type === 'article' ? articles : books);
+    if (type === 'article' && newItem._body) {
+      // Generate & push article HTML page
+      const ts = newItem.url && newItem.url.startsWith('articles/') ? newItem.url : `articles/art-${Date.now()}.html`;
+      const articleHtml = generateArticlePage(newItem);
+      await saveFile(ts, articleHtml);
+      newItem.url = ts;
+    } else if (type === 'article' && !newItem._body) {
+      newItem.url = newItem.url || ''; // keep empty = "เร็วๆ นี้"
+    }
+    // Strip internal _body before saving to json (keep json small)
+    const saveItem = Object.assign({}, newItem);
+    delete saveItem._body;
+    if (index >= 0) arr[index] = saveItem; else { arr.pop(); arr.push(saveItem); }
+
+    await saveJson(type === 'article' ? 'articles.json' : 'books.json', type === 'article' ? articles : books);
     closeForm();
     renderLists();
-    toast('บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที', 'success');
+    toast(newItem._body ? 'เผยแพร่บทความแล้ว! เว็บจะอัปเดตใน ~60 วินาที ✓' : 'บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที', 'success');
   } catch(e) {
     toast(e.message, 'error');
-    // Revert in-memory change
     if (index >= 0) arr[index] = (type === 'article' ? articles : books)[index];
     else arr.pop();
   } finally {
@@ -933,6 +982,168 @@ function toast(msg, type='') {
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+// ══════════════════════════════════════════════════════════════
+// SAVE FILE (for article HTML pages)
+// ══════════════════════════════════════════════════════════════
+async function saveFile(path, htmlContent) {
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${encodeURIComponent(path)}`;
+  let sha = null;
+  const getRes = await fetch(url, { headers: ghHeaders() });
+  if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
+  const b64 = btoa(unescape(encodeURIComponent(htmlContent)));
+  const body = { message: `อัปเดตบทความ: ${path}`, content: b64 };
+  if (sha) body.sha = sha;
+  const putRes = await fetch(url, { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(()=>({}));
+    throw new Error(err.message || `HTTP ${putRes.status}`);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// GENERATE ARTICLE PAGE HTML
+// ══════════════════════════════════════════════════════════════
+function generateArticlePage(a) {
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return `<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${esc(a.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
+<meta name="description" content="${esc(a.desc)}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E2233;--ink-soft:#46596A;--teal:#0E8A84;--teal-deep:#0A5F5B;--glow:#43D2C8;--paper:#FBF9F5;--paper-2:#F3EFE8;--gold:#B8924F}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);background:var(--paper);line-height:1.85;-webkit-font-smoothing:antialiased}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(251,249,245,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(14,34,51,.08);padding:12px 24px;display:flex;align-items:center;gap:16px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-size:14px;font-weight:500;text-decoration:none;transition:.2s}
+.back-btn:hover{color:var(--teal-deep)}
+.top-bar .clinic-name{font-size:13px;color:var(--ink-soft);font-family:'Noto Serif Thai',serif}
+.read-bar{height:3px;background:linear-gradient(90deg,var(--teal),var(--glow));position:fixed;top:0;left:0;width:0%;z-index:200;transition:width .1s linear}
+.hero{padding:56px 24px 40px;max-width:780px;margin:0 auto}
+.cat-badge{display:inline-block;background:rgba(14,138,132,.1);color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:.08em;padding:4px 14px;border-radius:999px;margin-bottom:16px;font-family:'Noto Serif Thai',serif}
+.art-title{font-family:'Noto Serif Thai',serif;font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.25;color:var(--ink);margin-bottom:14px}
+.art-meta{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--ink-soft);margin-bottom:12px}
+.art-meta svg{flex-shrink:0}
+.art-desc{font-size:17px;color:var(--ink-soft);line-height:1.7;border-left:3px solid var(--teal);padding-left:16px;font-style:italic}
+.art-divider{max-width:780px;margin:32px auto;border:none;border-top:1px solid rgba(14,34,51,.1)}
+.art-body{max-width:720px;margin:0 auto;padding:0 24px 80px}
+.art-body h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--ink);margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(14,138,132,.15)}
+.art-body h3{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:600;color:var(--teal-deep);margin:28px 0 10px}
+.art-body p{margin-bottom:16px;font-size:16px;line-height:1.85}
+.art-body ul,.art-body ol{margin:0 0 16px 24px}
+.art-body li{margin-bottom:6px;font-size:16px;line-height:1.75}
+.art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:20px 0;font-style:italic;color:var(--ink-soft)}
+.art-body img{max-width:100%;border-radius:14px;margin:20px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
+.art-body a{color:var(--teal);text-decoration:underline}
+.art-footer{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none;transition:.2s}
+.back-home:hover{background:var(--teal-deep);transform:translateY(-1px)}
+/* TTS */
+#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px;transition:.25s}
+#tts-fab:hover{background:var(--teal-deep);transform:translateY(-2px)}
+#tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
+#tts-bar.open{transform:translateY(0)}
+#tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
+#tts-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--glow));border-radius:3px;pointer-events:none;transition:width .3s linear}
+#tts-controls{display:flex;align-items:center;gap:10px}
+#tts-play-btn,#tts-stop-btn{background:none;border:1.5px solid rgba(255,255,255,.3);border-radius:50%;width:34px;height:34px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+#tts-label{flex:1;font-size:13px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#tts-speed{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;padding:4px 8px;font-size:11px;cursor:pointer}
+#tts-speed option{background:#0e1a28}
+#tts-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;padding:0 4px}
+</style>
+</head>
+<body>
+<div class="read-bar" id="readBar"></div>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    กลับหน้าหลัก
+  </a>
+  <span class="clinic-name">คลินิกรักษ์สมองหมออดิศักดิ์</span>
+</div>
+<div class="hero">
+  <div class="cat-badge">${esc(a.cat)}</div>
+  <h1 class="art-title">${esc(a.title)}</h1>
+  <div class="art-meta">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    อ่าน ${a.readMin || 5} นาที
+    &nbsp;·&nbsp;
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    นพ.อดิศักดิ์ กิตติสาเรศ
+  </div>
+  <p class="art-desc">${esc(a.desc)}</p>
+</div>
+<hr class="art-divider">
+<article class="art-body">
+<!-- ARTICLE-CONTENT-START -->
+${a._body || ''}
+<!-- ARTICLE-CONTENT-END -->
+</article>
+<div class="art-footer">
+  <a href="../index.html" class="back-home">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+    กลับหน้าคลินิก
+  </a>
+</div>
+<button id="tts-fab">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+  ฟังบทความ
+</button>
+<div id="tts-bar">
+  <div id="tts-track"><div id="tts-fill"></div></div>
+  <div id="tts-controls">
+    <button id="tts-play-btn">▶</button>
+    <button id="tts-stop-btn">⏹</button>
+    <div id="tts-label">พร้อมเล่น</div>
+    <select id="tts-speed"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+    <button id="tts-close">✕</button>
+  </div>
+</div>
+<script>
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;
+  document.getElementById('readBar').style.width=(s/m*100)+'%';
+},{passive:true});
+(function(){
+  const nodes=[...document.querySelectorAll('.art-body h2,.art-body h3,.art-body p')].filter(n=>n.textContent.trim().length>3);
+  let cur=-1,playing=false,speed=1,thVoice=null;
+  function fv(){const v=speechSynthesis.getVoices();thVoice=v.find(x=>x.lang.startsWith('th'))||null;}
+  speechSynthesis.onvoiceschanged=fv;fv();
+  function speak(i){if(i<0||i>=nodes.length){stop();return;}cur=i;
+    document.querySelectorAll('.tts-hl').forEach(e=>e.classList.remove('tts-hl'));
+    nodes[i].classList.add('tts-hl');nodes[i].scrollIntoView({behavior:'smooth',block:'center'});
+    updateUI();const u=new SpeechSynthesisUtterance(nodes[i].textContent.trim());
+    u.lang='th-TH';u.rate=speed;if(thVoice)u.voice=thVoice;
+    u.onend=()=>{if(playing)speak(cur+1);};u.onerror=()=>{if(playing)speak(cur+1);};
+    speechSynthesis.cancel();speechSynthesis.speak(u);}
+  function play(){playing=true;speak(cur<0?0:cur);}
+  function pause(){playing=false;speechSynthesis.cancel();updateUI();}
+  function stop(){playing=false;cur=-1;speechSynthesis.cancel();document.querySelectorAll('.tts-hl').forEach(e=>e.classList.remove('tts-hl'));updateUI();}
+  function updateUI(){
+    const b=document.getElementById('tts-play-btn');if(b)b.textContent=playing?'⏸':'▶';
+    const f=document.getElementById('tts-fill');if(f)f.style.width=(cur>=0?(cur/(nodes.length-1))*100:0)+'%';
+    const l=document.getElementById('tts-label');if(l)l.textContent=cur>=0?nodes[cur].textContent.trim().slice(0,50)+'…':'พร้อมเล่น';}
+  document.getElementById('tts-track')?.addEventListener('click',e=>{
+    const r=e.currentTarget.getBoundingClientRect(),p=(e.clientX-r.left)/r.width,i=Math.round(p*(nodes.length-1));
+    playing=true;speak(Math.max(0,Math.min(i,nodes.length-1)));});
+  document.getElementById('tts-play-btn')?.addEventListener('click',()=>playing?pause():play());
+  document.getElementById('tts-stop-btn')?.addEventListener('click',stop);
+  document.getElementById('tts-close')?.addEventListener('click',()=>{stop();document.getElementById('tts-bar').classList.remove('open');document.getElementById('tts-fab').style.display='flex';});
+  document.getElementById('tts-speed')?.addEventListener('change',e=>{speed=parseFloat(e.target.value);if(playing){speechSynthesis.cancel();speak(cur);}});
+  document.getElementById('tts-fab')?.addEventListener('click',()=>{document.getElementById('tts-bar').classList.add('open');document.getElementById('tts-fab').style.display='none';if(!playing)play();});
+  updateUI();
+})();
+</script>
+</body>
+</html>`;
+}
+
 </script>
 </body>
 </html>
