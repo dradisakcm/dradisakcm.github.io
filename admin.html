@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — คลินิกรักษ์สมองหมออดิศักดิ์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E2233; --ink-soft:#46596A;
+  --paper:#FBF9F5; --paper-2:#F3EFE8; --card:#FFFFFF;
+  --teal:#0E8A84; --teal-deep:#0A5F5B; --glow:#43D2C8;
+  --gold:#B8924F; --line:rgba(14,34,51,.12);
+  --shadow:0 1px 3px rgba(14,34,51,.06),0 8px 30px -12px rgba(14,34,51,.18);
+  --shadow-lift:0 2px 8px rgba(14,34,51,.08),0 20px 50px -18px rgba(14,34,51,.26);
+  --danger:#E53E3E; --success:#38A169; --warn:#D69E2E;
+  --f-head:'Anuphan',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans Thai','Anuphan',system-ui,sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-body);color:var(--ink);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+
+/* ── PIN OVERLAY ──────────────────────────────────────────────────────── */
+#pinOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#0D2C3C 0%,#0A5F5B 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+#pinOverlay.hidden{display:none}
+.pin-box{
+  background:#fff;border-radius:24px;padding:48px 40px;
+  width:100%;max-width:380px;text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,.3);
+}
+.pin-logo{font-family:var(--f-head);font-size:22px;font-weight:700;color:var(--teal-deep);margin-bottom:6px}
+.pin-sub{font-size:14px;color:var(--ink-soft);margin-bottom:32px}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:32px}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);transition:.2s}
+.pin-dot.filled{background:var(--teal);border-color:var(--teal)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:260px;margin:0 auto}
+.pin-key{
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  font-size:20px;font-weight:500;padding:16px 0;
+  transition:.15s;color:var(--ink);
+}
+.pin-key:hover{background:var(--teal);color:#fff;border-color:var(--teal);transform:scale(1.03)}
+.pin-key:active{transform:scale(.97)}
+.pin-key.clear{font-size:14px;font-weight:600;color:var(--ink-soft)}
+.pin-error{color:var(--danger);font-size:13.5px;margin-top:16px;min-height:20px;font-weight:500}
+
+/* ── SETUP MODAL ──────────────────────────────────────────────────────── */
+#setupModal{
+  position:fixed;inset:0;z-index:200;background:rgba(14,34,51,.5);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+#setupModal.hidden{display:none}
+.modal-box{
+  background:#fff;border-radius:20px;padding:40px;width:100%;max-width:480px;
+  box-shadow:var(--shadow-lift);
+}
+.modal-box h2{font-family:var(--f-head);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.modal-box p{font-size:14px;color:var(--ink-soft);margin-bottom:24px;line-height:1.65}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+.form-row input{
+  width:100%;padding:12px 16px;border:1.5px solid var(--line);border-radius:10px;
+  font-size:15px;transition:.2s;background:#fff;color:var(--ink);
+}
+.form-row input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,138,132,.12)}
+.form-row small{display:block;margin-top:6px;font-size:12.5px;color:var(--ink-soft);line-height:1.5}
+.modal-actions{display:flex;gap:10px;margin-top:28px;justify-content:flex-end}
+
+/* ── TOPBAR ────────────────────────────────────────────────────────────── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:62px;gap:16px;
+}
+.topbar-brand{font-family:var(--f-head);font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.topbar-brand span{opacity:.6;font-weight:400;font-size:13px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.repo-badge{
+  font-size:12.5px;background:rgba(255,255,255,.12);
+  padding:6px 14px;border-radius:999px;color:rgba(255,255,255,.85);
+  display:flex;align-items:center;gap:6px;
+}
+.repo-badge svg{opacity:.7}
+
+/* ── MAIN LAYOUT ───────────────────────────────────────────────────────── */
+.main{margin-top:62px;padding:32px 28px;max-width:1080px;margin-left:auto;margin-right:auto}
+
+/* ── TABS ──────────────────────────────────────────────────────────────── */
+.tabs{display:flex;gap:4px;background:var(--paper-2);border-radius:12px;padding:4px;margin-bottom:28px;width:fit-content}
+.tab{
+  padding:10px 24px;border-radius:9px;font-size:15px;font-weight:500;
+  background:transparent;border:0;color:var(--ink-soft);transition:.2s;
+}
+.tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(14,34,51,.1);font-weight:600}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── TOOLBAR ───────────────────────────────────────────────────────────── */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.toolbar h2{font-family:var(--f-head);font-size:22px;font-weight:700;color:var(--ink)}
+.count-badge{font-size:13px;color:var(--ink-soft);background:var(--paper-2);padding:4px 12px;border-radius:999px;margin-left:8px;font-weight:500}
+
+/* ── BUTTONS ───────────────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:999px;font-size:14px;font-weight:600;
+  border:1.5px solid transparent;transition:.2s;
+  font-family:var(--f-body);white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:0 4px 14px rgba(14,138,132,.25)}
+.btn-primary:hover{background:var(--teal-deep)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-danger{background:transparent;color:var(--danger);border-color:rgba(229,62,62,.3)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-icon{padding:8px;border-radius:10px;border-color:var(--line)}
+
+/* ── CARD LIST ─────────────────────────────────────────────────────────── */
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item-card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 20px;display:flex;align-items:center;gap:16px;
+  transition:.2s;
+}
+.item-card:hover{box-shadow:var(--shadow)}
+.item-preview{
+  width:56px;height:56px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.item-info{flex:1;min-width:0}
+.item-cat{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:4px}
+.item-title{font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-meta{font-size:12.5px;color:var(--ink-soft);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+.item-actions{display:flex;gap:8px;flex-shrink:0}
+.badge-soon{font-size:11px;background:rgba(14,34,51,.08);color:var(--ink-soft);padding:2px 9px;border-radius:999px;font-weight:500}
+.badge-live{font-size:11px;background:rgba(56,161,105,.12);color:var(--success);padding:2px 9px;border-radius:999px;font-weight:500}
+
+/* ── FORM PANEL ─────────────────────────────────────────────────────────── */
+#formPanel{
+  position:fixed;top:62px;right:0;bottom:0;width:520px;max-width:100%;
+  background:#fff;border-left:1px solid var(--line);z-index:150;
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:-8px 0 40px rgba(14,34,51,.15);
+}
+#formPanel.open{transform:translateX(0)}
+.form-header{
+  padding:22px 24px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.form-header h3{font-family:var(--f-head);font-size:18px;font-weight:700;color:var(--ink)}
+.form-body{flex:1;overflow-y:auto;padding:24px}
+.form-footer{padding:16px 24px;border-top:1px solid var(--line);flex-shrink:0;display:flex;gap:10px;justify-content:flex-end;background:#fff}
+
+.field{margin-bottom:20px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:7px;letter-spacing:.04em;text-transform:uppercase}
+.field input[type="text"],.field input[type="url"],.field input[type="number"],.field textarea,.field select{
+  width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;
+  font-size:15px;color:var(--ink);background:#fff;transition:.2s;resize:vertical;
+}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,138,132,.10)}
+.field textarea{min-height:90px;line-height:1.6}
+.field small{display:block;font-size:12px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* gradient picker */
+.grad-picker{display:flex;flex-direction:column;gap:12px}
+.grad-colors{display:flex;gap:12px;align-items:center}
+.grad-colors label{font-size:13px;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.grad-colors input[type="color"]{width:52px;height:52px;border-radius:10px;border:2px solid var(--line);padding:3px;cursor:pointer;background:none}
+.grad-preview{width:100%;height:64px;border-radius:10px;border:1px solid var(--line);transition:.3s;position:relative;overflow:hidden}
+.grad-preview .prev-title{position:absolute;bottom:10px;left:12px;font-size:12px;font-weight:600;color:rgba(255,255,255,.85)}
+.grad-presets{display:flex;gap:8px;flex-wrap:wrap}
+.grad-presets span{display:block;width:36px;height:36px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0}
+.grad-presets span:hover,.grad-presets span.sel{border-color:#fff;box-shadow:0 0 0 2px var(--teal),0 2px 8px rgba(0,0,0,.2);transform:scale(1.08)}
+
+/* checkbox */
+.field-check{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:15px}
+.field-check input[type="checkbox"]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+
+/* ── TOAST ─────────────────────────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:#fff;padding:14px 24px;border-radius:999px;
+  font-size:14.5px;font-weight:500;z-index:9000;transition:.3s;opacity:0;white-space:nowrap;
+  display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.success{background:var(--success)}
+#toast.error{background:var(--danger)}
+#toast.warn{background:var(--warn);color:var(--ink)}
+
+/* ── OVERLAY DIMMER ─────────────────────────────────────────────────────── */
+#dimmer{position:fixed;inset:0;background:rgba(14,34,51,.35);z-index:140;display:none;backdrop-filter:blur(2px)}
+#dimmer.show{display:block}
+
+/* ── EMPTY STATE ────────────────────────────────────────────────────────── */
+.empty{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+.empty svg{margin:0 auto 16px;opacity:.35}
+.empty p{font-size:16px}
+
+/* ── SAVING SPINNER ─────────────────────────────────────────────────────── */
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media(max-width:600px){
+  .main{padding:20px 16px}
+  .topbar{padding:0 16px}
+  #formPanel{width:100%;top:62px}
+  .item-preview{width:44px;height:44px}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PIN OVERLAY -->
+<div id="pinOverlay">
+  <div class="pin-box">
+    <div class="pin-logo">🧠 Admin Panel</div>
+    <div class="pin-sub">คลินิกรักษ์สมองหมออดิศักดิ์<br>กรอก PIN เพื่อเข้าใช้งาน</div>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-pad" id="pinPad">
+      <button class="pin-key" data-k="1">1</button>
+      <button class="pin-key" data-k="2">2</button>
+      <button class="pin-key" data-k="3">3</button>
+      <button class="pin-key" data-k="4">4</button>
+      <button class="pin-key" data-k="5">5</button>
+      <button class="pin-key" data-k="6">6</button>
+      <button class="pin-key" data-k="7">7</button>
+      <button class="pin-key" data-k="8">8</button>
+      <button class="pin-key" data-k="9">9</button>
+      <button class="pin-key clear" data-k="clear">ลบ</button>
+      <button class="pin-key" data-k="0">0</button>
+      <button class="pin-key clear" data-k="del">⌫</button>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+  </div>
+</div>
+
+<!-- GITHUB SETUP MODAL -->
+<div id="setupModal" class="hidden">
+  <div class="modal-box">
+    <h2>เชื่อมต่อ GitHub Repository</h2>
+    <p>กรอกข้อมูล GitHub เพื่อให้ระบบบันทึกบทความและหนังสือขึ้นเว็บอัตโนมัติ — ข้อมูลนี้จะเก็บในเบราว์เซอร์นี้เท่านั้น</p>
+    <div class="form-row">
+      <label>GitHub Username (owner)</label>
+      <input type="text" id="inputOwner" placeholder="เช่น dradisak">
+      <small>ชื่อ GitHub account ของท่าน</small>
+    </div>
+    <div class="form-row">
+      <label>Repository Name</label>
+      <input type="text" id="inputRepo" placeholder="เช่น dradisak.github.io">
+      <small>ชื่อ repository ที่ใช้ GitHub Pages</small>
+    </div>
+    <div class="form-row">
+      <label>Personal Access Token (PAT)</label>
+      <input type="password" id="inputToken" placeholder="github_pat_...">
+      <small>สร้างได้ที่ GitHub → Settings → Developer settings → Fine-grained tokens → เลือก repo นี้ → Contents: Read &amp; Write</small>
+    </div>
+    <div id="setupError" style="color:var(--danger);font-size:13.5px;margin-top:8px;min-height:18px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeSetup()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveSetup()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        บันทึก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    🧠 Admin Panel
+    <span>คลินิกรักษ์สมองหมออดิศักดิ์</span>
+  </div>
+  <div class="topbar-right">
+    <div class="repo-badge" id="repoBadge" style="display:none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span id="repoBadgeText"></span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="openSetup()" style="color:#fff;border-color:rgba(255,255,255,.25)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 0-14.14 0M4.93 19.07a10 10 0 0 0 14.14 0"/></svg>
+      ตั้งค่า GitHub
+    </button>
+    <a href="index.html" target="_blank" class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.2)">ดูเว็บ</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainContent" style="display:none">
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('articles',this)">
+      บทความ <span id="artTabCount" class="count-badge">0</span>
+    </button>
+    <button class="tab" onclick="switchTab('books',this)">
+      หนังสือ <span id="bookTabCount" class="count-badge">0</span>
+    </button>
+  </div>
+
+  <!-- ARTICLES TAB -->
+  <div class="tab-panel active" id="tab-articles">
+    <div class="toolbar">
+      <h2>จัดการบทความ</h2>
+      <button class="btn btn-primary" onclick="openForm('article')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        เพิ่มบทความใหม่
+      </button>
+    </div>
+    <div class="item-list" id="artList"></div>
+  </div>
+
+  <!-- BOOKS TAB -->
+  <div class="tab-panel" id="tab-books">
+    <div class="toolbar">
+      <h2>จัดการหนังสือ</h2>
+      <button class="btn btn-primary" onclick="openForm('book')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        เพิ่มหนังสือใหม่
+      </button>
+    </div>
+    <div class="item-list" id="bookList"></div>
+  </div>
+</div>
+
+<!-- DIMMER -->
+<div id="dimmer" onclick="closeForm()"></div>
+
+<!-- FORM PANEL -->
+<div id="formPanel">
+  <div class="form-header">
+    <h3 id="formTitle">เพิ่มบทความ</h3>
+    <button class="btn btn-icon btn-ghost" onclick="closeForm()" aria-label="ปิด">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="form-body" id="formBody"></div>
+  <div class="form-footer">
+    <button class="btn btn-ghost" onclick="closeForm()">ยกเลิก</button>
+    <button class="btn btn-primary" id="saveBtn" onclick="submitForm()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      บันทึกขึ้น GitHub
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// CONFIG — เปลี่ยน PIN ที่นี่ (4 หลัก)
+// ══════════════════════════════════════════════════════════════
+const ADMIN_PIN = '2516';
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let articles = [];
+let books    = [];
+let editMode = null;   // { type: 'article'|'book', index: number|-1 }
+let currentTab = 'articles';
+
+// Gradient presets (teal/navy family matching the website)
+const ART_PRESETS = [
+  ['#1a5e63','#0e2a38'],
+  ['#0e8a84','#0a3f4a'],
+  ['#15706e','#0c2533'],
+  ['#1a3a6a','#0e1c3c'],
+  ['#2d4a6a','#162535'],
+  ['#0a5a55','#06292a'],
+  ['#0e8484','#0a3a4a'],
+  ['#1a6a5a','#0a2a1a'],
+];
+const BOOK_PRESETS = [
+  ['#1a4a6a','#0a5a55'],
+  ['#0e2a3c','#0a5f5b'],
+  ['#1a2a4a','#0e3a6a'],
+  ['#0a3a5a','#063a3a'],
+  ['#2a1a4a','#0a2a5a'],
+  ['#1a3a5a','#0a2a4a'],
+];
+
+// ══════════════════════════════════════════════════════════════
+// PIN
+// ══════════════════════════════════════════════════════════════
+let pinBuffer = '';
+// Auto-unlock if URL has ?pin=XXXX (for local testing only)
+if(new URLSearchParams(location.search).get('pin') === ADMIN_PIN){
+  document.getElementById('pinOverlay').classList.add('hidden');
+  document.addEventListener('DOMContentLoaded', init);
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('d'+i).classList.toggle('filled', i < pinBuffer.length);
+  }
+}
+
+document.getElementById('pinPad').addEventListener('click', e => {
+  const k = e.target.closest('[data-k]')?.dataset.k;
+  if (!k) return;
+  if (k === 'clear') { pinBuffer = ''; updatePinDots(); document.getElementById('pinError').textContent = ''; return; }
+  if (k === 'del')   { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); return; }
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += k;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    if (pinBuffer === ADMIN_PIN) {
+      document.getElementById('pinOverlay').classList.add('hidden');
+      init();
+    } else {
+      document.getElementById('pinError').textContent = 'PIN ไม่ถูกต้อง กรุณาลองใหม่';
+      pinBuffer = '';
+      setTimeout(() => updatePinDots(), 50);
+    }
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+// GITHUB SETUP
+// ══════════════════════════════════════════════════════════════
+function ghOwner() { return localStorage.getItem('ghOwner') || ''; }
+function ghRepo()  { return localStorage.getItem('ghRepo')  || ''; }
+function ghToken() { return localStorage.getItem('ghToken') || ''; }
+function isGhConfigured() { return !!(ghOwner() && ghRepo() && ghToken()); }
+
+function updateRepoBadge() {
+  const b = document.getElementById('repoBadge');
+  const t = document.getElementById('repoBadgeText');
+  if (isGhConfigured()) {
+    b.style.display = 'flex';
+    t.textContent = `${ghOwner()}/${ghRepo()}`;
+  } else {
+    b.style.display = 'none';
+  }
+}
+
+function openSetup() {
+  document.getElementById('inputOwner').value = ghOwner();
+  document.getElementById('inputRepo').value  = ghRepo();
+  document.getElementById('inputToken').value  = ghToken();
+  document.getElementById('setupError').textContent = '';
+  document.getElementById('setupModal').classList.remove('hidden');
+}
+function closeSetup() { document.getElementById('setupModal').classList.add('hidden'); }
+
+function saveSetup() {
+  const owner = document.getElementById('inputOwner').value.trim();
+  const repo  = document.getElementById('inputRepo').value.trim();
+  const token = document.getElementById('inputToken').value.trim();
+  if (!owner || !repo || !token) {
+    document.getElementById('setupError').textContent = 'กรุณากรอกข้อมูลให้ครบทุกช่อง';
+    return;
+  }
+  localStorage.setItem('ghOwner', owner);
+  localStorage.setItem('ghRepo',  repo);
+  localStorage.setItem('ghToken', token);
+  closeSetup();
+  updateRepoBadge();
+  toast('บันทึกการตั้งค่าแล้ว', 'success');
+  loadFromGitHub();
+}
+
+// ══════════════════════════════════════════════════════════════
+// GITHUB API
+// ══════════════════════════════════════════════════════════════
+function ghHeaders() {
+  return {
+    'Authorization': `Bearer ${ghToken()}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+}
+
+async function fetchJsonFromGH(filename) {
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${encodeURIComponent(filename)}`;
+  const res = await fetch(url, { headers: ghHeaders() });
+  if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status });
+  const data = await res.json();
+  return { parsed: JSON.parse(atob(data.content.replace(/\n/g,''))), sha: data.sha };
+}
+
+async function saveJson(filename, newData) {
+  const url = `https://api.github.com/repos/${ghOwner()}/${ghRepo()}/contents/${encodeURIComponent(filename)}`;
+  // GET current SHA
+  const getRes = await fetch(url, { headers: ghHeaders() });
+  if (!getRes.ok) {
+    const body = await getRes.json().catch(()=>({}));
+    const status = getRes.status;
+    if (status === 401) throw new Error('Token ไม่ถูกต้อง หรือหมดอายุ — ไปตั้งค่า GitHub ใหม่');
+    if (status === 404) throw new Error('ไม่พบไฟล์ใน repository — ตรวจสอบชื่อ repo และ username');
+    throw new Error(body.message || `เกิดข้อผิดพลาด HTTP ${status}`);
+  }
+  const existing = await getRes.json();
+  const sha = existing.sha;
+
+  // Encode UTF-8 JSON as base64
+  const jsonStr = JSON.stringify(newData, null, 2);
+  const content = btoa(unescape(encodeURIComponent(jsonStr)));
+
+  const putRes = await fetch(url, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify({ message: `Update ${filename} via Admin Panel`, content, sha })
+  });
+  if (!putRes.ok) {
+    const body = await putRes.json().catch(()=>({}));
+    const status = putRes.status;
+    if (status === 409) throw new Error('ข้อมูลถูกแก้ไขจากที่อื่น กรุณา reload หน้านี้แล้วลองใหม่');
+    if (status === 422) throw new Error('ข้อมูลไม่ถูกต้อง — ตรวจสอบ SHA และ content');
+    throw new Error(body.message || `บันทึกไม่สำเร็จ HTTP ${status}`);
+  }
+  return putRes.json();
+}
+
+// ══════════════════════════════════════════════════════════════
+// INIT & LOAD
+// ══════════════════════════════════════════════════════════════
+async function init() {
+  document.getElementById('mainContent').style.display = 'block';
+  updateRepoBadge();
+  if (!isGhConfigured()) {
+    openSetup();
+    return;
+  }
+  await loadFromGitHub();
+}
+
+async function loadFromGitHub() {
+  if (!isGhConfigured()) return;
+  try {
+    const [artData, bookData] = await Promise.all([
+      fetchJsonFromGH('articles.json'),
+      fetchJsonFromGH('books.json'),
+    ]);
+    articles = artData.parsed;
+    books    = bookData.parsed;
+    renderLists();
+    toast('โหลดข้อมูลสำเร็จ', 'success');
+  } catch(e) {
+    if (e.status === 401) {
+      toast('Token ไม่ถูกต้อง กรุณาตั้งค่า GitHub ใหม่', 'error');
+      openSetup();
+    } else if (e.status === 404) {
+      toast('ไม่พบ repository หรือไฟล์ JSON — ตรวจสอบการตั้งค่า', 'error');
+    } else {
+      toast('โหลดข้อมูลไม่สำเร็จ: ' + e.message, 'error');
+    }
+    renderLists(); // render empty
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// RENDER LISTS
+// ══════════════════════════════════════════════════════════════
+function renderLists() {
+  document.getElementById('artTabCount').textContent = articles.length;
+  document.getElementById('bookTabCount').textContent = books.length;
+
+  const artList = document.getElementById('artList');
+  if (articles.length === 0) {
+    artList.innerHTML = `<div class="empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>ยังไม่มีบทความ — กดเพิ่มบทความใหม่</p></div>`;
+  } else {
+    artList.innerHTML = articles.map((a,i) => `
+      <div class="item-card">
+        <div class="item-preview" style="background:${a.gradient}"></div>
+        <div class="item-info">
+          <div class="item-cat">${a.cat}</div>
+          <div class="item-title" title="${a.title}">${a.title}</div>
+          <div class="item-meta">
+            <span>⏱ ${a.readMin} นาที</span>
+            ${a.url ? `<span class="badge-live">มีลิงก์</span>` : `<span class="badge-soon">เร็วๆ นี้</span>`}
+            ${a.featured ? `<span class="badge-live">⭐ Featured</span>` : ''}
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openForm('article',${i})">แก้ไข</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteItem('article',${i})">ลบ</button>
+        </div>
+      </div>`).join('');
+  }
+
+  const bookList = document.getElementById('bookList');
+  if (books.length === 0) {
+    bookList.innerHTML = `<div class="empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><p>ยังไม่มีหนังสือ — กดเพิ่มหนังสือใหม่</p></div>`;
+  } else {
+    bookList.innerHTML = books.map((b,i) => `
+      <div class="item-card">
+        <div class="item-preview" style="background:${b.gradient}"></div>
+        <div class="item-info">
+          <div class="item-cat">${b.series} · ${b.num}</div>
+          <div class="item-title" title="${b.title}">${b.title}</div>
+          <div class="item-meta">
+            ${b.ready ? `<span class="badge-live">พร้อมเผยแพร่</span>` : `<span class="badge-soon">เร็วๆ นี้</span>`}
+            ${b.pdfUrl ? `<span>PDF: ${b.pdfUrl}</span>` : ''}
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openForm('book',${i})">แก้ไข</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteItem('book',${i})">ลบ</button>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════════
+function switchTab(name, btn) {
+  currentTab = name;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════
+// FORM — OPEN / CLOSE
+// ══════════════════════════════════════════════════════════════
+function openForm(type, index = -1) {
+  editMode = { type, index };
+  const isEdit = index >= 0;
+  const data = isEdit ? (type === 'article' ? articles[index] : books[index]) : null;
+  document.getElementById('formTitle').textContent =
+    isEdit ? (type === 'article' ? 'แก้ไขบทความ' : 'แก้ไขหนังสือ')
+           : (type === 'article' ? 'เพิ่มบทความใหม่' : 'เพิ่มหนังสือใหม่');
+  document.getElementById('formBody').innerHTML =
+    type === 'article' ? buildArticleForm(data) : buildBookForm(data);
+  initGradientPicker(type, data);
+  document.getElementById('formPanel').classList.add('open');
+  document.getElementById('dimmer').classList.add('show');
+}
+
+function closeForm() {
+  document.getElementById('formPanel').classList.remove('open');
+  document.getElementById('dimmer').classList.remove('show');
+  editMode = null;
+}
+
+// ══════════════════════════════════════════════════════════════
+// FORM BUILDERS
+// ══════════════════════════════════════════════════════════════
+const CAT_OPTIONS = ['สมองเสื่อม','ไมเกรน','หลอดเลือดสมอง','พาร์กินสัน','สุขภาพสมอง','เส้นประสาท'];
+
+function buildArticleForm(d) {
+  const v = d || {};
+  const catOpts = CAT_OPTIONS.map(c =>
+    `<option value="${c}" ${v.cat===c?'selected':''}>${c}</option>`).join('');
+  return `
+    <div class="field">
+      <label>หมวดหมู่ *</label>
+      <select id="fCat">
+        <option value="">— เลือกหมวดหมู่ —</option>${catOpts}
+        <option value="__custom" ${!CAT_OPTIONS.includes(v.cat)&&v.cat?'selected':''}>อื่นๆ (พิมพ์เอง)</option>
+      </select>
+    </div>
+    <div class="field" id="fCatCustomRow" style="display:${(!CAT_OPTIONS.includes(v.cat)&&v.cat)?'block':'none'}">
+      <label>หมวดหมู่ (พิมพ์เอง)</label>
+      <input type="text" id="fCatCustom" value="${(!CAT_OPTIONS.includes(v.cat)&&v.cat)?v.cat:''}" placeholder="เช่น โรคลมชัก">
+    </div>
+    <div class="field">
+      <label>ชื่อบทความ *</label>
+      <input type="text" id="fTitle" value="${escHtml(v.title||'')}" placeholder="ชื่อบทความภาษาไทย">
+    </div>
+    <div class="field">
+      <label>คำอธิบาย *</label>
+      <textarea id="fDesc" placeholder="คำอธิบายสั้นๆ 1-2 บรรทัด">${escHtml(v.desc||'')}</textarea>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>เวลาอ่าน (นาที) *</label>
+        <input type="number" id="fReadMin" value="${v.readMin||5}" min="1" max="60">
+      </div>
+      <div class="field">
+        <label>ลิงก์บทความ</label>
+        <input type="url" id="fUrl" value="${escHtml(v.url||'')}" placeholder="articles/ชื่อไฟล์.html">
+        <small>ว่างไว้ = แสดง "เร็วๆ นี้"</small>
+      </div>
+    </div>
+    <div class="field">
+      <label>สีพื้นหลังการ์ด</label>
+      <div class="grad-picker" id="gradPicker"></div>
+    </div>
+    <div class="field">
+      <label class="field-check">
+        <input type="checkbox" id="fFeatured" ${v.featured?'checked':''}>
+        บทความ Featured (แสดงก่อน)
+      </label>
+    </div>`;
+}
+
+function buildBookForm(d) {
+  const v = d || {};
+  return `
+    <div class="field-row">
+      <div class="field">
+        <label>ชื่อ Series</label>
+        <input type="text" id="fSeries" value="${escHtml(v.series||'Brain Care Series')}" placeholder="Brain Care Series">
+      </div>
+      <div class="field">
+        <label>เล่มที่</label>
+        <input type="text" id="fNum" value="${escHtml(v.num||'')}" placeholder="เล่ม 2">
+      </div>
+    </div>
+    <div class="field">
+      <label>ชื่อหนังสือ *</label>
+      <input type="text" id="fTitle" value="${escHtml(v.title||'')}" placeholder="ชื่อหนังสือ">
+    </div>
+    <div class="field">
+      <label>คำอธิบาย *</label>
+      <textarea id="fDesc" placeholder="คำอธิบายหนังสือ">${escHtml(v.desc||'')}</textarea>
+    </div>
+    <div class="field">
+      <label>สีพื้นหลังปกหนังสือ</label>
+      <div class="grad-picker" id="gradPicker"></div>
+    </div>
+    <div class="field">
+      <label>ไฟล์ eBook (.html)</label>
+      <input type="text" id="fReadUrl" value="${escHtml(v.readUrl||'')}" placeholder="Brain Care Series เล่ม 2 - eBook.html">
+    </div>
+    <div class="field">
+      <label>ไฟล์ PDF</label>
+      <input type="text" id="fPdfUrl" value="${escHtml(v.pdfUrl||'')}" placeholder="Brain Care Series เล่ม 2.pdf">
+    </div>
+    <div class="field">
+      <label class="field-check">
+        <input type="checkbox" id="fReady" ${v.ready?'checked':''}>
+        พร้อมเผยแพร่ (แสดงปุ่มอ่านและดาวน์โหลด)
+      </label>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// GRADIENT PICKER
+// ══════════════════════════════════════════════════════════════
+function initGradientPicker(type, data) {
+  const presets = type === 'article' ? ART_PRESETS : BOOK_PRESETS;
+  const defaultGrad = data?.gradient || '';
+
+  // Parse existing gradient colors or use first preset
+  let c1 = presets[0][0], c2 = presets[0][1];
+  if (defaultGrad) {
+    const hex = defaultGrad.match(/#[0-9a-fA-F]{3,6}/g);
+    if (hex && hex.length >= 2) { c1 = hex[0]; c2 = hex[1]; }
+    else if (hex && hex.length === 1) { c1 = hex[0]; }
+  }
+
+  const presetsHtml = presets.map((p,i) => {
+    const sel = (p[0]===c1 && p[1]===c2) ? 'sel' : '';
+    const bg = type==='article'
+      ? `radial-gradient(120% 100% at 50% 20%,${p[0]},${p[1]})`
+      : `linear-gradient(145deg,${p[0]},${p[1]})`;
+    return `<span class="${sel}" style="background:${bg}" data-c1="${p[0]}" data-c2="${p[1]}" onclick="selectPreset(this,'${type}')"></span>`;
+  }).join('');
+
+  document.getElementById('gradPicker').innerHTML = `
+    <div class="grad-preview" id="gradPreview">
+      <div class="prev-title">ตัวอย่าง</div>
+    </div>
+    <div class="grad-colors">
+      <label>สีที่ 1<input type="color" id="gCol1" value="${c1}" oninput="updateGrad('${type}')"></label>
+      <label>สีที่ 2<input type="color" id="gCol2" value="${c2}" oninput="updateGrad('${type}')"></label>
+    </div>
+    <small style="color:var(--ink-soft);font-size:12px">หรือเลือกชุดสีสำเร็จ:</small>
+    <div class="grad-presets">${presetsHtml}</div>`;
+
+  updateGrad(type);
+
+  // Category custom field toggle
+  const catSel = document.getElementById('fCat');
+  if (catSel) catSel.addEventListener('change', () => {
+    const row = document.getElementById('fCatCustomRow');
+    if (row) row.style.display = catSel.value === '__custom' ? 'block' : 'none';
+  });
+}
+
+function updateGrad(type) {
+  const c1 = document.getElementById('gCol1').value;
+  const c2 = document.getElementById('gCol2').value;
+  const grad = type === 'article'
+    ? `radial-gradient(120% 100% at 50% 20%,${c1},${c2})`
+    : `linear-gradient(145deg,${c1} 0%,${c2} 100%)`;
+  document.getElementById('gradPreview').style.background = grad;
+}
+
+function selectPreset(el, type) {
+  document.querySelectorAll('.grad-presets span').forEach(s => s.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('gCol1').value = el.dataset.c1;
+  document.getElementById('gCol2').value = el.dataset.c2;
+  updateGrad(type);
+}
+
+function getGradient(type) {
+  const c1 = document.getElementById('gCol1').value;
+  const c2 = document.getElementById('gCol2').value;
+  return type === 'article'
+    ? `radial-gradient(120% 100% at 50% 20%,${c1},${c2})`
+    : `linear-gradient(145deg,${c1} 0%,${c2} 100%)`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════════════════════
+async function submitForm() {
+  if (!editMode) return;
+  const { type, index } = editMode;
+
+  let newItem, error;
+  if (type === 'article') {
+    const cat = document.getElementById('fCat').value === '__custom'
+      ? (document.getElementById('fCatCustom')?.value.trim() || '')
+      : document.getElementById('fCat').value;
+    const title = document.getElementById('fTitle').value.trim();
+    const desc  = document.getElementById('fDesc').value.trim();
+    const readMin = parseInt(document.getElementById('fReadMin').value) || 5;
+    const url   = document.getElementById('fUrl').value.trim();
+    const featured = document.getElementById('fFeatured').checked;
+    const gradient = getGradient('article');
+    if (!cat)   error = 'กรุณาเลือกหมวดหมู่';
+    else if (!title) error = 'กรุณากรอกชื่อบทความ';
+    else if (!desc)  error = 'กรุณากรอกคำอธิบาย';
+    else newItem = { cat, title, desc, readMin, gradient, url, featured };
+  } else {
+    const series = document.getElementById('fSeries').value.trim() || 'Brain Care Series';
+    const num    = document.getElementById('fNum').value.trim();
+    const title  = document.getElementById('fTitle').value.trim();
+    const desc   = document.getElementById('fDesc').value.trim();
+    const readUrl = document.getElementById('fReadUrl').value.trim();
+    const pdfUrl  = document.getElementById('fPdfUrl').value.trim();
+    const ready   = document.getElementById('fReady').checked;
+    const gradient = getGradient('book');
+    if (!title) error = 'กรุณากรอกชื่อหนังสือ';
+    else if (!desc) error = 'กรุณากรอกคำอธิบาย';
+    else newItem = { series, num, title, desc, gradient, readUrl, pdfUrl, ready };
+  }
+
+  if (error) { toast(error, 'warn'); return; }
+
+  // Update in-memory array
+  const arr = type === 'article' ? articles : books;
+  if (index >= 0) arr[index] = newItem;
+  else arr.push(newItem);
+
+  // Save to GitHub
+  setSaving(true);
+  try {
+    const filename = type === 'article' ? 'articles.json' : 'books.json';
+    await saveJson(filename, type === 'article' ? articles : books);
+    closeForm();
+    renderLists();
+    toast('บันทึกแล้ว! เว็บจะอัปเดตภายใน ~60 วินาที', 'success');
+  } catch(e) {
+    toast(e.message, 'error');
+    // Revert in-memory change
+    if (index >= 0) arr[index] = (type === 'article' ? articles : books)[index];
+    else arr.pop();
+  } finally {
+    setSaving(false);
+  }
+}
+
+function setSaving(on) {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = on;
+  btn.innerHTML = on
+    ? `<div class="spin"></div> กำลังบันทึก...`
+    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> บันทึกขึ้น GitHub`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════════════════════════
+async function deleteItem(type, index) {
+  const arr = type === 'article' ? articles : books;
+  const name = arr[index].title;
+  if (!confirm(`ลบ "${name}" ?\nการลบนี้ไม่สามารถกู้คืนได้`)) return;
+
+  arr.splice(index, 1);
+  const filename = type === 'article' ? 'articles.json' : 'books.json';
+  try {
+    await saveJson(filename, type === 'article' ? articles : books);
+    renderLists();
+    toast('ลบเรียบร้อยแล้ว', 'success');
+  } catch(e) {
+    // revert
+    arr.splice(index, 0, name);
+    toast('ลบไม่สำเร็จ: ' + e.message, 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════════════
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ══════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
