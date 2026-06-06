@@ -646,17 +646,22 @@ function switchTab(name, btn) {
 // FORM — OPEN / CLOSE
 // ══════════════════════════════════════════════════════════════
 function openForm(type, index = -1) {
-  editMode = { type, index };
-  const isEdit = index >= 0;
-  const data = isEdit ? (type === 'article' ? articles[index] : books[index]) : null;
-  document.getElementById('formTitle').textContent =
-    isEdit ? (type === 'article' ? 'แก้ไขบทความ' : 'แก้ไขหนังสือ')
-           : (type === 'article' ? 'เพิ่มบทความใหม่' : 'เพิ่มหนังสือใหม่');
-  document.getElementById('formBody').innerHTML =
-    type === 'article' ? buildArticleForm(data) : buildBookForm(data);
-  initGradientPicker(type, data);
-  document.getElementById('formPanel').classList.add('open');
-  document.getElementById('dimmer').classList.add('show');
+  try {
+    editMode = { type, index };
+    const isEdit = index >= 0;
+    const data = isEdit ? (type === 'article' ? articles[index] : books[index]) : null;
+    document.getElementById('formTitle').textContent =
+      isEdit ? (type === 'article' ? 'แก้ไขบทความ' : 'แก้ไขหนังสือ')
+             : (type === 'article' ? 'เพิ่มบทความใหม่' : 'เพิ่มหนังสือใหม่');
+    document.getElementById('formBody').innerHTML =
+      type === 'article' ? buildArticleForm(data) : buildBookForm(data);
+    initGradientPicker(type, data);
+    document.getElementById('formPanel').classList.add('open');
+    document.getElementById('dimmer').classList.add('show');
+  } catch(err) {
+    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+    console.error('openForm error:', err);
+  }
 }
 
 function closeForm() {
@@ -851,12 +856,12 @@ function initGradientPicker(type, data) {
         inp.click();
       });
       // Pre-fill content when editing
-      if (d && d._body) window._quill.root.innerHTML = d._body;
+      if (data && data._body) window._quill.root.innerHTML = data._body;
     }, 60);
   }
 
   // Audio file upload handler
-  window._audioDataUrl = (d && d._audio) ? d._audio : '';
+  window._audioDataUrl = (data && data._audio) ? data._audio : '';
   window._audioName = '';
   const fAudio = document.getElementById('fAudio');
   if (fAudio) {
@@ -873,7 +878,7 @@ function initGradientPicker(type, data) {
       reader.readAsDataURL(file);
     });
     // Show existing audio if editing
-    if (d && d._audio) {
+    if (data && data._audio) {
       document.getElementById('audioName').textContent = '(ไฟล์เสียงเดิม)';
       document.getElementById('audioPreview').style.display = 'flex';
     }
