@@ -501,7 +501,9 @@ async function fetchJsonFromGH(filename) {
   const res = await fetch(url, { headers: ghHeaders() });
   if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status });
   const data = await res.json();
-  return { parsed: JSON.parse(atob(data.content.replace(/\n/g,''))), sha: data.sha };
+  const b64 = data.content.replace(/\n/g,'');
+  const text = new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0)));
+  return { parsed: JSON.parse(text), sha: data.sha };
 }
 
 async function saveJson(filename, newData) {
