@@ -469,6 +469,10 @@ html[lang="en"] .foot-col h4{font-family:var(--f-en-head)}
 .book-btn-dl{background:transparent;color:var(--ink);border-color:var(--line)}
 .book-btn-dl:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-1px)}
 .book-soon{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);padding:9px 0;margin-top:18px}
+.book-btn-audio{background:transparent;color:var(--ink);border-color:var(--line)}
+.book-btn-audio:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-1px)}
+.book-btn-audio.disabled{color:var(--ink-soft);border-color:var(--line-soft);opacity:.55;cursor:not-allowed;pointer-events:none}
+.book-btn-audio.disabled:hover{transform:none;color:var(--ink-soft);border-color:var(--line-soft)}
 @media (max-width:980px){.books-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:600px){.books-grid{grid-template-columns:1fr}}
 
@@ -508,12 +512,11 @@ html[lang="en"] .social-content h3{font-family:var(--f-en-head)}
 .art-search input::placeholder{color:var(--ink-soft);opacity:.7}
 .art-card.hidden{display:none}
 /* TTS button on article cards */
-.art-tts{display:flex;align-items:center;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
-.art-tts-btn{background:none;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;padding:4px 13px 4px 10px;font-size:11.5px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.2s;white-space:nowrap}
-.art-tts-btn:hover{background:var(--teal);color:#fff}
-.art-tts-btn.playing{background:var(--teal);color:#fff}
-.art-tts-bar{flex:1;height:3px;background:var(--line-soft);border-radius:2px;overflow:hidden}
-.art-tts-fill{height:100%;width:0%;background:var(--teal);border-radius:2px;transition:width .4s linear}
+.art-audio{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft)}
+.art-audio-btn{width:100%;justify-content:center;background:none;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.2s;white-space:nowrap}
+.art-audio-btn:hover{background:var(--teal);color:#fff}
+.art-audio-btn.disabled{border-color:var(--line-soft);color:var(--ink-soft);opacity:.55;cursor:not-allowed}
+.art-audio-btn.disabled:hover{background:none;color:var(--ink-soft)}
 /* NAV over dark hero — white links */
 .nav:not(.scrolled) .nav-links a{color:rgba(255,255,255,.92)}
 .nav:not(.scrolled) .nav-links a::after{background:rgba(255,255,255,.7)}
@@ -964,6 +967,184 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
 </section>
 
 <!-- JOURNEY -->
+<!-- ARTICLES -->
+<section class="section articles" id="articles">
+  <div class="wrap">
+    <div class="art-head reveal">
+      <div>
+        <span class="eyebrow" data-lang="th">ความรู้เรื่องสมอง</span>
+        <span class="eyebrow" data-lang="en">Brain Insights</span>
+        <h2 class="sec-title" data-lang="th">บทความสุขภาพสมอง โดยแพทย์</h2>
+        <h2 class="sec-title" data-lang="en">Brain-health writing, by your doctor</h2>
+        <p class="sec-lead" data-lang="th">คลังความรู้ที่เขียนจากความเข้าใจจริง — บทความโดย นพ.อดิศักดิ์ เพื่อให้คุณดูแลสมองได้อย่างมั่นใจ</p>
+        <p class="sec-lead" data-lang="en">A library written from genuine clinical understanding — featured reads hand-picked by Dr. Adisak.</p>
+      </div>
+    </div>
+    <div class="art-head-row reveal">
+      <label class="art-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="artSearch" placeholder="ค้นหาบทความ เช่น ไมเกรน สมองเสื่อม..." aria-label="ค้นหาบทความ">
+      </label>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <select id="artFilter" style="font-family:inherit;font-size:14px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2346596A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:.25s">
+          <option value="">หมวดหมู่ทั้งหมด</option>
+          <option value="สมองเสื่อม">สมองเสื่อม / ความจำ</option>
+          <option value="ไมเกรน">ไมเกรน / ปวดศีรษะ</option>
+          <option value="หลอดเลือดสมอง">หลอดเลือดสมอง</option>
+          <option value="พาร์กินสัน">พาร์กินสัน</option>
+          <option value="สุขภาพสมอง">สุขภาพสมองทั่วไป</option>
+          <option value="เส้นประสาท">เส้นประสาท</option>
+        </select>
+        <span id="artCount" style="font-size:13px;color:var(--ink-soft)"></span>
+      </div>
+    </div>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ARTICLES DATA — เพิ่มบทความใหม่โดยใส่ข้อมูลในอาร์เรย์ ARTICLES_DATA
+         ด้านล่างใน <script> — ไม่ต้องแก้ HTML ใดๆ
+    ════════════════════════════════════════════════════════════════════════ -->
+    <div class="art-grid stagger" id="artGrid"></div>
+    <div id="artEmpty" style="display:none;text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:16px">ไม่พบบทความที่ค้นหา</div>
+    <div style="text-align:center;margin-top:44px" id="artLoadMore" class="reveal">
+      <button onclick="loadMoreArticles()" class="btn btn-ghost" id="loadMoreBtn" style="min-width:200px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        ดูบทความเพิ่มเติม
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section class="section books-sec" id="books">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">คลังหนังสือ</span>
+      <h2 class="sec-title">Brain Care Series — หนังสือสุขภาพสมองโดยแพทย์</h2>
+      <p class="sec-lead">หนังสือที่เขียนจากประสบการณ์การดูแลผู้ป่วยจริง — อ่านออนไลน์ได้เลย หรือดาวน์โหลดเก็บไว้อ่านเมื่อสะดวก</p>
+    </div>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         BOOKS DATA — เพิ่มหนังสือใหม่โดยแก้อาร์เรย์ BOOKS_DATA ใน <script>
+         ไม่ต้องแก้ HTML ใดๆ
+    ════════════════════════════════════════════════════════════════════════ -->
+    <div class="books-grid stagger" id="booksGrid"></div>
+  </div>
+</section>
+
+<!-- SOCIAL FOLLOW -->
+<section class="section social-sec" id="follow">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="eyebrow" data-lang="th">ติดตามเรา</span>
+      <span class="eyebrow" data-lang="en">Follow Along</span>
+      <h2 class="sec-title" data-lang="th">เรียนรู้เรื่องสมอง ไปกับเรา</h2>
+      <h2 class="sec-title" data-lang="en">Learn about your brain, together</h2><h2 class="sec-title" data-lang="zh">与我们一起学习脑健康</h2><h2 class="sec-title" data-lang="ja">一緒に学ぶ脳の健康</h2><h2 class="sec-title" data-lang="de">Hirngesundheit gemeinsam verstehen</h2>
+      <p class="sec-lead" data-lang="th">ติดตามคลิปและบทความจากหมอ — ความรู้เรื่องสมองเสื่อม ไมเกรน หลอดเลือดสมอง และการดูแลสุขภาพสมองในชีวิตประจำวัน เผยแพร่อย่างต่อเนื่อง</p>
+      <p class="sec-lead" data-lang="en">Follow videos and articles by Dr. Adisak — on dementia, migraine, stroke, and everyday brain health, shared regularly.</p><p class="sec-lead" data-lang="zh">关注医生的视频与文章——涵盖痴呆、偏头痛、脑卒中及日常脑健康护理,持续更新</p><p class="sec-lead" data-lang="ja">医師による動画と記事をフォロー——認知症、片頭痛、脳卒中、日常の脳ケアについて随時発信</p><p class="sec-lead" data-lang="de">Folgen Sie den Videos und Beiträgen von Dr. Adisak — zu Demenz, Migräne, Schlaganfall und Hirngesundheit im Alltag</p>
+    </div>
+    <div class="social-grid stagger">
+      <a class="social-card fb" href="https://www.facebook.com/share/1JFowoTzjH/" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.3h-1.2c-1.2 0-1.5.7-1.5 1.5V12h2.6l-.4 2.9h-2.2v7A10 10 0 0 0 22 12Z"/></svg>
+        </div>
+        <span class="social-tag">Facebook</span>
+        <div class="social-content">
+          <h3 data-lang="th">คลินิกรักษ์สมองหมออดิศักดิ์</h3>
+          <h3 data-lang="en">Dr.Adisak Brain Care Clinic</h3><h3 data-lang="zh">阿迪萨脑健康诊所</h3><h3 data-lang="ja">Dr.Adisak 脳神経クリニック</h3><h3 data-lang="de">Dr.Adisak Hirnpflegeklinik</h3>
+          <p data-lang="th">อัปเดตความรู้เรื่องสมอง บทความใหม่ และกิจกรรมของคลินิกอย่างต่อเนื่อง</p>
+          <p data-lang="en">Brain-health updates, new articles, and clinic activities — shared regularly.</p><p data-lang="zh">持续更新脑健康知识、新文章及诊所活动</p><p data-lang="ja">脳の健康に関する最新情報、新記事、クリニックの活動を随時更新</p><p data-lang="de">Aktuelle Beiträge zur Hirngesundheit, neue Artikel und Klinik-Updates</p>
+        </div>
+        <span class="social-arrow">
+          <span data-lang="th">เข้าหน้าเพจ Facebook</span><span data-lang="en">Open Facebook Page</span><span data-lang="zh">进入 Facebook 主页</span><span data-lang="ja">Facebook ページへ</span><span data-lang="de">Zur Facebook-Seite</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+      <a class="social-card yt" href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener">
+        <div class="social-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg>
+        </div>
+        <span class="social-tag">YouTube</span>
+        <div class="social-content">
+          <h3 data-lang="th">ช่อง Dr.Adisak Kittisares</h3>
+          <h3 data-lang="en">Dr. Adisak Kittisares</h3><h3 data-lang="zh">Dr.Adisak Kittisares 频道</h3><h3 data-lang="ja">Dr.Adisak Kittisares チャンネル</h3><h3 data-lang="de">Kanal Dr. Adisak Kittisares</h3>
+          <p data-lang="th">คลิปความรู้เรื่องสมอง สมองเสื่อม ไมเกรน พาร์กินสัน และโรคทางระบบประสาทอื่น ๆ</p>
+          <p data-lang="en">Clinical insights on dementia, migraine, Parkinson's, and other neurological conditions.</p><p data-lang="zh">关于痴呆、偏头痛、帕金森及其他神经系统疾病的科普视频</p><p data-lang="ja">認知症、片頭痛、パーキンソン病など神経疾患の解説動画</p><p data-lang="de">Klinische Einblicke zu Demenz, Migräne, Parkinson und weiteren neurologischen Erkrankungen</p>
+        </div>
+        <span class="social-arrow">
+          <span data-lang="th">ไปยังช่อง YouTube</span><span data-lang="en">Open YouTube Channel</span><span data-lang="zh">前往 YouTube 频道</span><span data-lang="ja">YouTube チャンネルへ</span><span data-lang="de">Zum YouTube-Kanal</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="eyebrow" data-lang="th">ติดต่อและนัดหมาย</span>
+      <span class="eyebrow" data-lang="en">Contact &amp; Booking</span><span class="eyebrow" data-lang="zh">联系与预约</span><span class="eyebrow" data-lang="ja">ご連絡・ご予約</span><span class="eyebrow" data-lang="de">Kontakt & Termin</span>
+      <h2 class="sec-title" data-lang="th">ปรึกษาเรา เพื่อก้าวแรกของการดูแลสมองอย่างมั่นใจ</h2>
+      <h2 class="sec-title" data-lang="en">Talk to us — your first step toward confident brain care</h2><h2 class="sec-title" data-lang="zh">联系我们,迈出安心守护脑健康的第一步</h2><h2 class="sec-title" data-lang="ja">安心の脳ケアの第一歩、まずはご相談ください</h2><h2 class="sec-title" data-lang="de">Sprechen Sie mit uns — Ihr erster Schritt zu sicherer Hirngesundheit</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="map reveal">
+        <iframe src="https://maps.google.com/maps?q=18.7975,98.9645&hl=th&output=embed&z=18" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="แผนที่คลินิก"></iframe>
+        <a class="map-cta" href="https://maps.app.goo.gl/vCZyAjfY4yRbpELj7" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span data-lang="th">เปิดใน Google Maps</span><span data-lang="en">Open in Google Maps</span><span data-lang="zh">在 Google 地图打开</span><span data-lang="ja">Google マップで開く</span><span data-lang="de">In Google Maps öffnen</span>
+        </a>
+      </div>
+      <div class="info-cards reveal">
+        <a class="info-card brand-msgr" href="https://m.me/250128068679567" target="_blank" rel="noopener">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6 2 11c0 2.8 1.4 5.3 3.6 6.9V22l3.3-1.8c1 .3 2 .4 3.1.4 5.5 0 10-4 10-9s-4.5-9.6-10-9.6Zm1.1 12.1-2.5-2.7-5 2.7 5.5-5.8 2.6 2.7 4.9-2.7-5.5 5.8Z"/></svg></div>
+          <div><b data-lang="th">ทักแชทผ่าน Messenger</b><b data-lang="en">Chat on Messenger</b><b data-lang="zh">通过 Messenger 联系</b><b data-lang="ja">Messenger で問合せ</b><b data-lang="de">Über Messenger anschreiben</b><span data-lang="th">สอบถามและนัดหมายได้ทันที</span><span data-lang="en">Ask questions or book instantly</span><span data-lang="zh">即时咨询与预约</span><span data-lang="ja">お問合せ・ご予約はすぐに</span><span data-lang="de">Fragen oder direkt buchen</span></div>
+        </a>
+        <a class="info-card brand-line" href="https://lin.ee/OUNz8ob" target="_blank" rel="noopener">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 4 3.6 7.3 8.5 7.9.3.1.8.2.9.5.1.3 0 .8 0 1.1l-.1.9c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.1-6C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8Z"/></svg></div>
+          <div><b data-lang="th">เพิ่มเพื่อนทาง LINE</b><b data-lang="en">Add us on LINE</b><b data-lang="zh">添加 LINE 好友</b><b data-lang="ja">LINE で友だち追加</b><b data-lang="de">Auf LINE hinzufügen</b><span data-lang="th">สอบถามและนัดหมายผ่าน LINE ได้สะดวก</span><span data-lang="en">Friendly, easy way to reach us</span><span data-lang="zh">通过 LINE 便捷咨询与预约</span><span data-lang="ja">LINE で便利にお問合せ・ご予約</span><span data-lang="de">Bequem über LINE Fragen stellen und buchen</span></div>
+        </a>
+        <a class="info-card" href="tel:+66932244626">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg></div>
+          <div><b data-lang="th">โทรศัพท์</b><b data-lang="en">Phone</b><b data-lang="zh">电话</b><b data-lang="ja">お電話</b><b data-lang="de">Telefon</b><span>093-224-4626</span></div>
+        </a>
+        <div class="info-card hours-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div>
+            <b data-lang="th">เวลาทำการ</b><b data-lang="en">Clinic Hours</b><b data-lang="zh">诊疗时间</b><b data-lang="ja">診療時間</b><b data-lang="de">Sprechzeiten</b>
+            <ul class="hours-list" data-lang="th">
+              <li><span class="day">อังคาร</span><span class="time">17:00 – 19:30 น.</span></li>
+              <li><span class="day">พฤหัสบดี</span><span class="time">17:00 – 19:30 น.</span></li>
+              <li><span class="day">เสาร์</span><span class="time">09:00 – 12:00 น.</span></li>
+            </ul>
+            <ul class="hours-list" data-lang="en">
+              <li><span class="day">Tuesday</span><span class="time">5:00 – 7:30 PM</span></li>
+              <li><span class="day">Thursday</span><span class="time">5:00 – 7:30 PM</span></li>
+              <li><span class="day">Saturday</span><span class="time">9:00 AM – 12:00 PM</span></li>
+            </ul><ul class="hours-list" data-lang="zh">
+              <li><span class="day">周二</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">周四</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">周六</span><span class="time">09:00 – 12:00</span></li>
+            </ul><ul class="hours-list" data-lang="ja">
+              <li><span class="day">火曜</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">木曜</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">土曜</span><span class="time">09:00 – 12:00</span></li>
+            </ul><ul class="hours-list" data-lang="de">
+              <li><span class="day">Dienstag</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">Donnerstag</span><span class="time">17:00 – 19:30</span></li>
+              <li><span class="day">Samstag</span><span class="time">09:00 – 12:00</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+          <div><b data-lang="th">ที่ตั้งคลินิก</b><b data-lang="en">Address</b><b data-lang="zh">诊所地址</b><b data-lang="ja">所在地</b><b data-lang="de">Adresse</b><span data-lang="th">โครงการปันนาเพลส เลขที่ 30<br>ถ.นิมมานเหมินทร์ ต.สุเทพ อ.เมือง<br>จ.เชียงใหม่ 50200</span><span data-lang="en">Punna Place, 30 Nimmanhaemin Rd.<br>Suthep, Mueang, Chiang Mai 50200</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section class="section sec-paper" id="faq">
   <div class="wrap">
@@ -1145,184 +1326,6 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
   </div>
 </section>
 
-<!-- ARTICLES -->
-<section class="section articles" id="articles">
-  <div class="wrap">
-    <div class="art-head reveal">
-      <div>
-        <span class="eyebrow" data-lang="th">ความรู้เรื่องสมอง</span>
-        <span class="eyebrow" data-lang="en">Brain Insights</span>
-        <h2 class="sec-title" data-lang="th">บทความสุขภาพสมอง โดยแพทย์</h2>
-        <h2 class="sec-title" data-lang="en">Brain-health writing, by your doctor</h2>
-        <p class="sec-lead" data-lang="th">คลังความรู้ที่เขียนจากความเข้าใจจริง — บทความโดย นพ.อดิศักดิ์ เพื่อให้คุณดูแลสมองได้อย่างมั่นใจ</p>
-        <p class="sec-lead" data-lang="en">A library written from genuine clinical understanding — featured reads hand-picked by Dr. Adisak.</p>
-      </div>
-    </div>
-    <div class="art-head-row reveal">
-      <label class="art-search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="search" id="artSearch" placeholder="ค้นหาบทความ เช่น ไมเกรน สมองเสื่อม..." aria-label="ค้นหาบทความ">
-      </label>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <select id="artFilter" style="font-family:inherit;font-size:14px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2346596A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:.25s">
-          <option value="">หมวดหมู่ทั้งหมด</option>
-          <option value="สมองเสื่อม">สมองเสื่อม / ความจำ</option>
-          <option value="ไมเกรน">ไมเกรน / ปวดศีรษะ</option>
-          <option value="หลอดเลือดสมอง">หลอดเลือดสมอง</option>
-          <option value="พาร์กินสัน">พาร์กินสัน</option>
-          <option value="สุขภาพสมอง">สุขภาพสมองทั่วไป</option>
-          <option value="เส้นประสาท">เส้นประสาท</option>
-        </select>
-        <span id="artCount" style="font-size:13px;color:var(--ink-soft)"></span>
-      </div>
-    </div>
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         ARTICLES DATA — เพิ่มบทความใหม่โดยใส่ข้อมูลในอาร์เรย์ ARTICLES_DATA
-         ด้านล่างใน <script> — ไม่ต้องแก้ HTML ใดๆ
-    ════════════════════════════════════════════════════════════════════════ -->
-    <div class="art-grid stagger" id="artGrid"></div>
-    <div id="artEmpty" style="display:none;text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:16px">ไม่พบบทความที่ค้นหา</div>
-    <div style="text-align:center;margin-top:44px" id="artLoadMore" class="reveal">
-      <button onclick="loadMoreArticles()" class="btn btn-ghost" id="loadMoreBtn" style="min-width:200px">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        ดูบทความเพิ่มเติม
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- BOOKS -->
-<section class="section books-sec" id="books">
-  <div class="wrap">
-    <div class="reveal">
-      <span class="eyebrow">คลังหนังสือ</span>
-      <h2 class="sec-title">Brain Care Series — หนังสือสุขภาพสมองโดยแพทย์</h2>
-      <p class="sec-lead">หนังสือที่เขียนจากประสบการณ์การดูแลผู้ป่วยจริง — อ่านออนไลน์ได้เลย หรือดาวน์โหลดเก็บไว้อ่านเมื่อสะดวก</p>
-    </div>
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         BOOKS DATA — เพิ่มหนังสือใหม่โดยแก้อาร์เรย์ BOOKS_DATA ใน <script>
-         ไม่ต้องแก้ HTML ใดๆ
-    ════════════════════════════════════════════════════════════════════════ -->
-    <div class="books-grid stagger" id="booksGrid"></div>
-  </div>
-</section>
-
-<!-- SOCIAL FOLLOW -->
-<section class="section social-sec" id="follow">
-  <div class="wrap">
-    <div class="reveal" style="max-width:680px">
-      <span class="eyebrow" data-lang="th">ติดตามเรา</span>
-      <span class="eyebrow" data-lang="en">Follow Along</span>
-      <h2 class="sec-title" data-lang="th">เรียนรู้เรื่องสมอง ไปกับเรา</h2>
-      <h2 class="sec-title" data-lang="en">Learn about your brain, together</h2><h2 class="sec-title" data-lang="zh">与我们一起学习脑健康</h2><h2 class="sec-title" data-lang="ja">一緒に学ぶ脳の健康</h2><h2 class="sec-title" data-lang="de">Hirngesundheit gemeinsam verstehen</h2>
-      <p class="sec-lead" data-lang="th">ติดตามคลิปและบทความจากหมอ — ความรู้เรื่องสมองเสื่อม ไมเกรน หลอดเลือดสมอง และการดูแลสุขภาพสมองในชีวิตประจำวัน เผยแพร่อย่างต่อเนื่อง</p>
-      <p class="sec-lead" data-lang="en">Follow videos and articles by Dr. Adisak — on dementia, migraine, stroke, and everyday brain health, shared regularly.</p><p class="sec-lead" data-lang="zh">关注医生的视频与文章——涵盖痴呆、偏头痛、脑卒中及日常脑健康护理,持续更新</p><p class="sec-lead" data-lang="ja">医師による動画と記事をフォロー——認知症、片頭痛、脳卒中、日常の脳ケアについて随時発信</p><p class="sec-lead" data-lang="de">Folgen Sie den Videos und Beiträgen von Dr. Adisak — zu Demenz, Migräne, Schlaganfall und Hirngesundheit im Alltag</p>
-    </div>
-    <div class="social-grid stagger">
-      <a class="social-card fb" href="https://www.facebook.com/share/1JFowoTzjH/" target="_blank" rel="noopener">
-        <div class="social-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.3h-1.2c-1.2 0-1.5.7-1.5 1.5V12h2.6l-.4 2.9h-2.2v7A10 10 0 0 0 22 12Z"/></svg>
-        </div>
-        <span class="social-tag">Facebook</span>
-        <div class="social-content">
-          <h3 data-lang="th">คลินิกรักษ์สมองหมออดิศักดิ์</h3>
-          <h3 data-lang="en">Dr.Adisak Brain Care Clinic</h3><h3 data-lang="zh">阿迪萨脑健康诊所</h3><h3 data-lang="ja">Dr.Adisak 脳神経クリニック</h3><h3 data-lang="de">Dr.Adisak Hirnpflegeklinik</h3>
-          <p data-lang="th">อัปเดตความรู้เรื่องสมอง บทความใหม่ และกิจกรรมของคลินิกอย่างต่อเนื่อง</p>
-          <p data-lang="en">Brain-health updates, new articles, and clinic activities — shared regularly.</p><p data-lang="zh">持续更新脑健康知识、新文章及诊所活动</p><p data-lang="ja">脳の健康に関する最新情報、新記事、クリニックの活動を随時更新</p><p data-lang="de">Aktuelle Beiträge zur Hirngesundheit, neue Artikel und Klinik-Updates</p>
-        </div>
-        <span class="social-arrow">
-          <span data-lang="th">เข้าหน้าเพจ Facebook</span><span data-lang="en">Open Facebook Page</span><span data-lang="zh">进入 Facebook 主页</span><span data-lang="ja">Facebook ページへ</span><span data-lang="de">Zur Facebook-Seite</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </a>
-      <a class="social-card yt" href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener">
-        <div class="social-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg>
-        </div>
-        <span class="social-tag">YouTube</span>
-        <div class="social-content">
-          <h3 data-lang="th">ช่อง Dr.Adisak Kittisares</h3>
-          <h3 data-lang="en">Dr. Adisak Kittisares</h3><h3 data-lang="zh">Dr.Adisak Kittisares 频道</h3><h3 data-lang="ja">Dr.Adisak Kittisares チャンネル</h3><h3 data-lang="de">Kanal Dr. Adisak Kittisares</h3>
-          <p data-lang="th">คลิปความรู้เรื่องสมอง สมองเสื่อม ไมเกรน พาร์กินสัน และโรคทางระบบประสาทอื่น ๆ</p>
-          <p data-lang="en">Clinical insights on dementia, migraine, Parkinson's, and other neurological conditions.</p><p data-lang="zh">关于痴呆、偏头痛、帕金森及其他神经系统疾病的科普视频</p><p data-lang="ja">認知症、片頭痛、パーキンソン病など神経疾患の解説動画</p><p data-lang="de">Klinische Einblicke zu Demenz, Migräne, Parkinson und weiteren neurologischen Erkrankungen</p>
-        </div>
-        <span class="social-arrow">
-          <span data-lang="th">ไปยังช่อง YouTube</span><span data-lang="en">Open YouTube Channel</span><span data-lang="zh">前往 YouTube 频道</span><span data-lang="ja">YouTube チャンネルへ</span><span data-lang="de">Zum YouTube-Kanal</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </a>
-    </div>
-  </div>
-</section>
-
-
-<!-- CONTACT -->
-<section class="section contact" id="contact">
-  <div class="wrap">
-    <div class="reveal" style="max-width:680px">
-      <span class="eyebrow" data-lang="th">ติดต่อและนัดหมาย</span>
-      <span class="eyebrow" data-lang="en">Contact &amp; Booking</span><span class="eyebrow" data-lang="zh">联系与预约</span><span class="eyebrow" data-lang="ja">ご連絡・ご予約</span><span class="eyebrow" data-lang="de">Kontakt & Termin</span>
-      <h2 class="sec-title" data-lang="th">ปรึกษาเรา เพื่อก้าวแรกของการดูแลสมองอย่างมั่นใจ</h2>
-      <h2 class="sec-title" data-lang="en">Talk to us — your first step toward confident brain care</h2><h2 class="sec-title" data-lang="zh">联系我们,迈出安心守护脑健康的第一步</h2><h2 class="sec-title" data-lang="ja">安心の脳ケアの第一歩、まずはご相談ください</h2><h2 class="sec-title" data-lang="de">Sprechen Sie mit uns — Ihr erster Schritt zu sicherer Hirngesundheit</h2>
-    </div>
-    <div class="contact-grid">
-      <div class="map reveal">
-        <iframe src="https://maps.google.com/maps?q=18.7975,98.9645&hl=th&output=embed&z=18" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="แผนที่คลินิก"></iframe>
-        <a class="map-cta" href="https://maps.app.goo.gl/vCZyAjfY4yRbpELj7" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          <span data-lang="th">เปิดใน Google Maps</span><span data-lang="en">Open in Google Maps</span><span data-lang="zh">在 Google 地图打开</span><span data-lang="ja">Google マップで開く</span><span data-lang="de">In Google Maps öffnen</span>
-        </a>
-      </div>
-      <div class="info-cards reveal">
-        <a class="info-card brand-msgr" href="https://m.me/250128068679567" target="_blank" rel="noopener">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6 2 11c0 2.8 1.4 5.3 3.6 6.9V22l3.3-1.8c1 .3 2 .4 3.1.4 5.5 0 10-4 10-9s-4.5-9.6-10-9.6Zm1.1 12.1-2.5-2.7-5 2.7 5.5-5.8 2.6 2.7 4.9-2.7-5.5 5.8Z"/></svg></div>
-          <div><b data-lang="th">ทักแชทผ่าน Messenger</b><b data-lang="en">Chat on Messenger</b><b data-lang="zh">通过 Messenger 联系</b><b data-lang="ja">Messenger で問合せ</b><b data-lang="de">Über Messenger anschreiben</b><span data-lang="th">สอบถามและนัดหมายได้ทันที</span><span data-lang="en">Ask questions or book instantly</span><span data-lang="zh">即时咨询与预约</span><span data-lang="ja">お問合せ・ご予約はすぐに</span><span data-lang="de">Fragen oder direkt buchen</span></div>
-        </a>
-        <a class="info-card brand-line" href="https://lin.ee/OUNz8ob" target="_blank" rel="noopener">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 4 3.6 7.3 8.5 7.9.3.1.8.2.9.5.1.3 0 .8 0 1.1l-.1.9c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.1-6C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8Z"/></svg></div>
-          <div><b data-lang="th">เพิ่มเพื่อนทาง LINE</b><b data-lang="en">Add us on LINE</b><b data-lang="zh">添加 LINE 好友</b><b data-lang="ja">LINE で友だち追加</b><b data-lang="de">Auf LINE hinzufügen</b><span data-lang="th">สอบถามและนัดหมายผ่าน LINE ได้สะดวก</span><span data-lang="en">Friendly, easy way to reach us</span><span data-lang="zh">通过 LINE 便捷咨询与预约</span><span data-lang="ja">LINE で便利にお問合せ・ご予約</span><span data-lang="de">Bequem über LINE Fragen stellen und buchen</span></div>
-        </a>
-        <a class="info-card" href="tel:+66932244626">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg></div>
-          <div><b data-lang="th">โทรศัพท์</b><b data-lang="en">Phone</b><b data-lang="zh">电话</b><b data-lang="ja">お電話</b><b data-lang="de">Telefon</b><span>093-224-4626</span></div>
-        </a>
-        <div class="info-card hours-card">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <div>
-            <b data-lang="th">เวลาทำการ</b><b data-lang="en">Clinic Hours</b><b data-lang="zh">诊疗时间</b><b data-lang="ja">診療時間</b><b data-lang="de">Sprechzeiten</b>
-            <ul class="hours-list" data-lang="th">
-              <li><span class="day">อังคาร</span><span class="time">17:00 – 19:30 น.</span></li>
-              <li><span class="day">พฤหัสบดี</span><span class="time">17:00 – 19:30 น.</span></li>
-              <li><span class="day">เสาร์</span><span class="time">09:00 – 12:00 น.</span></li>
-            </ul>
-            <ul class="hours-list" data-lang="en">
-              <li><span class="day">Tuesday</span><span class="time">5:00 – 7:30 PM</span></li>
-              <li><span class="day">Thursday</span><span class="time">5:00 – 7:30 PM</span></li>
-              <li><span class="day">Saturday</span><span class="time">9:00 AM – 12:00 PM</span></li>
-            </ul><ul class="hours-list" data-lang="zh">
-              <li><span class="day">周二</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">周四</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">周六</span><span class="time">09:00 – 12:00</span></li>
-            </ul><ul class="hours-list" data-lang="ja">
-              <li><span class="day">火曜</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">木曜</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">土曜</span><span class="time">09:00 – 12:00</span></li>
-            </ul><ul class="hours-list" data-lang="de">
-              <li><span class="day">Dienstag</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">Donnerstag</span><span class="time">17:00 – 19:30</span></li>
-              <li><span class="day">Samstag</span><span class="time">09:00 – 12:00</span></li>
-            </ul>
-          </div>
-        </div>
-        <div class="info-card">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
-          <div><b data-lang="th">ที่ตั้งคลินิก</b><b data-lang="en">Address</b><b data-lang="zh">诊所地址</b><b data-lang="ja">所在地</b><b data-lang="de">Adresse</b><span data-lang="th">โครงการปันนาเพลส เลขที่ 30<br>ถ.นิมมานเหมินทร์ ต.สุเทพ อ.เมือง<br>จ.เชียงใหม่ 50200</span><span data-lang="en">Punna Place, 30 Nimmanhaemin Rd.<br>Suthep, Mueang, Chiang Mai 50200</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer class="footer">
   <div class="neural-line"></div>
@@ -1490,6 +1493,11 @@ function renderArticles(data, append=false) {
     const tag = hasUrl ? `<a href="${a.url}" class="art-card" style="text-decoration:none;color:inherit">` : `<article class="art-card">`;
     const closeTag = hasUrl ? `</a>` : `</article>`;
     const badge = hasUrl ? '' : `<span class="soon">เร็วๆ นี้</span>`;
+    const audioSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+    const hasAudio = a.audioUrl && a.audioUrl.trim() !== '';
+    const audioBtn = hasAudio
+      ? `<button class="art-audio-btn" onclick="openAudio(event,'${String(a.audioUrl).replace(/'/g,"\\'")}')">${audioSvg} ฟังเสียงอ่าน</button>`
+      : `<button class="art-audio-btn disabled" disabled aria-disabled="true" title="ยังไม่มีเสียงอ่าน">${audioSvg} ฟังเสียงอ่าน</button>`;
     return `${tag}
       <div class="art-cover"><div class="mesh" style="background:${a.gradient}"></div>
         <span class="cat">${a.cat}</span>${badge}
@@ -1501,13 +1509,7 @@ function renderArticles(data, append=false) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           อ่าน ${a.readMin} นาที
         </div>
-        <div class="art-tts">
-          <button class="art-tts-btn" data-title="${a.title.replace(/"/g,'&quot;')}" data-desc="${a.desc.replace(/"/g,'&quot;')}" onclick="ttsCard(this,event)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            ฟัง
-          </button>
-          <div class="art-tts-bar"><div class="art-tts-fill"></div></div>
-        </div>
+        <div class="art-audio">${audioBtn}</div>
       </div>${closeTag}`;
   }).join('');
   grid.innerHTML = html;
@@ -1568,6 +1570,16 @@ function renderBooks() {
   const grid = document.getElementById('booksGrid');
   if (!grid) return;
   grid.innerHTML = BOOKS_DATA.map(b => {
+    const hasAudio = b.audioUrl && b.audioUrl.trim() !== '';
+    const audioBtn = hasAudio
+      ? `<a href="${b.audioUrl}" target="_blank" rel="noopener" class="book-btn book-btn-audio">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            ฟังเสียงอ่าน
+          </a>`
+      : `<span class="book-btn book-btn-audio disabled" aria-disabled="true" title="ยังไม่มีเสียงอ่าน">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            ฟังเสียงอ่าน
+          </span>`;
     const actions = b.ready
       ? `<div class="book-actions">
           <a href="${b.readUrl}" target="_blank" class="book-btn book-btn-read">
@@ -1578,8 +1590,10 @@ function renderBooks() {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             ดาวน์โหลด PDF
           </a>
+          ${audioBtn}
         </div>`
-      : `<div class="book-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>เร็วๆ นี้</div>`;
+      : `<div class="book-actions">${audioBtn}</div>
+         <div class="book-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>เร็วๆ นี้</div>`;
     return `<div class="book-card">
       <div class="book-cover">
         <div class="cover-gradient" style="background:${b.gradient}">
@@ -1647,65 +1661,23 @@ document.addEventListener('click', function(e){
   }
 });
 
-// ── Article Card TTS ──────────────────────────────────────────────
-let _ttsActive = null; // {btn, utt, fill}
-
-function ttsCard(btn, e) {
-  e.preventDefault(); e.stopPropagation();
-  const title = btn.dataset.title;
-  const desc  = btn.dataset.desc;
-  const fill  = btn.closest('.art-tts').querySelector('.art-tts-fill');
-
-  // If same card is playing — stop
-  if (_ttsActive && _ttsActive.btn === btn) {
-    speechSynthesis.cancel();
-    _ttsReset(_ttsActive);
-    _ttsActive = null;
-    return;
+// ── Listen-to-audio button (opens YouTube audio link) ──────────────
+function openAudio(e, url) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (!url) return;
+  let opened = null;
+  try { opened = window.open(url, '_blank', 'noopener,noreferrer'); } catch(_) {}
+  if (opened && !opened.closed) return;
+  // Blocked by sandbox — fall back to clipboard + toast
+  const msg = (document.documentElement.lang === 'en')
+      ? 'Link copied — paste into your browser to open'
+      : 'คัดลอกลิงก์แล้ว — วางในเบราว์เซอร์เพื่อเปิด';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(()=>showToast(msg), ()=>showToast(url, 5000));
+  } else {
+    showToast(url, 5000);
   }
-  // Stop previous card
-  if (_ttsActive) { speechSynthesis.cancel(); _ttsReset(_ttsActive); }
-
-  btn.classList.add('playing');
-  btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> หยุด`;
-
-  // Find Thai voice
-  const voices = speechSynthesis.getVoices();
-  const thVoice = voices.find(v => v.lang.startsWith('th')) || null;
-
-  // Speak title then desc as two utterances
-  const speak = (text, onDone) => {
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = 'th-TH'; utt.rate = 1;
-    if (thVoice) utt.voice = thVoice;
-    utt.onend = onDone; utt.onerror = onDone;
-    speechSynthesis.speak(utt);
-  };
-
-  _ttsActive = {btn, fill};
-
-  // Animate fill: title ~30%, then desc to 100%
-  fill.style.transition = 'width 1.5s linear';
-  fill.style.width = '30%';
-  speak(title, () => {
-    if (!_ttsActive || _ttsActive.btn !== btn) return;
-    fill.style.transition = `width ${(desc.length / 5)}s linear`;
-    fill.style.width = '100%';
-    speak(desc, () => {
-      if (_ttsActive && _ttsActive.btn === btn) { _ttsReset(_ttsActive); _ttsActive = null; }
-    });
-  });
 }
-
-function _ttsReset({btn, fill}) {
-  btn.classList.remove('playing');
-  btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> ฟัง`;
-  fill.style.transition = 'width .3s';
-  fill.style.width = '0%';
-}
-
-// Preload voices
-if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.getVoices();
 
 
 

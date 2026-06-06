@@ -6,7 +6,8 @@
     "readMin": 6,
     "gradient": "radial-gradient(120% 100% at 50% 20%,#0e8a84,#0a3f4a)",
     "url": "articles/art-1780750191566.html",
-    "featured": true
+    "featured": true,
+    "audioUrl": ""
   },
   {
     "cat": "ไมเกรน",
@@ -15,7 +16,8 @@
     "readMin": 5,
     "gradient": "radial-gradient(120% 100% at 80% 20%,#0e8a84,#0a3f4a)",
     "url": "",
-    "featured": true
+    "featured": true,
+    "audioUrl": ""
   },
   {
     "cat": "หลอดเลือดสมอง",
@@ -24,7 +26,8 @@
     "readMin": 7,
     "gradient": "radial-gradient(120% 100% at 50% 0%,#15706e,#0c2533)",
     "url": "",
-    "featured": true
+    "featured": true,
+    "audioUrl": ""
   },
   {
     "cat": "สุขภาพสมอง",
@@ -33,7 +36,8 @@
     "readMin": 5,
     "gradient": "radial-gradient(120% 100% at 30% 80%,#1a3a6a,#0e1c3c)",
     "url": "",
-    "featured": false
+    "featured": false,
+    "audioUrl": ""
   },
   {
     "cat": "พาร์กินสัน",
@@ -42,7 +46,8 @@
     "readMin": 6,
     "gradient": "radial-gradient(120% 100% at 70% 30%,#2d4a6a,#162535)",
     "url": "",
-    "featured": false
+    "featured": false,
+    "audioUrl": ""
   },
   {
     "cat": "เส้นประสาท",
@@ -51,6 +56,7 @@
     "readMin": 5,
     "gradient": "radial-gradient(120% 100% at 20% 60%,#0a5a55,#06292a)",
     "url": "",
-    "featured": false
+    "featured": false,
+    "audioUrl": ""
   }
 ]
