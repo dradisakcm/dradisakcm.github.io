@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="theme-color" content="#7B7FCA">
+<link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="book"><meta property="og:title" content="Brain Care Series เล่ม 1 — พ่อแม่ขี้ลืม…ปกติหรืออัลไซเมอร์?"><meta property="og:image" content="https://dradisak.com/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet"><title>พ่อแม่ขี้ลืม…ปกติหรืออัลไซเมอร์? | Brain Care Series เล่ม 1</title>
 <style>
 @page{
@@ -2236,6 +2237,44 @@ window.addEventListener('scroll',()=>{
   document.getElementById('fs-up')?.addEventListener('click',   () => apply(cur + 1));
 })();
 
+</script>
+
+
+<style>
+#eb-footer{max-width:560px;margin:30px auto 60px;padding:26px 22px;text-align:center;border-top:1px solid var(--c-line);font-family:'Sarabun',sans-serif}
+#eb-footer .eb-share-label{font-size:15px;color:var(--c-ink-s);font-weight:600;margin-bottom:14px}
+#eb-footer .eb-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:18px}
+#eb-footer .eb-sbtn{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;padding:10px 18px;border-radius:999px;color:#fff;transition:transform .2s,box-shadow .2s}
+#eb-footer .eb-sbtn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(45,43,71,.2)}
+#eb-fb{background:#1877F2}#eb-line{background:#06C755}#eb-copy{background:var(--c-ink)}
+#eb-footer .eb-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+#eb-footer .eb-nbtn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:14px;font-weight:700;font-size:15px;text-decoration:none;transition:transform .2s,background .2s,border-color .2s,color .2s}
+#eb-footer .eb-prim{background:var(--c-p);color:#fff}
+#eb-footer .eb-prim:hover{background:var(--c-p-d);transform:translateY(-2px)}
+#eb-footer .eb-ghost{background:#fff;color:var(--c-ink);border:1.5px solid var(--c-line)}
+#eb-footer .eb-ghost:hover{border-color:var(--c-p);color:var(--c-p-d);transform:translateY(-2px)}
+#ebCopyToast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c-ink);color:#fff;padding:11px 22px;border-radius:999px;font-size:14px;font-family:'Sarabun',sans-serif;opacity:0;pointer-events:none;transition:.3s;z-index:9000;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#ebCopyToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media print{#eb-footer,#ebCopyToast{display:none}}
+@media(max-width:480px){#eb-footer .eb-nbtn{width:100%;justify-content:center}}
+</style>
+<div id="eb-footer">
+  <div class="eb-share-label">แชร์หนังสือเล่มนี้</div>
+  <div class="eb-row">
+    <button class="eb-sbtn" id="eb-fb" onclick="ebShareFB()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.8 3.7-3.8 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>Facebook</button>
+    <button class="eb-sbtn" id="eb-line" onclick="ebShareLINE()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.4 7.2 8 7.9.3.1.7.2.8.5.1.3.1.6 0 .9 0 0-.1.7-.2 1-.1.3-.2 1 .9.6 1.2-.5 6.1-3.6 8.3-6.1C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8z"/></svg>LINE</button>
+    <button class="eb-sbtn" id="eb-copy" onclick="ebCopyLink()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>คัดลอกลิงก์</button>
+  </div>
+  <div class="eb-nav">
+    <a class="eb-nbtn eb-prim" href="index.html#books"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>ดูหนังสือเล่มอื่น ๆ</a>
+    <a class="eb-nbtn eb-ghost" href="index.html"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับสู่หน้าเว็บไซต์</a>
+  </div>
+</div>
+<div id="ebCopyToast">คัดลอกลิงก์แล้ว ✓</div>
+<script>
+function ebShareFB(){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function ebShareLINE(){window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function ebCopyLink(){var done=function(){var t=document.getElementById('ebCopyToast');if(t){t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(done,done);}else{var ta=document.createElement('textarea');ta.value=location.href;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();done();}}
 </script>
 
 </body>

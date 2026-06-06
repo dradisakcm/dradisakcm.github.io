@@ -1208,7 +1208,7 @@ function generateArticlePage(a) {
       + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังบทความ (ไฟล์เสียง)</div>'
       + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + a._audio + '"></audio>'
       + '</div>'
-    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังบทความ</button>'
+    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังเสียงอ่านบทความ</button>'
       + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
       + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
       + '<div id="tts-label">พร้อมเล่น</div>'
@@ -1222,6 +1222,12 @@ function generateArticlePage(a) {
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${esc(a.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
 <meta name="description" content="${esc(a.desc)}">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${esc(a.title)}">
+<meta property="og:description" content="${esc(a.desc)}">
+<meta property="og:image" content="https://dradisak.com/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1249,13 +1255,31 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:20px 0;font-style:italic;color:var(--ink-soft)}
 .art-body img{max-width:100%;border-radius:14px;margin:20px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
 .art-body a{color:var(--teal);text-decoration:underline}
-.art-footer{max-width:720px;margin:0 auto;padding:0 24px 90px}
+.art-footer{max-width:720px;margin:0 auto;padding:8px 24px 160px;text-align:center}
 .back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none}
 .back-home:hover{background:var(--teal-deep)}
-.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
+.share-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:center;margin:0 auto 30px;padding-top:6px}
+.share-label{font-family:'Noto Serif Thai',serif;font-size:14.5px;color:var(--ink-soft);font-weight:600}
+.share-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.share-btn{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;font-size:13.5px;font-weight:600;padding:10px 17px;border-radius:999px;color:#fff;transition:transform .2s,box-shadow .2s}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(14,34,51,.2)}
+.share-btn svg{flex-shrink:0}
+.sb-fb{background:#1877F2}.sb-line{background:#06C755}.sb-copy{background:var(--ink)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.fnav-btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:14px;font-weight:700;font-size:15px;text-decoration:none;font-family:'Noto Serif Thai',serif;transition:transform .2s,box-shadow .25s,background .2s,border-color .2s,color .2s}
+.fnav-primary{background:var(--teal);color:#fff;box-shadow:0 6px 20px rgba(14,138,132,.3)}
+.fnav-primary:hover{background:var(--teal-deep);transform:translateY(-2px)}
+.fnav-ghost{background:#fff;color:var(--ink);border:1.5px solid rgba(14,34,51,.15)}
+.fnav-ghost:hover{border-color:var(--teal);color:var(--teal-deep);transform:translateY(-2px)}
+#copyToast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#fff;padding:11px 22px;border-radius:999px;font-size:14px;font-family:'IBM Plex Sans Thai',sans-serif;opacity:0;pointer-events:none;transition:.3s;z-index:900;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#copyToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
 .audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
-#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px}
-#tts-fab:hover{background:var(--teal-deep)}
+#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
+#tts-fab svg{width:19px;height:19px}
+#tts-fab:hover{transform:translateY(-2px)}
+@keyframes fabPulse{0%,100%{box-shadow:0 8px 26px rgba(14,138,132,.4)}50%{box-shadow:0 8px 32px rgba(14,138,132,.6),0 0 0 7px rgba(67,210,200,.16)}}
+@media(max-width:480px){.fnav-btn{width:100%;justify-content:center}.share-btn{padding:9px 13px;font-size:13px}#tts-fab{padding:12px 18px;font-size:14px}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
@@ -1293,10 +1317,25 @@ ${a._body || ''}
 <!-- ARTICLE-CONTENT-END -->
 </article>
 <div class="art-footer">
-  <a href="../index.html" class="back-home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับหน้าคลินิก</a>
+  <div class="share-row">
+    <span class="share-label">แชร์บทความนี้</span>
+    <div class="share-btns">
+      <button class="share-btn sb-fb" onclick="shareFB()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.8 3.7-3.8 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>Facebook</button>
+      <button class="share-btn sb-line" onclick="shareLINE()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.4 7.2 8 7.9.3.1.7.2.8.5.1.3.1.6 0 .9 0 0-.1.7-.2 1-.1.3-.2 1 .9.6 1.2-.5 6.1-3.6 8.3-6.1C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8zM8.4 13.3H6.3c-.3 0-.5-.2-.5-.5V9.2c0-.3.2-.5.5-.5s.5.2.5.5v3.1h1.6c.3 0 .5.2.5.5s-.2.5-.5.5zm2-0.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V9.2c0-.3.2-.5.5-.5s.5.2.5.5v3.6zm4.3 0c0 .2-.1.4-.4.5h-.2c-.1 0-.3-.1-.4-.2l-1.7-2.3v2c0 .3-.2.5-.5.5s-.5-.2-.5-.5V9.2c0-.2.1-.4.4-.5.2-.1.5 0 .6.2l1.7 2.3v-2c0-.3.2-.5.5-.5s.5.2.5.5v3.6zm3-1.8c.3 0 .5.2.5.5s-.2.5-.5.5h-1.6v.8h1.6c.3 0 .5.2.5.5s-.2.5-.5.5h-2.1c-.3 0-.5-.2-.5-.5V9.2c0-.3.2-.5.5-.5h2.1c.3 0 .5.2.5.5s-.2.5-.5.5h-1.6v.8h1.6z"/></svg>LINE</button>
+      <button class="share-btn sb-copy" onclick="copyLink()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>คัดลอกลิงก์</button>
+    </div>
+  </div>
+  <div class="footer-nav">
+    <a href="../index.html#articles" class="fnav-btn fnav-primary"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>อ่านบทความอื่น ๆ</a>
+    <a href="../index.html" class="fnav-btn fnav-ghost"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับสู่หน้าเว็บไซต์</a>
+  </div>
 </div>
+<div id="copyToast">คัดลอกลิงก์แล้ว ✓</div>
 ${mediaHTML}
 <script>
+function shareFB(){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function shareLINE(){window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function copyLink(){var done=function(){var t=document.getElementById('copyToast');if(t){t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(done,done);}else{var ta=document.createElement('textarea');ta.value=location.href;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();done();}}
 window.addEventListener('scroll',()=>{const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;document.getElementById('readBar').style.width=(s/m*100)+'%';},{passive:true});
 (function(){
   const nodes=[...document.querySelectorAll('.art-body h2,.art-body h3,.art-body p')].filter(n=>n.textContent.trim().length>3);
@@ -1341,7 +1380,7 @@ function generateBookPage(b) {
       + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังหนังสือ (ไฟล์เสียง)</div>'
       + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + b._audio + '"></audio>'
       + '</div>'
-    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังหนังสือ</button>'
+    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>ฟังเสียงอ่านหนังสือ</button>'
       + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
       + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
       + '<div id="tts-label">พร้อมเล่น</div>'
@@ -1355,6 +1394,12 @@ function generateBookPage(b) {
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${esc(b.title)} | คลินิกรักษ์สมองหมออดิศักดิ์</title>
 <meta name="description" content="${esc(b.desc)}">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="book">
+<meta property="og:title" content="${esc(b.title)}">
+<meta property="og:description" content="${esc(b.desc)}">
+<meta property="og:image" content="https://dradisak.com/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1381,20 +1426,39 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:22px 0;font-style:italic;color:var(--ink-soft)}
 .art-body img{max-width:100%;border-radius:14px;margin:22px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
 .art-body a{color:var(--teal);text-decoration:underline}
-.art-footer{max-width:720px;margin:0 auto;padding:0 24px 90px;text-align:center}
+.art-footer{max-width:720px;margin:0 auto;padding:8px 24px 170px;text-align:center}
 .back-home{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none}
 .back-home:hover{background:var(--teal-deep)}
+.share-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:center;margin:0 auto 30px;padding-top:6px}
+.share-label{font-family:'Noto Serif Thai',serif;font-size:14.5px;color:var(--ink-soft);font-weight:600}
+.share-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.share-btn{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;font-size:13.5px;font-weight:600;padding:10px 17px;border-radius:999px;color:#fff;transition:transform .2s,box-shadow .2s}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(14,34,51,.2)}
+.share-btn svg{flex-shrink:0}
+.sb-fb{background:#1877F2}.sb-line{background:#06C755}.sb-copy{background:var(--ink)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.fnav-btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:14px;font-weight:700;font-size:15px;text-decoration:none;font-family:'Noto Serif Thai',serif;transition:transform .2s,box-shadow .25s,background .2s,border-color .2s,color .2s}
+.fnav-primary{background:var(--teal);color:#fff;box-shadow:0 6px 20px rgba(14,138,132,.3)}
+.fnav-primary:hover{background:var(--teal-deep);transform:translateY(-2px)}
+.fnav-ghost{background:#fff;color:var(--ink);border:1.5px solid rgba(14,34,51,.15)}
+.fnav-ghost:hover{border-color:var(--teal);color:var(--teal-deep);transform:translateY(-2px)}
+#copyToast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#fff;padding:11px 22px;border-radius:999px;font-size:14px;font-family:'IBM Plex Sans Thai',sans-serif;opacity:0;pointer-events:none;transition:.3s;z-index:900;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#copyToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:480px){.fnav-btn{width:100%;justify-content:center}.share-btn{padding:9px 13px;font-size:13px}}
 /* Font-size widget */
 #fs-widget{position:fixed;bottom:20px;left:20px;z-index:500;background:#fff;border:1px solid rgba(14,34,51,.12);border-radius:50px;padding:6px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 18px rgba(14,34,51,.15)}
 #fs-widget button{width:34px;height:34px;border:none;background:var(--paper-2);border-radius:50%;color:var(--ink);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
 #fs-widget button:hover{background:var(--teal);color:#fff}
 #fs-widget .fs-label{font-size:12px;color:var(--ink-soft);padding:0 4px;min-width:34px;text-align:center}
 /* Audio player */
-.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
+.audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
 .audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
 /* TTS */
-#tts-fab{position:fixed;bottom:24px;right:20px;z-index:500;background:var(--teal);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(14,138,132,.35);display:flex;align-items:center;gap:7px}
-#tts-fab:hover{background:var(--teal-deep)}
+#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
+#tts-fab svg{width:19px;height:19px}
+#tts-fab:hover{transform:translateY(-2px)}
+@keyframes fabPulse{0%,100%{box-shadow:0 8px 26px rgba(14,138,132,.4)}50%{box-shadow:0 8px 32px rgba(14,138,132,.6),0 0 0 7px rgba(67,210,200,.16)}}
+@media(max-width:480px){#tts-fab{padding:12px 18px;font-size:14px}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
@@ -1426,8 +1490,20 @@ ${b._body || ''}
 <!-- BOOK-CONTENT-END -->
 </article>
 <div class="art-footer">
-  <a href="../index.html" class="back-home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับหน้าคลินิก</a>
+  <div class="share-row">
+    <span class="share-label">แชร์หนังสือเล่มนี้</span>
+    <div class="share-btns">
+      <button class="share-btn sb-fb" onclick="shareFB()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.8 3.7-3.8 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>Facebook</button>
+      <button class="share-btn sb-line" onclick="shareLINE()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.4 7.2 8 7.9.3.1.7.2.8.5.1.3.1.6 0 .9 0 0-.1.7-.2 1-.1.3-.2 1 .9.6 1.2-.5 6.1-3.6 8.3-6.1C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8z"/></svg>LINE</button>
+      <button class="share-btn sb-copy" onclick="copyLink()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>คัดลอกลิงก์</button>
+    </div>
+  </div>
+  <div class="footer-nav">
+    <a href="../index.html#books" class="fnav-btn fnav-primary"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>ดูหนังสือเล่มอื่น ๆ</a>
+    <a href="../index.html" class="fnav-btn fnav-ghost"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>กลับสู่หน้าเว็บไซต์</a>
+  </div>
 </div>
+<div id="copyToast">คัดลอกลิงก์แล้ว ✓</div>
 <div id="fs-widget">
   <button onclick="fsAdj(-1)">A−</button>
   <span class="fs-label" id="fsLabel">100%</span>
@@ -1435,6 +1511,9 @@ ${b._body || ''}
 </div>
 ${mediaHTML}
 <script>
+function shareFB(){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function shareLINE(){window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
+function copyLink(){var done=function(){var t=document.getElementById('copyToast');if(t){t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(done,done);}else{var ta=document.createElement('textarea');ta.value=location.href;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();done();}}
 var FS_LEVELS=[0.85,0.92,1,1.12,1.26],fsIdx=2;
 function fsAdj(d){fsIdx=Math.max(0,Math.min(FS_LEVELS.length-1,fsIdx+d));document.documentElement.style.setProperty('--fs',FS_LEVELS[fsIdx]);document.getElementById('fsLabel').textContent=Math.round(FS_LEVELS[fsIdx]*100)+'%';}
 window.addEventListener('scroll',()=>{const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;document.getElementById('readBar').style.width=(s/m*100)+'%';},{passive:true});

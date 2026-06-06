@@ -21,6 +21,9 @@
 <meta name="Google-Extended" content="index, follow" />
 
 <link rel="canonical" href="https://dradisak.com/" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="shortcut icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- ============================================
      HREFLANG (5 languages + x-default)
@@ -110,8 +113,8 @@
   --f-en-body:'Fraunces', Georgia, serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--f-body);color:var(--ink);background:var(--paper);line-height:1.75;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden;width:100%}
+body{font-family:var(--f-body);color:var(--ink);background:var(--paper);line-height:1.75;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;width:100%;max-width:100%;position:relative}
 /* lang toggle: show only active language */
 html[lang="th"] [data-lang]:not([data-lang="th"]),
 html[lang="en"] [data-lang]:not([data-lang="en"]),
@@ -150,17 +153,31 @@ h1,h2,h3{font-family:var(--f-head);font-weight:600;line-height:1.22;letter-spaci
 svg{flex-shrink:0}
 
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s, box-shadow .3s, border-color .3s;border-bottom:1px solid transparent}
-.nav.scrolled{background:rgba(251,249,245,.86);backdrop-filter:saturate(160%) blur(14px);border-color:var(--line-soft);box-shadow:0 6px 24px -18px rgba(14,34,51,.35)}
+.nav{position:fixed;top:0;left:0;right:0;width:100%;z-index:50;transition:background .3s, box-shadow .3s, border-color .3s;border-bottom:1px solid transparent;-webkit-transform:translateZ(0);transform:translateZ(0);will-change:background}
+.nav.scrolled{background:rgba(251,249,245,.92);-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px);border-color:var(--line-soft);box-shadow:0 6px 24px -18px rgba(14,34,51,.35)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:74px;gap:16px}
-.nav-logo{display:flex;align-items:center;flex-shrink:0;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);border-radius:14px;padding:4px 14px 4px 8px;transition:background .3s}
-.nav.scrolled .nav-logo{background:transparent;backdrop-filter:none;padding:4px 8px 4px 4px}
+.nav-logo{display:flex;align-items:center;flex-shrink:0;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:14px;padding:4px 14px 4px 8px;transition:background .3s}
+.nav.scrolled .nav-logo{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;padding:4px 8px 4px 4px}
 .nav-logo img{height:38px;width:auto;max-width:none;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 1px 0 rgba(255,255,255,.6));transition:transform .3s}
 .nav-logo:hover img{transform:scale(1.03)}
 .nav-logo .logo-mark{display:none;height:40px;width:auto;max-width:none;flex-shrink:0;filter:none}
 @media (max-width:560px){
   .nav-logo .logo-full{display:none}
   .nav-logo .logo-mark{display:block}
+}
+/* ── Compact nav on small phones so it never overflows / clips off-screen ── */
+@media (max-width:600px){
+  .wrap{padding-left:16px;padding-right:16px}
+  .nav-inner{gap:8px}
+  .nav-cta{gap:8px}
+}
+@media (max-width:480px){
+  .nav-cta{gap:6px}
+  .lang-toggle{padding:7px 9px;gap:5px}
+  /* booking button becomes a compact icon-only pill to save width */
+  a.nav-cta{padding:9px 11px;animation:none}
+  a.nav-cta span[data-lang]{display:none}
+  a.nav-cta svg{margin:0}
 }
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:14.5px;color:var(--ink);font-weight:400;position:relative;opacity:.82;transition:opacity .2s;white-space:nowrap}
