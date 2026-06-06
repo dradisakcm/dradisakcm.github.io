@@ -8,15 +8,5 @@
     "readUrl": "Brain Care Series เล่ม 1 - eBook.html",
     "pdfUrl": "Brain Care Series เล่ม 1.pdf",
     "ready": true
-  },
-  {
-    "series": "Brain Care Series",
-    "num": "เล่มทดสอบ",
-    "title": "หนังสือทดสอบระบบ",
-    "desc": "ทดสอบ compose eBook",
-    "gradient": "linear-gradient(145deg,#1a4a6a 0%,#0a5a55 100%)",
-    "readUrl": "books/book-1780759193165.html",
-    "pdfUrl": "",
-    "ready": true
   }
 ]
