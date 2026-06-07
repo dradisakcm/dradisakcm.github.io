@@ -1265,7 +1265,7 @@ function generateArticlePage(a) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0E2233;--ink-soft:#46596A;--teal:#0E8A84;--teal-deep:#0A5F5B;--glow:#43D2C8;--paper:#FBF9F5;--paper-2:#F3EFE8;--gold:#B8924F}
+:root{--ink:#0E2233;--ink-soft:#46596A;--teal:#0E8A84;--teal-deep:#0A5F5B;--glow:#43D2C8;--paper:#FBF9F5;--paper-2:#F3EFE8;--gold:#B8924F;--fs:1}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);background:var(--paper);line-height:1.85;-webkit-font-smoothing:antialiased}
 .top-bar{position:sticky;top:0;z-index:100;background:rgba(251,249,245,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(14,34,51,.08);padding:12px 24px;display:flex;align-items:center;gap:16px}
@@ -1281,11 +1281,11 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .art-desc{font-size:17px;color:var(--ink-soft);line-height:1.7;border-left:3px solid var(--teal);padding-left:16px;font-style:italic}
 .art-divider{max-width:780px;margin:32px auto;border:none;border-top:1px solid rgba(14,34,51,.1)}
 .art-body{max-width:720px;margin:0 auto;padding:0 24px 100px}
-.art-body h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:#4338ca;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(67,56,202,.18)}
-.art-body h3{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:600;color:var(--teal-deep);margin:28px 0 10px}
-.art-body p{margin-bottom:16px;font-size:16px;line-height:1.85}
+.art-body h2{font-family:'Noto Serif Thai',serif;font-size:calc(22px * var(--fs));font-weight:700;color:#4338ca;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(67,56,202,.18)}
+.art-body h3{font-family:'Noto Serif Thai',serif;font-size:calc(18px * var(--fs));font-weight:600;color:var(--teal-deep);margin:28px 0 10px}
+.art-body p{margin-bottom:16px;font-size:calc(16px * var(--fs));line-height:1.85}
 .art-body ul,.art-body ol{margin:0 0 16px 24px}
-.art-body li{margin-bottom:6px;font-size:16px;line-height:1.75}
+.art-body li{margin-bottom:6px;font-size:calc(16px * var(--fs));line-height:1.75}
 .art-body blockquote{border-left:4px solid var(--teal);background:rgba(14,138,132,.06);padding:14px 18px;border-radius:0 10px 10px 0;margin:20px 0;font-style:italic;color:var(--ink-soft)}
 .art-body img{max-width:100%;border-radius:14px;margin:20px auto;display:block;box-shadow:0 4px 24px rgba(14,34,51,.12)}
 .art-body a{color:var(--teal);text-decoration:underline}
@@ -1309,14 +1309,19 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 #copyToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .audio-player-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 20px;z-index:600}
 .audio-label{color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;gap:7px;margin-bottom:8px;font-family:'Noto Serif Thai',serif}
-#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
-#tts-fab svg{width:19px;height:19px}
+#tts-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(14,138,132,.4);display:flex;align-items:center;gap:7px;animation:fabPulse 2.6s ease-in-out infinite}
+#tts-fab svg{width:17px;height:17px}
 #tts-fab:hover{transform:translateY(-2px)}
-@keyframes fabPulse{0%,100%{box-shadow:0 8px 26px rgba(14,138,132,.4)}50%{box-shadow:0 8px 32px rgba(14,138,132,.6),0 0 0 7px rgba(67,210,200,.16)}}
-@media(max-width:480px){.fnav-btn{width:100%;justify-content:center}.share-btn{padding:9px 13px;font-size:13px}#tts-fab{padding:12px 18px;font-size:14px}}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 20px rgba(14,138,132,.38)}50%{box-shadow:0 6px 26px rgba(14,138,132,.55),0 0 0 6px rgba(67,210,200,.15)}}
+/* Font-size widget (A−/A+) — same as the book reader */
+#fs-widget{position:fixed;bottom:20px;left:20px;z-index:500;background:#fff;border:1px solid rgba(14,34,51,.12);border-radius:50px;padding:6px;display:flex;align-items:center;gap:4px;box-shadow:0 4px 18px rgba(14,34,51,.15)}
+#fs-widget button{width:34px;height:34px;border:none;background:var(--paper-2);border-radius:50%;color:var(--ink);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#fs-widget button:hover{background:var(--teal);color:#fff}
+#fs-widget .fs-label{font-size:12px;color:var(--ink-soft);padding:0 4px;min-width:34px;text-align:center}
+@media(max-width:480px){.fnav-btn{width:100%;justify-content:center}.share-btn{padding:9px 13px;font-size:13px}#tts-fab{padding:8px 14px;font-size:12px;bottom:18px;right:14px}#fs-widget{bottom:18px;left:14px}}
 /* Floating audio button + slide-up player (embedded narration) */
-#audio-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(14,138,132,.45);display:flex;align-items:center;gap:9px;animation:fabPulse 2.6s ease-in-out infinite}
-#audio-fab svg{width:19px;height:19px}
+#audio-fab{position:fixed;bottom:22px;right:18px;z-index:500;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border:none;border-radius:50px;padding:10px 18px;font-family:'Noto Serif Thai',serif;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(14,138,132,.4);display:flex;align-items:center;gap:7px;animation:fabPulse 2.6s ease-in-out infinite}
+#audio-fab svg{width:17px;height:17px}
 #audio-fab:hover{transform:translateY(-2px)}
 #audio-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:14px 18px calc(16px + env(safe-area-inset-bottom));transform:translateY(110%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #audio-bar.open{transform:translateY(0)}
@@ -1324,7 +1329,7 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 .audio-bar-head span{display:flex;align-items:center;gap:7px}
 #audio-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;line-height:1;cursor:pointer;padding:0 4px}
 #audio-bar audio{width:100%;height:40px}
-@media(max-width:480px){#audio-fab{padding:12px 18px;font-size:14px}}
+@media(max-width:480px){#audio-fab{padding:8px 14px;font-size:12px;bottom:18px;right:14px}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}
@@ -1376,11 +1381,18 @@ ${a._body || ''}
   </div>
 </div>
 <div id="copyToast">คัดลอกลิงก์แล้ว ✓</div>
+<div id="fs-widget">
+  <button onclick="fsAdj(-1)" aria-label="ลดขนาดตัวอักษร">A−</button>
+  <span class="fs-label" id="fsLabel">100%</span>
+  <button onclick="fsAdj(1)" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+</div>
 ${mediaHTML}
 <script>
 function shareFB(){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
 function shareLINE(){window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(location.href),'_blank','width=640,height=560,noopener');}
 function copyLink(){var done=function(){var t=document.getElementById('copyToast');if(t){t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(done,done);}else{var ta=document.createElement('textarea');ta.value=location.href;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();done();}}
+var FS_LEVELS=[0.85,0.92,1,1.12,1.26],fsIdx=2;
+function fsAdj(d){fsIdx=Math.max(0,Math.min(FS_LEVELS.length-1,fsIdx+d));document.documentElement.style.setProperty('--fs',FS_LEVELS[fsIdx]);var l=document.getElementById('fsLabel');if(l)l.textContent=Math.round(FS_LEVELS[fsIdx]*100)+'%';}
 window.addEventListener('scroll',()=>{const h=document.documentElement,s=h.scrollTop||document.body.scrollTop,m=(h.scrollHeight-h.clientHeight)||1;document.getElementById('readBar').style.width=(s/m*100)+'%';},{passive:true});
 (function(){
   const nodes=[...document.querySelectorAll('.art-body h2,.art-body h3,.art-body p')].filter(n=>n.textContent.trim().length>3);
@@ -1425,7 +1437,7 @@ function generateBookPage(b) {
       + '<div class="audio-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>ฟังหนังสือ (ไฟล์เสียง)</div>'
       + '<audio controls style="width:100%;border-radius:10px;margin-top:6px" src="' + b._audio + '"></audio>'
       + '</div>'
-    : '<button id="tts-fab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span class="fab-txt">ฟังหนังสือ</span></button>'
+    : '<button id="tts-fab" aria-label="ฟังหนังสือ"><span class="fab-txt">ฟังหนังสือ</span></button>'
       + '<div id="tts-bar"><div id="tts-track"><div id="tts-fill"></div></div><div id="tts-controls">'
       + '<button id="tts-play-btn">▶</button><button id="tts-stop-btn">⏹</button>'
       + '<div id="tts-label">พร้อมเล่น</div>'
@@ -1517,8 +1529,7 @@ body{font-family:'IBM Plex Sans Thai','Anuphan',sans-serif;color:var(--ink);back
 #tts-fab svg{width:17px;height:17px}
 #tts-fab:hover{transform:translateY(-2px)}
 @keyframes fabPulse{0%,100%{box-shadow:0 6px 20px rgba(14,138,132,.38)}50%{box-shadow:0 6px 26px rgba(14,138,132,.55),0 0 0 6px rgba(67,210,200,.15)}}
-@media(max-width:600px){#tts-fab{bottom:18px;right:14px;padding:8px 13px;font-size:12px}#fs-widget{bottom:18px;left:14px}}
-@media(max-width:430px){#tts-fab .fab-txt{display:none}#tts-fab{padding:11px;border-radius:50%}}
+@media(max-width:600px){#tts-fab{bottom:18px;right:14px;padding:8px 14px;font-size:12px}#fs-widget{bottom:18px;left:14px}}
 #tts-bar{position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(14,26,40,.96);backdrop-filter:blur(12px);color:#fff;padding:10px 16px 14px;transform:translateY(100%);transition:.35s cubic-bezier(.4,0,.2,1)}
 #tts-bar.open{transform:translateY(0)}
 #tts-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;cursor:pointer;margin-bottom:10px}

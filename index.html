@@ -363,7 +363,7 @@ html[lang="en"] .doc-quote{font-family:var(--f-en-head);font-style:italic}
 .art-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px}
 .art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:50px}
 .art-card{background:var(--card);border:1px solid var(--line-soft);border-radius:16px;overflow:hidden;transition:.35s;display:flex;flex-direction:column}
-.art-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift)}
+@media(hover:hover){.art-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift)}}
 .art-cover{height:160px;position:relative;overflow:hidden}
 .art-cover .mesh{position:absolute;inset:0}
 .art-cover .cat{position:absolute;left:16px;top:16px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.92);color:var(--teal-deep);padding:5px 11px;border-radius:999px}
@@ -532,10 +532,13 @@ html[lang="en"] .social-content h3{font-family:var(--f-en-head)}
 .art-search input::placeholder{color:var(--ink-soft);opacity:.7}
 .art-card.hidden{display:none}
 /* TTS button on article cards */
-.art-read-btn{margin-top:16px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);color:#fff;border-radius:999px;padding:11px 18px;font-size:14px;font-weight:600;letter-spacing:.01em;box-shadow:0 4px 14px rgba(14,138,132,.30);transition:transform .25s,box-shadow .3s}
+.art-read-btn{margin-top:16px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);color:#fff;border-radius:999px;padding:13px 18px;font-size:14px;font-weight:600;letter-spacing:.01em;box-shadow:0 4px 14px rgba(14,138,132,.30);transition:transform .15s,box-shadow .3s;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .art-read-btn svg{transition:transform .25s}
-.art-card:hover .art-read-btn{box-shadow:0 8px 22px rgba(14,138,132,.45);transform:translateY(-1px)}
-.art-card:hover .art-read-btn svg{transform:translateX(3px)}
+.art-read-btn:active{transform:scale(.97)}
+@media(hover:hover){
+  .art-card:hover .art-read-btn{box-shadow:0 8px 22px rgba(14,138,132,.45);transform:translateY(-1px)}
+  .art-card:hover .art-read-btn svg{transform:translateX(3px)}
+}
 .art-audio{margin-top:10px;padding-top:0;border-top:none}
 .art-audio-btn{width:100%;justify-content:center;background:none;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.2s;white-space:nowrap}
 .art-audio-btn:hover{background:var(--teal);color:#fff}
@@ -616,11 +619,11 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
       <a href="#why"><span data-lang="th">ทำไมต้องที่นี่</span><span data-lang="en">Why Us</span><span data-lang="zh">为何选择我们</span><span data-lang="ja">当院の特長</span><span data-lang="de">Warum wir</span></a>
       <a href="#doctor"><span data-lang="th">แพทย์ผู้ดูแล</span><span data-lang="en">Your Doctor</span><span data-lang="zh">主治医生</span><span data-lang="ja">担当医</span><span data-lang="de">Ihr Arzt</span></a>
       <a href="#visit"><span data-lang="th">สถานที่</span><span data-lang="en">Visit Us</span><span data-lang="zh">诊所位置</span><span data-lang="ja">アクセス</span><span data-lang="de">Standort</span></a>
-      <a href="#faq"><span data-lang="th">FAQ</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ</span><span data-lang="ja">FAQ</span><span data-lang="de">FAQ</span></a>
-      <a href="#books"><span data-lang="th">หนังสือ</span><span data-lang="en">Books</span></a>
       <a href="#articles"><span data-lang="th">บทความ</span><span data-lang="en">Insights</span><span data-lang="zh">文章</span><span data-lang="ja">記事</span><span data-lang="de">Artikel</span></a>
+      <a href="#books"><span data-lang="th">หนังสือ</span><span data-lang="en">Books</span></a>
       <a href="#follow"><span data-lang="th">ติดตามเรา</span><span data-lang="en">Follow</span><span data-lang="zh">关注我们</span><span data-lang="ja">フォロー</span><span data-lang="de">Folgen</span></a>
       <a href="#contact"><span data-lang="th">ติดต่อ</span><span data-lang="en">Contact</span><span data-lang="zh">联系我们</span><span data-lang="ja">お問合せ</span><span data-lang="de">Kontakt</span></a>
+      <a href="#faq"><span data-lang="th">FAQ</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ</span><span data-lang="ja">FAQ</span><span data-lang="de">FAQ</span></a>
     </div>
     <div class="nav-cta">
 <div class="lang-picker" id="langPicker">
@@ -650,11 +653,11 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
   <a href="#why"><span data-lang="th">ทำไมต้องที่นี่</span><span data-lang="en">Why Us</span><span data-lang="zh">为何选择我们</span><span data-lang="ja">当院の特長</span><span data-lang="de">Warum wir</span></a>
   <a href="#doctor"><span data-lang="th">แพทย์ผู้ดูแล</span><span data-lang="en">Your Doctor</span><span data-lang="zh">主治医生</span><span data-lang="ja">担当医</span><span data-lang="de">Ihr Arzt</span></a>
   <a href="#visit"><span data-lang="th">สถานที่</span><span data-lang="en">Visit Us</span><span data-lang="zh">诊所位置</span><span data-lang="ja">アクセス</span><span data-lang="de">Standort</span></a>
-  <a href="#faq"><span data-lang="th">FAQ คำถามที่พบบ่อย</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ 常见问题</span><span data-lang="ja">FAQ よくある質問</span><span data-lang="de">FAQ</span></a>
-  <a href="#books"><span data-lang="th">หนังสือ</span><span data-lang="en">Books</span></a>
   <a href="#articles"><span data-lang="th">ความรู้เรื่องสมอง</span><span data-lang="en">Brain Insights</span><span data-lang="zh">脑健康知识</span><span data-lang="ja">脳の知識</span><span data-lang="de">Wissen rund ums Gehirn</span></a>
+  <a href="#books"><span data-lang="th">หนังสือ</span><span data-lang="en">Books</span></a>
   <a href="#follow"><span data-lang="th">ติดตามเรา</span><span data-lang="en">Follow</span><span data-lang="zh">关注我们</span><span data-lang="ja">フォロー</span><span data-lang="de">Folgen</span></a>
   <a href="#contact"><span data-lang="th">ติดต่อ</span><span data-lang="en">Contact</span><span data-lang="zh">联系我们</span><span data-lang="ja">お問合せ</span><span data-lang="de">Kontakt</span></a>
+  <a href="#faq"><span data-lang="th">FAQ คำถามที่พบบ่อย</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ 常见问题</span><span data-lang="ja">FAQ よくある質問</span><span data-lang="de">FAQ</span></a>
   <a href="https://m.me/250128068679567" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:14px;color:#fff"><span data-lang="th">นัดหมายปรึกษาแพทย์</span><span data-lang="en">Book a Consultation</span><span data-lang="zh">预约咨询</span><span data-lang="ja">診察予約</span><span data-lang="de">Termin vereinbaren</span></a>
 </div>
 
@@ -1523,7 +1526,7 @@ function renderArticles(data, append=false) {
       ? `<button class="art-audio-btn" onclick="openAudio(event,'${String(a.audioUrl).replace(/'/g,"\\'")}')">${audioSvg} ฟังเสียงอ่าน</button>`
       : `<button class="art-audio-btn disabled" disabled aria-disabled="true" title="ยังไม่มีเสียงอ่าน">${audioSvg} ฟังเสียงอ่าน</button>`;
     const arrowSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
-    const readBtn = hasUrl ? `<span class="art-read-btn">อ่านบทความ ${arrowSvg}</span>` : '';
+    const readBtn = hasUrl ? `<span class="art-read-btn" role="link" tabindex="0" onclick="event.stopPropagation();window.location.href='${String(a.url).replace(/'/g,"\\'")}'">อ่านบทความ ${arrowSvg}</span>` : '';
     return `${tag}
       <div class="art-cover"><div class="mesh" style="background:${a.gradient}"></div>
         <span class="cat">${a.cat}</span>${badge}
