@@ -34,8 +34,8 @@
     "title": "นอนหลับกับสุขภาพสมอง ความเชื่อมโยงที่หลายคนมองข้าม",
     "desc": "การนอนหลับไม่เพียงพอส่งผลต่อสมองอย่างไร และจะดูแลการนอนของตัวเองได้อย่างไร",
     "readMin": 5,
-    "gradient": "radial-gradient(120% 100% at 30% 80%,#1a3a6a,#0e1c3c)",
-    "url": "",
+    "gradient": "radial-gradient(120% 100% at 50% 20%,#d4e3fe,#00c7fc)",
+    "url": "articles/art-1780828185958.html",
     "featured": false,
     "audioUrl": ""
   },
