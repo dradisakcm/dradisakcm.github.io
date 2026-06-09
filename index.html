@@ -604,6 +604,56 @@ html[lang="ja"] .faq-item .q{font-family:'Noto Sans JP',sans-serif}
 html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
 .hours-list .time{color:var(--teal-deep);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.01em}
 </style>
+<style id="azq-cta-style">
+.azq-cta-section{padding:clamp(18px,4vw,40px) 0}
+.azq-cta{position:relative;overflow:hidden;display:flex;align-items:center;gap:clamp(24px,4vw,48px);flex-wrap:wrap;
+  background:linear-gradient(135deg,#0A5F5B 0%,#0E2233 72%);border:1px solid rgba(184,146,79,.45);
+  border-radius:28px;padding:clamp(26px,4.5vw,52px);box-shadow:0 32px 64px -32px rgba(14,34,51,.65)}
+.azq-cta::before{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(67,210,200,.35),transparent 65%);pointer-events:none}
+.azq-cta::after{content:"";position:absolute;left:-60px;bottom:-100px;width:260px;height:260px;
+  background:radial-gradient(circle,rgba(184,146,79,.22),transparent 65%);pointer-events:none}
+.azq-cta-body{flex:1;min-width:270px;position:relative;z-index:1}
+.azq-cta-eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#EBD3A0;background:rgba(184,146,79,.14);border:1px solid rgba(184,146,79,.4);
+  padding:6px 16px;border-radius:999px;margin-bottom:16px}
+.azq-cta h2.azq-cta-h{color:#fff;font-size:clamp(24px,3.3vw,40px);line-height:1.18;margin:0 0 14px;font-weight:600}
+.azq-cta-lead{color:rgba(255,255,255,.86);font-size:clamp(15px,1.5vw,18px);line-height:1.7;margin:0 0 18px;max-width:560px}
+.azq-cta-lead b{color:#EBD3A0;font-weight:700}
+.azq-cta-meta{display:block;color:rgba(255,255,255,.7);font-size:13.5px;font-weight:500;margin-bottom:24px;letter-spacing:.01em}
+.azq-cta-btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  background:linear-gradient(135deg,#EBD3A0 0%,#B8924F 100%);color:#0E2233;font-weight:800;
+  font-size:clamp(16px,1.6vw,18px);padding:16px 34px;border-radius:999px;
+  box-shadow:0 16px 34px -14px rgba(184,146,79,.75);transition:transform .25s, box-shadow .25s}
+.azq-cta-btn:hover{transform:translateY(-3px);box-shadow:0 24px 46px -14px rgba(184,146,79,.85)}
+.azq-cta-art{position:relative;z-index:1;flex-shrink:0;margin:0 auto}
+.azq-cta-illus{width:clamp(200px,22vw,290px);height:auto;display:block;
+  filter:drop-shadow(0 18px 36px rgba(0,0,0,.32))}
+/* เมนู "แบบประเมินสมอง" ให้เด่นนิดๆ ด้วยสีทอง */
+.nav-links a.azq-navlink{color:var(--gold,#B8924F);font-weight:600}
+/* ── ปุ่มในเมนูมือถือ ── */
+.mobile-menu .azq-mcta{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,#EBD3A0 0%,#B8924F 100%);
+  color:#0E2233 !important;border:0 !important;border-radius:999px !important;
+  font-weight:800;font-size:18px !important;padding:16px 22px !important;
+  box-shadow:0 16px 32px -12px rgba(184,146,79,.7)}
+.mobile-menu .azq-mcta:active{transform:translateY(1px)}
+.azq-mcta-ico{width:24px;height:24px;flex-shrink:0;filter:drop-shadow(0 1px 1px rgba(0,0,0,.15))}
+/* ปุ่มนัดหมาย — เพิ่มเงาให้ดูพรีเมียม */
+.mobile-menu .btn-primary{
+  border:0 !important;border-radius:999px !important;font-size:18px !important;padding:16px 22px !important;
+  box-shadow:0 16px 32px -12px rgba(14,138,132,.75)}
+.mobile-menu .azq-mcta,.mobile-menu .btn-primary{border-bottom:0 !important}
+/* ── เมนูตอบสนองทุกแพลตฟอร์ม (กันเมนูตกขอบเมื่อมี 10 เมนู) ── */
+@media(min-width:1241px){.nav-links{gap:11px}.nav-links a{font-size:13px}}
+@media(max-width:1240px){.nav-links{display:none!important}.burger{display:flex!important}}
+@media(max-width:760px){
+  .azq-cta{flex-direction:column-reverse;text-align:center}
+  .azq-cta-lead{margin-left:auto;margin-right:auto}
+  .azq-cta-illus{width:clamp(150px,40vw,210px)}
+}
+</style>
 </head>
 <body>
 
@@ -621,6 +671,7 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
       <a href="#visit"><span data-lang="th">สถานที่</span><span data-lang="en">Visit Us</span><span data-lang="zh">诊所位置</span><span data-lang="ja">アクセス</span><span data-lang="de">Standort</span></a>
       <a href="#articles"><span data-lang="th">บทความ</span><span data-lang="en">Insights</span><span data-lang="zh">文章</span><span data-lang="ja">記事</span><span data-lang="de">Artikel</span></a>
       <a href="#books"><span data-lang="th">หนังสือ</span><span data-lang="en">Books</span></a>
+      <a href="/thaiazq/" class="azq-navlink"><span data-lang="th">แบบประเมินสมอง</span><span data-lang="en">Brain Check</span><span data-lang="zh">脑部自测</span><span data-lang="ja">脳の自己評価</span><span data-lang="de">Hirn-Check</span></a>
       <a href="#follow"><span data-lang="th">ติดตามเรา</span><span data-lang="en">Follow</span><span data-lang="zh">关注我们</span><span data-lang="ja">フォロー</span><span data-lang="de">Folgen</span></a>
       <a href="#contact"><span data-lang="th">ติดต่อ</span><span data-lang="en">Contact</span><span data-lang="zh">联系我们</span><span data-lang="ja">お問合せ</span><span data-lang="de">Kontakt</span></a>
       <a href="#faq"><span data-lang="th">FAQ</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ</span><span data-lang="ja">FAQ</span><span data-lang="de">FAQ</span></a>
@@ -658,6 +709,7 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
   <a href="#follow"><span data-lang="th">ติดตามเรา</span><span data-lang="en">Follow</span><span data-lang="zh">关注我们</span><span data-lang="ja">フォロー</span><span data-lang="de">Folgen</span></a>
   <a href="#contact"><span data-lang="th">ติดต่อ</span><span data-lang="en">Contact</span><span data-lang="zh">联系我们</span><span data-lang="ja">お問合せ</span><span data-lang="de">Kontakt</span></a>
   <a href="#faq"><span data-lang="th">FAQ คำถามที่พบบ่อย</span><span data-lang="en">FAQ</span><span data-lang="zh">FAQ 常见问题</span><span data-lang="ja">FAQ よくある質問</span><span data-lang="de">FAQ</span></a>
+  <a href="/thaiazq/" class="btn azq-mcta" style="margin-top:18px"><svg class="azq-mcta-ico" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true"><path d="M11.5 4C9.6 4 8 5.4 8 7.2v.2C6.5 7.7 5.4 9 5.4 10.6c0 .6.1 1.1.4 1.6-.9.6-1.5 1.6-1.5 2.8 0 1.5.9 2.7 2.2 3.2v.3c0 1.8 1.5 3.3 3.4 3.3.9 0 1.6-.7 1.6-1.6V5.8C11.5 4.8 11.5 4 11.5 4z" fill="#5C3A1E"/><path d="M16.5 4c1.9 0 3.5 1.4 3.5 3.2v.2c1.5.3 2.6 1.6 2.6 3.2 0 .6-.1 1.1-.4 1.6.9.6 1.5 1.6 1.5 2.8 0 1.5-.9 2.7-2.2 3.2v.3c0 1.8-1.5 3.3-3.4 3.3-.9 0-1.6-.7-1.6-1.6V5.8C16.5 4.8 16.5 4 16.5 4z" fill="#7A4A24"/><path d="M14 5.4v15.4M11.1 8.8c-1.3.3-2 1.5-1.7 2.8M16.9 8.8c1.3.3 2 1.5 1.7 2.8M10.7 14.8c-1.1.2-1.8 1.1-1.6 2.2M17.3 14.8c1.1.2 1.8 1.1 1.6 2.2" stroke="#D9B071" stroke-width="1.1" stroke-linecap="round"/></svg><span data-lang="th">ประเมินสมองออนไลน์</span><span data-lang="en">Brain Self-Check Online</span><span data-lang="zh">在线脑部自测</span><span data-lang="ja">脳のオンライン評価</span><span data-lang="de">Online Hirn-Check</span></a>
   <a href="https://m.me/250128068679567" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:14px;color:#fff"><span data-lang="th">นัดหมายปรึกษาแพทย์</span><span data-lang="en">Book a Consultation</span><span data-lang="zh">预约咨询</span><span data-lang="ja">診察予約</span><span data-lang="de">Termin vereinbaren</span></a>
 </div>
 
@@ -758,6 +810,76 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
     <p class="quote" data-lang="en">We believe the finest brain care begins by helping you truly <em>understand</em> — so you can take real ownership of your brain health.<br>Better brain health starts here, together.</p><p class="quote" data-lang="zh">我们相信,最好的脑部护理始于帮您真正 <em>理解</em> — 让您能够真正掌握自己的脑健康。<br>更好的脑健康,从这里、与我们一起开始。</p><p class="quote" data-lang="ja">最良の脳のケアは、あなたが本当に <em>理解する</em> ことを支えるところから始まります — ご自身の脳の健康を、自分のものとして大切にできるように。<br>より良い脳の健康は、ここから、共に始まります。</p><p class="quote" data-lang="de">Wir glauben: Beste Hirnpflege beginnt damit, dass Sie wirklich <em>verstehen</em> — damit Sie Verantwortung für Ihre Hirngesundheit übernehmen können.<br>Bessere Hirngesundheit beginnt hier — gemeinsam.</p>
     <p class="by" data-lang="th">— แนวคิดการดูแลของคลินิกรักษ์สมองหมออดิศักดิ์</p>
     <p class="by" data-lang="en">— Care philosophy at Dr.Adisak Brain Care Clinic</p><p class="by" data-lang="zh">— 阿迪萨脑健康诊所的诊疗理念</p><p class="by" data-lang="ja">— Dr.Adisak 脳神経クリニックの診療理念</p><p class="by" data-lang="de">— Behandlungsphilosophie der Dr.Adisak Hirnpflegeklinik</p>
+  </div>
+</section>
+
+<!-- ★ THAI AZQ — แบบประเมินสมอง (เพิ่มโดยอัตโนมัติ) -->
+<section class="azq-cta-section" id="braincheck">
+  <div class="wrap">
+    <div class="azq-cta reveal">
+      <div class="azq-cta-body">
+        <span class="azq-cta-eyebrow" data-lang="th">เครื่องมือประเมินตนเอง · ฟรี</span>
+        <span class="azq-cta-eyebrow" data-lang="en">Free Self-Assessment</span>
+        <span class="azq-cta-eyebrow" data-lang="zh">免费自我评估</span>
+        <span class="azq-cta-eyebrow" data-lang="ja">無料セルフチェック</span>
+        <span class="azq-cta-eyebrow" data-lang="de">Kostenloser Selbsttest</span>
+        <h2 class="azq-cta-h" data-lang="th">สงสัยว่าคนที่คุณรัก…<br>เริ่มมีปัญหาความจำ?</h2>
+        <h2 class="azq-cta-h" data-lang="en">Worried a loved one<br>is starting to forget?</h2>
+        <h2 class="azq-cta-h" data-lang="zh">担心家人开始<br>出现记忆问题？</h2>
+        <h2 class="azq-cta-h" data-lang="ja">大切な人の物忘れ<br>が気になりますか？</h2>
+        <h2 class="azq-cta-h" data-lang="de">Sorge, dass ein Angehöriger<br>vergesslicher wird?</h2>
+        <p class="azq-cta-lead" data-lang="th">ลองทำแบบคัดกรองภาวะสมองเสื่อม <b>Thai AZQ</b> ออนไลน์ ใช้เวลาเพียง 5–10 นาที รู้ผลทันที พร้อมกราฟวิเคราะห์รายด้านและคำแนะนำจากแพทย์</p>
+        <p class="azq-cta-lead" data-lang="en">Try the <b>Thai AZQ</b> dementia screening online — just 5–10 minutes, with instant results, a domain-by-domain analysis and guidance.</p>
+        <p class="azq-cta-lead" data-lang="zh">在线完成 <b>Thai AZQ</b> 痴呆筛查，仅需 5–10 分钟，即时获得分项分析与建议。</p>
+        <p class="azq-cta-lead" data-lang="ja"><b>Thai AZQ</b> 認知症スクリーニングをオンラインで。わずか5〜10分で結果・領域別分析・アドバイスがわかります。</p>
+        <p class="azq-cta-lead" data-lang="de">Machen Sie das <b>Thai-AZQ</b>-Demenz-Screening online — nur 5–10 Minuten, mit Sofort­ergebnis, Analyse und Empfehlungen.</p>
+        <div class="azq-cta-meta">
+          <span data-lang="th">✓ ฟรี &nbsp;·&nbsp; ✓ ไม่ต้องลงทะเบียน &nbsp;·&nbsp; ✓ รู้ผลทันที</span>
+          <span data-lang="en">✓ Free &nbsp;·&nbsp; ✓ No sign-up &nbsp;·&nbsp; ✓ Instant result</span>
+          <span data-lang="zh">✓ 免费 &nbsp;·&nbsp; ✓ 无需注册 &nbsp;·&nbsp; ✓ 即时结果</span>
+          <span data-lang="ja">✓ 無料 &nbsp;·&nbsp; ✓ 登録不要 &nbsp;·&nbsp; ✓ すぐ結果</span>
+          <span data-lang="de">✓ Kostenlos &nbsp;·&nbsp; ✓ Ohne Anmeldung &nbsp;·&nbsp; ✓ Sofort­ergebnis</span>
+        </div>
+        <a class="azq-cta-btn" href="/thaiazq/">
+          <span data-lang="th">▶ เริ่มประเมินความจำ — ฟรี</span>
+          <span data-lang="en">▶ Start Free Assessment</span>
+          <span data-lang="zh">▶ 开始免费评估</span>
+          <span data-lang="ja">▶ 無料で評価を始める</span>
+          <span data-lang="de">▶ Kostenlos starten</span>
+        </a>
+      </div>
+      <div class="azq-cta-art">
+        <svg class="azq-cta-illus" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="แบบทดสอบสมอง">
+          <defs>
+            <radialGradient id="azqGlow" cx="50%" cy="44%" r="55%"><stop offset="0" stop-color="#43D2C8" stop-opacity=".30"/><stop offset="1" stop-color="#43D2C8" stop-opacity="0"/></radialGradient>
+            <linearGradient id="azqGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EBD3A0"/><stop offset="1" stop-color="#B8924F"/></linearGradient>
+          </defs>
+          <circle cx="150" cy="140" r="126" fill="url(#azqGlow)"/>
+          <g transform="rotate(-4 150 150)">
+            <rect x="78" y="66" width="144" height="166" rx="18" fill="#FCFAF6"/>
+            <path d="M78 84 a18 18 0 0 1 18 -18 h108 a18 18 0 0 1 18 18 v24 h-144 z" fill="#0A5F5B"/>
+            <rect x="126" y="55" width="48" height="22" rx="9" fill="url(#azqGold)"/>
+            <rect x="139" y="49" width="22" height="13" rx="6" fill="#9c7a3f"/>
+            <g transform="translate(150,86)" stroke="#EBD3A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <path d="M-13 3 q-6 -13 4 -16 q4 -8 11 -3 q10 -4 12 6 q8 4 2 12 q1 7 -8 7 l-15 0 q-9 0 -8 -8z"/>
+              <path d="M3 -13 v23 M-6 -8 q5 4 0 9 M11 -2 q4 4 -1 8"/>
+            </g>
+            <rect x="96" y="126" width="20" height="20" rx="6" fill="#DCF6E3"/>
+            <path d="M100 136 l4 4 l8 -9" stroke="#1B7A47" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="124" y="131" width="74" height="9" rx="4.5" fill="#E7E2D6"/>
+            <rect x="96" y="158" width="20" height="20" rx="6" fill="#D9F2F0"/>
+            <path d="M100 168 l4 4 l8 -9" stroke="#0A8A84" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="124" y="163" width="62" height="9" rx="4.5" fill="#E7E2D6"/>
+            <circle cx="106" cy="200" r="9" fill="none" stroke="#B8924F" stroke-width="2.4"/>
+            <rect x="124" y="195" width="78" height="9" rx="4.5" fill="#EFEAE0"/>
+          </g>
+          <path d="M238 92 l3.4 6.8 l6.8 3.4 l-6.8 3.4 l-3.4 6.8 l-3.4 -6.8 l-6.8 -3.4 l6.8 -3.4z" fill="#43D2C8"/>
+          <circle cx="250" cy="150" r="3.4" fill="#EBD3A0"/>
+          <circle cx="58" cy="104" r="3" fill="#EBD3A0"/>
+          <path d="M60 196 l2.4 4.8 l4.8 2.4 l-4.8 2.4 l-2.4 4.8 l-2.4 -4.8 l-4.8 -2.4 l4.8 -2.4z" fill="#B8924F"/>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
