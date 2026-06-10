@@ -1,3 +1,7 @@
 node_modules/
 .DS_Store
 *.log
+index_12.html
+index_v13.html
+booking-gas.js
+.claude/

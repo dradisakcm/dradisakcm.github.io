@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thai AZQ – แบบคัดกรองภาวะสมองเสื่อม | หมออดิศักดิ์ รักษ์สมอง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+:root {
+  /* ── ธีม: ม่วงอมน้ำเงิน + เขียวเทอร์คอยส์ + ทอง ── */
+  --ink:#241C4D;            /* ข้อความหลัก ม่วงน้ำเงินเข้ม อ่านชัด */
+  --ink-soft:#5B5680;       /* ข้อความรอง */
+  --paper:#F6F4FC;          /* พื้นหลัง ขาวอมลาเวนเดอร์ */
+  --paper-2:#ECE8F8;        /* พื้นหลังรอง */
+  --card:#FFFFFF;
+  --violet:#5B4BC4;         /* สีหลัก ม่วงอมน้ำเงิน */
+  --violet-deep:#3F32A0;    /* ม่วงเข้ม */
+  --violet-soft:#EEEAFB;    /* ม่วงอ่อนพื้นหลัง */
+  --turq:#10B3AC;           /* เขียวเทอร์คอยส์ */
+  --turq-deep:#0A8A84;
+  --turq-soft:#E0F6F4;
+  --glow:#3FD9D0;
+  --gold:#C9A227;           /* ทอง */
+  --gold-soft:#FBF3DC;
+  --line:rgba(36,28,77,.12); --line-soft:rgba(36,28,77,.06);
+  --shadow:0 6px 24px -8px rgba(63,50,160,.16);
+  --fs:1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Anuphan',system-ui,sans-serif;
+  background:var(--paper);color:var(--ink);
+  line-height:1.6;
+  font-size:calc(17px * var(--fs));
+  /* app-shell เต็มจอ — แต่ละหน้าอยู่ในจอเดียว */
+  height:100dvh;display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* ── HEADER ── */
+.hdr{
+  flex-shrink:0;z-index:50;
+  background:rgba(246,244,252,.96);
+  border-bottom:1px solid var(--line-soft);
+  box-shadow:0 2px 16px -8px rgba(63,50,160,.18);
+  padding:6px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.hdr-logo{height:52px;width:auto;display:block}
+.fs-ctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.fs-lbl{font-size:12px;color:var(--ink-soft);margin-right:2px;white-space:nowrap}
+.fs-btn{
+  font-family:'Anuphan',sans-serif;font-weight:600;
+  border:1.5px solid var(--line);border-radius:999px;
+  background:transparent;color:var(--ink);
+  cursor:pointer;transition:.2s;line-height:1;padding:6px 11px;
+}
+.fs-btn:hover{border-color:var(--violet);color:var(--violet)}
+.fs-btn.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.fs-s{font-size:13px}.fs-m{font-size:16px}.fs-l{font-size:20px}
+
+/* ── BRAND STRIP (Thai AZQ ทุกหน้า) ── */
+.brand-strip{
+  flex-shrink:0;z-index:40;
+  background:linear-gradient(90deg,var(--violet) 0%,var(--violet-deep) 55%,var(--turq-deep) 100%);
+  color:#fff;text-align:center;
+  padding:6px 16px;display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 4px 14px -8px rgba(63,50,160,.5);
+}
+.brand-strip .azq{
+  font-weight:800;letter-spacing:.04em;font-size:calc(15px*var(--fs));
+}
+.brand-strip .azq-sub{
+  font-size:calc(12px*var(--fs));opacity:.9;font-weight:400;
+  border-left:1px solid rgba(255,255,255,.4);padding-left:9px;
+}
+.brand-strip .azq-dot{color:var(--gold)}
+
+/* ── LAYOUT — พื้นที่เนื้อหาเต็มจอ เลื่อนเฉพาะเมื่อจำเป็น (เช่น ตัวอักษรใหญ่พิเศษ) ── */
+.wrap{
+  flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  width:100%;max-width:760px;margin:0 auto;padding:14px 16px;
+}
+/* แต่ละหน้าเป็น flex column สูงเต็มพื้นที่ จัดกึ่งกลาง + ปุ่มย้อนกลับดันลงล่าง */
+.scr{display:none}
+.scr.show{
+  display:flex;flex-direction:column;min-height:100%;
+  animation:rise .35s cubic-bezier(.2,.7,.3,1);
+}
+.scr-main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0}
+#scr-rec .scr-main{gap:9px;justify-content:flex-start}
+
+/* ── BACK BUTTON (อยู่ล่างสุดของทุกหน้า) ── */
+.backbar{flex-shrink:0;display:flex;justify-content:center;gap:12px;padding-top:12px;margin-top:6px}
+.backbar-rec{flex-wrap:wrap}
+.btn-restart{background:var(--violet-soft);color:var(--violet-deep);border-color:transparent;font-weight:700}
+.btn-restart:hover{background:#fff;border-color:var(--violet)}
+.btn-back{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'Anuphan',sans-serif;font-weight:600;
+  font-size:calc(15px*var(--fs));
+  background:transparent;color:var(--ink-soft);
+  border:1.5px solid var(--line);border-radius:999px;
+  padding:9px 22px 9px 18px;cursor:pointer;transition:.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-back:hover{border-color:var(--violet);color:var(--violet)}
+.btn-back .arr{font-size:1.15em;line-height:1}
+
+/* ── WELCOME (จัดกึ่งกลาง พอดีจอ ใช้ gap แทน margin) ── */
+.wlc-hero{text-align:center;align-items:center;gap:10px}
+.wlc-svg{width:min(200px,30vh);height:auto;margin:0 auto;display:block}
+.wlc-svg svg{width:100%;height:auto}
+.wlc-tag{
+  display:inline-block;text-align:center;
+  background:var(--gold-soft);
+  color:#8A6D12;font-size:calc(12.5px*var(--fs));
+  font-weight:600;letter-spacing:.03em;line-height:1.5;
+  padding:6px 18px;border-radius:999px;
+  border:1px solid rgba(201,162,39,.3);
+}
+.wlc-tag b{font-weight:800;letter-spacing:.05em}
+.wlc-title{
+  font-size:clamp(calc(21px*var(--fs)),4.6vw,calc(30px*var(--fs)));
+  font-weight:800;color:var(--ink);line-height:1.25;
+}
+.wlc-sub{font-size:calc(16px*var(--fs));font-weight:700;color:var(--turq-deep)}
+.wlc-author{font-size:calc(13.5px*var(--fs));color:var(--ink-soft);line-height:1.55}
+.info-box{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:14px 20px;
+  text-align:center;box-shadow:var(--shadow);
+}
+.info-title{
+  font-size:calc(14px*var(--fs));font-weight:800;color:var(--violet-deep);
+  margin-bottom:6px;
+}
+.info-lead{
+  font-size:calc(15px*var(--fs));color:var(--ink-soft);line-height:1.55;
+  text-wrap:balance;margin-bottom:10px;
+}
+.info-box strong{color:var(--violet-deep);font-weight:700}
+.info-meta{
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+  font-size:calc(13px*var(--fs));font-weight:600;color:var(--turq-deep);
+  border-top:1px solid var(--line-soft);padding-top:10px;
+}
+.info-dot{color:var(--gold);font-weight:800}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Anuphan',sans-serif;font-weight:700;
+  border-radius:999px;cursor:pointer;border:2px solid transparent;
+  transition:all .25s cubic-bezier(.2,.7,.3,1);text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--violet) 0%,var(--violet-deep) 100%);
+  color:#fff;
+  font-size:calc(18px*var(--fs));padding:16px 44px;
+  box-shadow:0 10px 30px -10px rgba(91,75,196,.6);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(91,75,196,.7)}
+/* ── ANSWER BUTTONS — ดีไซน์ใหม่ โปรเฟสชันแนล ── */
+.ans-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:11px;
+  max-width:440px;margin:4px auto 0;width:100%;
+}
+.ans{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-family:'Anuphan',sans-serif;font-weight:700;
+  font-size:calc(16px*var(--fs));
+  border-radius:14px;cursor:pointer;border:2px solid transparent;
+  padding:11px 10px;transition:transform .18s, box-shadow .25s, background .25s;
+  -webkit-tap-highlight-color:transparent;position:relative;
+}
+.ans-ico{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;line-height:1;
+}
+/* ใช่ = เขียว pastel */
+.ans-yes{
+  background:#DCF6E3;color:#1B7A47;border-color:#B6E8C6;
+  box-shadow:0 6px 18px -10px rgba(27,122,71,.4);
+}
+.ans-yes .ans-ico{background:#3DBE74;color:#fff}
+/* ไม่ใช่ = แดงอ่อน pastel */
+.ans-no{
+  background:#FCE2E2;color:#C0392B;border-color:#F6C7C7;
+  box-shadow:0 6px 18px -10px rgba(192,57,43,.4);
+}
+.ans-no .ans-ico{background:#E8736B;color:#fff}
+/* ไม่ทราบ = เหลืองอ่อน pastel */
+.ans-unknown{
+  grid-column:1 / -1;
+  background:#FCF3CF;color:#8A6D12;border-color:#F1E2A0;
+  box-shadow:0 6px 18px -10px rgba(138,109,18,.4);
+}
+.ans-unknown .ans-ico{background:#E2B53C;color:#fff}
+.ans:hover{transform:translateY(-3px);box-shadow:0 12px 26px -12px rgba(36,28,77,.4)}
+.ans:active{transform:translateY(-1px)}
+/* selected (เมื่อย้อนกลับมาแก้คำตอบ) */
+.ans.sel{outline:3px solid var(--violet);outline-offset:3px}
+.sel-tag{
+  display:inline-block;font-size:calc(12.5px*var(--fs));font-weight:700;
+  color:var(--violet);background:var(--violet-soft);
+  padding:3px 14px;border-radius:999px;margin:0 auto 2px;
+}
+.btn-ghost{
+  background:transparent;color:var(--ink);
+  font-size:calc(16px*var(--fs));padding:13px 32px;
+  border-color:var(--line);
+}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-1px)}
+
+/* ── SPEAK / LISTEN BUTTON (ฟังเสียงอ่านคำถาม) — ชัด เด่น ── */
+.speak-row{display:flex;justify-content:center;margin:10px 0 10px}
+.btn-listen{
+  display:inline-flex;align-items:center;gap:11px;
+  font-family:'Anuphan',sans-serif;font-weight:700;
+  font-size:calc(16px*var(--fs));
+  color:#fff;
+  background:linear-gradient(135deg,var(--turq) 0%,var(--turq-deep) 100%);
+  border:none;
+  border-radius:999px;padding:8px 24px 8px 8px;cursor:pointer;
+  box-shadow:0 8px 20px -8px rgba(16,179,172,.65);
+  transition:all .25s;-webkit-tap-highlight-color:transparent;
+}
+.btn-listen:hover{box-shadow:0 12px 26px -8px rgba(16,179,172,.75);transform:translateY(-2px)}
+.listen-ico{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.listen-ico svg{width:19px;height:19px}
+/* sound waves animation while playing */
+.btn-listen.playing .wave{animation:wavepulse 1s ease-in-out infinite}
+.btn-listen.playing .wave2{animation-delay:.2s}
+.btn-listen.playing .wave3{animation-delay:.4s}
+@keyframes wavepulse{0%,100%{opacity:.3;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+.btn-listen.playing .listen-ico{animation:ring 1.4s ease-in-out infinite}
+@keyframes ring{0%,100%{box-shadow:0 4px 12px -3px rgba(16,179,172,.55)}50%{box-shadow:0 0 0 6px rgba(16,179,172,.18)}}
+
+/* ── PROGRESS (บางลง ให้พื้นที่ภาพประกอบ) ── */
+.prog-wrap{margin-bottom:2px;flex-shrink:0}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.prog-label{font-size:calc(11.5px*var(--fs));color:var(--ink-soft)}
+.prog-pct{font-size:calc(12px*var(--fs));font-weight:700;color:var(--violet)}
+.prog-track{background:var(--paper-2);border-radius:999px;height:5px;overflow:hidden}
+.prog-fill{
+  background:linear-gradient(90deg,var(--violet),var(--turq));
+  height:100%;border-radius:999px;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── QUESTION CARD ── */
+.q-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:22px;padding:18px 20px 20px;
+  box-shadow:var(--shadow);flex-shrink:0;
+}
+.q-num{
+  font-size:calc(12px*var(--fs));font-weight:700;
+  color:var(--violet);letter-spacing:.06em;margin-bottom:5px;
+  text-align:center;
+}
+.q-text{
+  font-size:clamp(calc(20px*var(--fs)),2.9vh,calc(25px*var(--fs)));font-weight:800;
+  color:var(--ink);line-height:1.4;margin-bottom:2px;
+  text-align:center;
+  text-wrap:balance;word-break:break-word;
+  max-width:30ch;margin-left:auto;margin-right:auto;
+}
+.illus-box{
+  display:flex;justify-content:center;align-items:center;
+  margin:0 auto;flex:0 0 auto;height:27vh;max-height:280px;width:100%;
+}
+.illus-box svg{height:100%;width:auto;max-width:92vw;display:block}
+
+/* ── RESULTS ── */
+.score-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:10px 18px;text-align:center;
+  box-shadow:var(--shadow);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+}
+.score-num-wrap{display:flex;align-items:baseline;gap:8px}
+.score-lbl{font-size:calc(13px*var(--fs));color:var(--ink-soft)}
+.score-big{
+  font-size:clamp(calc(34px*var(--fs)),5.5vh,calc(46px*var(--fs)));font-weight:800;
+  color:var(--violet);line-height:1;
+}
+.score-max{font-size:calc(13px*var(--fs));color:var(--ink-soft)}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:999px;
+  font-size:calc(13.5px*var(--fs));font-weight:700;line-height:1.35;
+}
+.badge-ok{background:#D7F5EC;color:#0A7A5E}
+.badge-mci{background:var(--gold-soft);color:#8A6D12}
+.badge-ad{background:#FCE4EC;color:#B0185A}
+
+.chart-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:14px 18px;
+  box-shadow:var(--shadow);flex-shrink:0;
+}
+.chart-card h3{
+  font-size:calc(16px*var(--fs));font-weight:700;
+  text-align:center;margin-bottom:4px;color:var(--ink);
+}
+.chart-note{
+  font-size:calc(12.5px*var(--fs));color:var(--ink-soft);
+  text-align:center;margin-bottom:12px;line-height:1.45;
+}
+/* radar + รายด้าน — ซ้อนบนมือถือ, ข้างกันบนจอกว้าง */
+.result-cols{display:flex;flex-direction:column;gap:10px;align-items:center}
+.chart-cont{position:relative;width:100%;max-width:min(210px,23vh);margin:0 auto;flex-shrink:0}
+.dom-list{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;width:100%}
+.dom-item{display:flex;align-items:center;gap:8px}
+.dom-ico{font-size:17px;flex-shrink:0}
+.dom-info{flex:1;min-width:0}
+.dom-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:2px}
+.dom-name{font-size:calc(12.5px*var(--fs));font-weight:700}
+.dom-score{font-size:calc(11px*var(--fs));color:var(--ink-soft);flex-shrink:0;white-space:nowrap}
+.dom-bar-bg{background:var(--paper-2);border-radius:999px;height:6px;overflow:hidden}
+.dom-bar{height:100%;border-radius:999px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+/* ด้านสุดท้าย (ภาษา) จัดกลางเต็มแถวเมื่อเป็น 2 คอลัมน์ */
+.dom-item:last-child:nth-child(odd){grid-column:1 / -1;max-width:50%;margin:0 auto}
+@media(min-width:760px){
+  .result-cols{flex-direction:row;align-items:center}
+  .chart-cont{max-width:240px}
+}
+
+/* ── RECOMMENDATIONS (compact, จัดให้อยู่ในจอเดียว) ── */
+.rec-top{display:flex;align-items:center;gap:14px}
+#rec-illus{flex-shrink:0}
+#rec-illus > div{width:clamp(72px,14vh,110px) !important;margin:0 !important}
+.level-banner{
+  border-radius:16px;padding:13px 18px;border-left:5px solid;
+}
+.banner-ok{background:#D7F5EC;border-color:var(--turq)}
+.banner-mci{background:var(--gold-soft);border-color:var(--gold)}
+.banner-ad{background:#FCE4EC;border-color:#E5417F}
+.banner-title{font-size:calc(16px*var(--fs));font-weight:700;margin-bottom:4px;color:var(--ink);line-height:1.35}
+.banner-text{font-size:calc(13.5px*var(--fs));line-height:1.55;color:var(--ink-soft)}
+
+.rec-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:13px 18px;
+  box-shadow:var(--shadow);
+}
+.rec-card h3{
+  font-size:calc(15px*var(--fs));font-weight:700;margin-bottom:6px;
+  color:var(--ink);display:flex;align-items:center;gap:8px;
+}
+.rec-list{list-style:none}
+.rec-list li{
+  font-size:calc(14px*var(--fs));color:var(--ink-soft);
+  line-height:1.4;padding:4px 0;
+  display:flex;gap:9px;align-items:flex-start;
+}
+.rec-list li .dot{color:var(--turq-deep);flex-shrink:0;margin-top:1px;font-size:15px}
+
+.link-row{display:flex;flex-direction:column;gap:10px}
+/* หน้าแหล่งความรู้ */
+.res-title{
+  font-size:calc(22px*var(--fs));font-weight:800;color:var(--violet-deep);
+  text-align:center;margin-bottom:4px;
+}
+.link-card.link-video{background:linear-gradient(135deg,#F0506E 0%,#C81E3A 100%)}
+.link-video .link-card-ico{font-size:26px}
+.quote{
+  margin:8px auto 0;max-width:560px;text-align:center;
+  display:flex;flex-direction:column;gap:4px;border:none;padding:6px 10px;
+}
+.quote-text{
+  font-size:calc(21px*var(--fs));font-weight:800;line-height:1.45;
+  background:linear-gradient(95deg,#6A3FD6 0%,#4F5BE0 45%,#2E86E6 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  color:#4F5BE0;  /* fallback ถ้าเบราว์เซอร์ไม่รองรับ gradient text */
+}
+.quote-by{font-size:calc(14px*var(--fs));font-weight:700;color:#3B6FD4;letter-spacing:.02em}
+.link-card{
+  background:linear-gradient(135deg,var(--violet) 0%,var(--violet-deep) 100%);
+  border-radius:16px;padding:12px 16px;
+  display:flex;align-items:center;gap:13px;
+  text-decoration:none;color:#fff;
+  transition:all .25s;cursor:pointer;border:none;width:100%;text-align:left;
+  font-family:'Anuphan',sans-serif;
+}
+.link-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px -12px rgba(91,75,196,.5)}
+.link-card-ico{font-size:30px;flex-shrink:0;line-height:1}
+.link-card-logo{
+  width:48px;height:48px;flex-shrink:0;
+  background:transparent;object-fit:contain;
+}
+.link-card-body{flex:1;min-width:0}
+.link-card-title{font-size:calc(15px*var(--fs));font-weight:700;margin-bottom:2px}
+.link-card-desc{font-size:calc(12.5px*var(--fs));opacity:.9;line-height:1.45}
+.link-card-arr{font-size:22px;opacity:.7;flex-shrink:0}
+
+/* ── DOWNLOAD BUTTONS ── */
+.dl-card{
+  background:var(--violet-soft);border:1.5px dashed rgba(91,75,196,.35);
+  border-radius:16px;padding:13px 16px;
+}
+.dl-card h3{font-size:calc(15px*var(--fs));font-weight:700;color:var(--violet-deep);margin-bottom:10px;display:flex;align-items:center;gap:8px;line-height:1.35}
+.dl-row{display:flex;gap:11px;flex-wrap:wrap}
+.btn-dl{
+  flex:1;min-width:140px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Anuphan',sans-serif;font-weight:700;font-size:calc(14.5px*var(--fs));
+  padding:12px 14px;border-radius:13px;cursor:pointer;border:2px solid transparent;
+  transition:.25s;-webkit-tap-highlight-color:transparent;
+}
+.btn-dl-png{background:linear-gradient(135deg,var(--turq) 0%,var(--turq-deep) 100%);color:#fff;box-shadow:0 8px 22px -10px rgba(16,179,172,.6)}
+.btn-dl-pdf{background:linear-gradient(135deg,var(--gold) 0%,#A8841C 100%);color:#fff;box-shadow:0 8px 22px -10px rgba(201,162,39,.6)}
+.btn-dl:hover{transform:translateY(-2px)}
+.btn-dl:disabled{opacity:.6;cursor:wait;transform:none}
+
+/* ── SECTION TITLE ── */
+.sec-ttl{
+  font-size:calc(16px*var(--fs));font-weight:700;
+  color:var(--ink);margin:6px 0 8px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-ttl::after{content:"";flex:1;height:1.5px;background:var(--line)}
+
+/* ── RESTART ── */
+.restart-row{text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── SUMMARY CAPTURE CARD (สำหรับบันทึก PNG/PDF) ── */
+#summary-capture{
+  position:fixed;left:-10000px;top:0;width:760px;
+  background:#fff;color:var(--ink);font-family:'Anuphan',sans-serif;
+  padding:0;box-sizing:border-box;
+}
+.sum-head{
+  background:linear-gradient(90deg,var(--violet) 0%,var(--violet-deep) 55%,var(--turq-deep) 100%);
+  color:#fff;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;
+}
+.sum-head .sum-logo{height:52px;background:#fff;border-radius:10px;padding:5px 10px}
+.sum-head .sum-azq{text-align:right}
+.sum-head .sum-azq .t{font-size:24px;font-weight:800;letter-spacing:.03em}
+.sum-head .sum-azq .s{font-size:13px;opacity:.92}
+.sum-body{padding:26px 34px 30px}
+.sum-row{display:flex;gap:26px;align-items:center;margin-bottom:22px}
+.sum-score-box{text-align:center;flex-shrink:0;background:var(--violet-soft);border-radius:18px;padding:18px 28px;min-width:180px}
+.sum-score-box .lbl{font-size:14px;color:var(--ink-soft)}
+.sum-score-box .num{font-size:62px;font-weight:800;color:var(--violet);line-height:1}
+.sum-score-box .max{font-size:14px;color:var(--ink-soft)}
+.sum-diag{flex:1}
+.sum-diag .badge{font-size:17px;padding:12px 22px}
+.sum-diag .diag-note{font-size:15px;color:var(--ink-soft);margin-top:12px;line-height:1.6}
+.sum-mid{display:flex;gap:26px;align-items:flex-start;margin-bottom:18px}
+.sum-radar{width:300px;flex-shrink:0;text-align:center}
+.sum-radar img{width:300px;height:300px}
+.sum-radar .cap{font-size:13px;color:var(--ink-soft);font-weight:700}
+.sum-doms{flex:1}
+.sum-doms .dh{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.sum-dom{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sum-dom .dn{font-size:14px;width:130px;flex-shrink:0}
+.sum-dom .db{flex:1;background:var(--paper-2);height:9px;border-radius:9px;overflow:hidden}
+.sum-dom .db i{display:block;height:100%;border-radius:9px}
+.sum-dom .ds{font-size:13px;color:var(--ink-soft);width:62px;text-align:right;flex-shrink:0}
+.sum-recs{background:var(--paper);border-radius:16px;padding:18px 22px;border:1px solid var(--line)}
+.sum-recs .dh{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.sum-recs ul{list-style:none;margin:0;padding:0}
+.sum-recs li{font-size:14px;color:var(--ink-soft);padding:5px 0;display:flex;gap:8px;line-height:1.55}
+.sum-recs li .d{color:var(--turq-deep);flex-shrink:0}
+.sum-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft)}
+.sum-foot b{color:var(--violet-deep)}
+.sum-disclaim{font-size:12px;color:var(--ink-soft);margin-top:10px;font-style:italic;line-height:1.5}
+
+/* ── RESPONSIVE ── */
+@media(max-width:500px){
+  .hdr{padding:5px 14px}
+  .hdr-logo{height:42px}
+  .fs-lbl{display:none}
+  .brand-strip{padding:5px 12px;gap:7px}
+  .brand-strip .azq-sub{font-size:calc(11px*var(--fs))}
+  .wrap{padding:12px}
+  .q-card{padding:16px 16px 18px}
+}
+/* จอเตี้ย — ลดขนาดภาพประกอบเพิ่ม เพื่อให้พอดีหนึ่งหน้าจอ */
+@media(max-height:680px){
+  .illus-box{height:22vh}
+  #rec-illus > div{width:clamp(64px,11vh,90px) !important}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <img src="logo_header.png" alt="หมออดิศักดิ์ รักษ์สมอง" class="hdr-logo">
+  <div class="fs-ctrl">
+    <span class="fs-lbl">ขนาดตัวอักษร:</span>
+    <button class="fs-btn fs-s" onclick="setFs(0.88)">ก</button>
+    <button class="fs-btn fs-m on" onclick="setFs(1)">ก</button>
+    <button class="fs-btn fs-l" onclick="setFs(1.22)">ก</button>
+  </div>
+</header>
+
+<!-- BRAND STRIP — Thai AZQ ปรากฏทุกหน้า -->
+<div class="brand-strip">
+  <span class="azq">Thai AZQ</span>
+  <span class="azq-sub"><span class="azq-dot">●</span> แบบคัดกรองภาวะสมองเสื่อม</span>
+</div>
+
+<main class="wrap">
+
+<!-- ══════════════════════════════ WELCOME ══════════════════════════════ -->
+<section id="scr-welcome" class="scr show">
+  <div class="scr-main wlc-hero">
+    <div class="wlc-svg" id="wlc-svg-slot"></div>
+    <div class="wlc-tag"><b>Thai AZQ</b> · Thai Alzheimer's Questionnaire</div>
+    <h1 class="wlc-title">แบบสอบถามคัดกรองภาวะสมองเสื่อม</h1>
+    <p class="wlc-sub">สำหรับญาติและผู้ดูแล</p>
+    <p class="wlc-author">โดย <strong>นพ.อดิศักดิ์ กิตติสาเรศ</strong> · คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+    <div class="info-box">
+      <div class="info-title">📋 วิธีใช้</div>
+      <p class="info-lead">ให้ <strong>ญาติหรือผู้ดูแล</strong> ตอบคำถาม 21 ข้อ<br>จากพฤติกรรมจริงของผู้ที่ท่านดูแล</p>
+      <div class="info-meta">
+        <span>✓ ไม่มีคำตอบถูกหรือผิด</span>
+        <span class="info-dot">·</span>
+        <span>⏱ ใช้เวลา 5–10 นาที</span>
+      </div>
+    </div>
+    <button class="btn-listen" onclick="playIntroAudio()" id="btn-intro" aria-label="ฟังคำแนะนำ">
+      <span class="listen-ico">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#fff"/>
+          <path class="wave wave2" d="M15.5 8.5a4 4 0 0 1 0 7" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="wave wave3" d="M18 6a7.5 7.5 0 0 1 0 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span id="intro-label">ฟังคำแนะนำ</span>
+    </button>
+    <button class="btn btn-primary" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ QUESTION ══════════════════════════════ -->
+<section id="scr-question" class="scr">
+  <div class="scr-main">
+    <div class="prog-wrap">
+      <div class="prog-row">
+        <span class="prog-label" id="prog-label">ข้อที่ 1 จาก 21</span>
+        <span class="prog-pct" id="prog-pct">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="illus-box" id="q-illus"></div>
+
+    <div class="q-card">
+      <div class="q-num" id="q-num">ข้อ 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="speak-row">
+        <button class="btn-listen" onclick="playQuestionAudio()" id="btn-listen" aria-label="ฟังเสียงอ่านคำถาม">
+          <span class="listen-ico">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#fff"/>
+              <path class="wave wave2" d="M15.5 8.5a4 4 0 0 1 0 7" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+              <path class="wave wave3" d="M18 6a7.5 7.5 0 0 1 0 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span id="listen-label">ฟังเสียงอ่านคำถาม</span>
+        </button>
+      </div>
+      <div id="sel-indicator" style="text-align:center"></div>
+      <div class="ans-grid">
+        <button class="ans ans-yes" id="ans-yes" onclick="answer('yes')">
+          <span class="ans-ico">✓</span><span class="ans-lbl">ใช่</span>
+        </button>
+        <button class="ans ans-no" id="ans-no" onclick="answer('no')">
+          <span class="ans-ico">✕</span><span class="ans-lbl">ไม่ใช่</span>
+        </button>
+        <button class="ans ans-unknown" id="ans-unknown" onclick="answer('unknown')">
+          <span class="ans-ico">?</span><span class="ans-lbl">ไม่ทราบ / ไม่แน่ใจ</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="backbar">
+    <button class="btn-back" onclick="goBack()"><span class="arr">←</span> ย้อนกลับ</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ RESULTS ══════════════════════════════ -->
+<section id="scr-result" class="scr">
+  <div class="scr-main">
+    <div class="score-card">
+      <div class="score-num-wrap">
+        <span class="score-big" id="res-score">0</span>
+        <span style="text-align:left">
+          <span class="score-lbl">คะแนนรวม</span><br>
+          <span class="score-max" id="res-max">จาก 27 คะแนน</span>
+        </span>
+      </div>
+      <div id="res-badge"></div>
+    </div>
+
+    <div class="chart-card">
+      <h3>🕸️ ผลการประเมินรายด้าน</h3>
+      <p class="chart-note">ℹ️ ยิ่งคะแนนมาก (แถบ/พื้นที่ยิ่งกว้าง) = ยิ่งมีปัญหาในด้านนั้นมาก</p>
+      <div class="result-cols">
+        <div class="chart-cont"><canvas id="radar-chart"></canvas></div>
+        <div class="dom-list" id="dom-list"></div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showScreen('scr-rec')">ดูคำแนะนำ →</button>
+  </div>
+
+  <div class="backbar">
+    <button class="btn-back" onclick="goBack()"><span class="arr">←</span> ย้อนกลับไปแก้คำตอบ</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ RECOMMENDATION ══════════════════════════════ -->
+<section id="scr-rec" class="scr">
+  <div class="scr-main">
+    <div class="rec-top">
+      <div id="rec-illus"></div>
+      <div style="flex:1;min-width:0">
+        <div id="rec-banner"></div>
+      </div>
+    </div>
+    <div id="rec-body"></div>
+
+    <div class="dl-card">
+      <h3>🩺 บันทึกผลเพื่อรับคำปรึกษาเพิ่มเติมกับแพทย์</h3>
+      <div class="dl-row">
+        <button class="btn-dl btn-dl-png" id="btn-png" onclick="downloadPNG()">🖼️ บันทึกรูปภาพ (PNG)</button>
+        <button class="btn-dl btn-dl-pdf" id="btn-pdf" onclick="downloadPDF()">📄 ดาวน์โหลด PDF</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showScreen('scr-resources')">📚 แหล่งความรู้เพิ่มเติม →</button>
+  </div>
+
+  <div class="backbar">
+    <button class="btn-back" onclick="goBack()"><span class="arr">←</span> ย้อนกลับ</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ RESOURCES (แหล่งความรู้) ══════════════════════════════ -->
+<section id="scr-resources" class="scr">
+  <div class="scr-main">
+    <h2 class="res-title">📚 แหล่งความรู้</h2>
+
+    <div class="link-row">
+      <a href="https://youtu.be/vtnMo4qNG2A" target="_blank" rel="noopener" class="link-card link-video">
+        <span class="link-card-ico">▶️</span>
+        <div class="link-card-body">
+          <div class="link-card-title">สงสัยสมองเสื่อม ต้องตรวจอะไรบ้าง</div>
+          <div class="link-card-desc">วิดีโอแนะนำ · การตรวจวินิจฉัยภาวะสมองเสื่อม</div>
+        </div>
+        <span class="link-card-arr">›</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=mQxBT1jytQg&t=62s" target="_blank" rel="noopener" class="link-card link-video">
+        <span class="link-card-ico">▶️</span>
+        <div class="link-card-body">
+          <div class="link-card-title">รู้จักโรคสมองเสื่อมเบื้องต้น</div>
+          <div class="link-card-desc">วิดีโอแนะนำ · ความรู้พื้นฐานเกี่ยวกับโรคสมองเสื่อม</div>
+        </div>
+        <span class="link-card-arr">›</span>
+      </a>
+
+      <a href="https://dradisak.com/Brain%20Care%20Series%20%E0%B9%80%E0%B8%A5%E0%B9%88%E0%B8%A1%201%20-%20eBook.html" target="_blank" rel="noopener" class="link-card">
+        <span class="link-card-ico">📖</span>
+        <div class="link-card-body">
+          <div class="link-card-title">Brain Care Series เล่ม 1</div>
+          <div class="link-card-desc">ความรู้เบื้องต้นเกี่ยวกับโรคสมองเสื่อม โดย นพ.อดิศักดิ์ กิตติสาเรศ</div>
+        </div>
+        <span class="link-card-arr">›</span>
+      </a>
+
+      <a href="https://dradisak.com" target="_blank" rel="noopener" class="link-card" style="background:linear-gradient(135deg,var(--turq) 0%,var(--turq-deep) 100%)">
+        <img class="link-card-logo" src="logo_brain.png" alt="รักษ์สมอง">
+        <div class="link-card-body">
+          <div class="link-card-title">เว็บไซต์ dradisak.com</div>
+          <div class="link-card-desc">คลินิกรักษ์สมองหมออดิศักดิ์ เชียงใหม่</div>
+        </div>
+        <span class="link-card-arr">›</span>
+      </a>
+    </div>
+
+    <blockquote class="quote">
+      <span class="quote-text">“เพราะหมอที่ดีที่สุดคือตัวของท่านเอง”</span>
+      <span class="quote-by">— หมออดิศักดิ์ รักษ์สมอง</span>
+    </blockquote>
+  </div>
+
+  <div class="backbar backbar-rec">
+    <button class="btn-back" onclick="goBack()"><span class="arr">←</span> ย้อนกลับ</button>
+    <button class="btn-back btn-restart" onclick="restartQuiz()">🔄 ทำแบบทดสอบใหม่</button>
+  </div>
+</section>
+
+</main>
+
+<!-- การ์ดสรุปผล (ซ่อนไว้นอกจอ ใช้สำหรับ render เป็น PNG/PDF) -->
+<div id="summary-capture" aria-hidden="true"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════════════════ */
+const QUESTIONS = [
+  {id:1, text:"คนที่คุณดูแลเป็นคนขี้ลืมหรือไม่?", score:1, domain:"memory", illus:"memory"},
+  {id:2, text:"ถ้าใช่ เขามีอาการขี้ลืมมากขึ้นภายใน 2–3 ปีที่ผ่านมาหรือไม่?", score:1, domain:"memory", illus:"memory"},
+  {id:3, text:"คนที่คุณดูแลชอบถามซ้ำหรือพูดซ้ำประโยคเดิมหรือเรื่องเดิมๆ หลายครั้งในวันเดียวหรือไม่?", score:2, domain:"memory", illus:"repeat"},
+  {id:4, text:"คุณต้องคอยเตือนย้ำเรื่องต่างๆ เช่น เรื่องนัด หรือผู้ดูแลลืมนัดบ่อยๆ หรือไม่?", score:1, domain:"memory", illus:"calendar"},
+  {id:5, text:"เขาวางของผิดที่มากกว่า 1 ครั้งต่อเดือนหรือไม่?", score:1, domain:"memory", illus:"misplace"},
+  {id:6, text:"เขาจะสงสัยว่ามีใครซ่อนหรือขโมยของ ถ้าหาของนั้นไม่พบ หรือไม่?", score:1, domain:"memory", illus:"suspicion"},
+  {id:7, text:"เขามักจำวัน วันที่ เดือน ปี และเวลาไม่ได้ หรือเช็คดูวันที่มากกว่า 1 ครั้งต่อวัน หรือไม่?", score:2, domain:"time", illus:"clock"},
+  {id:8, text:"เขารู้สึกหลงเมื่อไปสถานที่ที่ไม่คุ้นเคยหรือไม่?", score:1, domain:"space", illus:"lost"},
+  {id:9, text:"เมื่ออยู่นอกบ้านหรือขณะเดินทาง เขาจะรู้สึกสับสนมากกว่าอยู่ที่บ้าน หรือไม่?", score:1, domain:"space", illus:"lost"},
+  {id:10, text:"ถ้าไม่นับขีดจำกัดด้านร่างกาย เขามีปัญหาด้านการรับ–จ่ายเงิน เช่น การใช้จ่ายเงินสดหรือการคำนวณเงินทอน หรือไม่?", score:1, domain:"daily", illus:"money"},
+  {id:11, text:"เขามีปัญหาการจ่ายบิลค่าใช้จ่าย หรือการจัดการเรื่องการเงิน เช่น ค่าไฟฟ้า ค่าโทรศัพท์ ค่าบัตรเครดิต หรือไม่?", score:2, domain:"daily", illus:"bills"},
+  {id:12, text:"เขาลืมกินยาหรือกินยาไม่สม่ำเสมอหรือไม่?", score:1, domain:"daily", illus:"medicine"},
+  {id:13, text:"เขาขับรถหลงทาง หรือทำให้คุณกังวลเกี่ยวกับการขับรถของเขา หรือไม่?", score:1, domain:"daily", illus:"driving"},
+  {id:14, text:"เขาใช้เครื่องมืออุปกรณ์ที่เคยทำทุกวันได้ยากขึ้น เช่น เตาหุงต้ม โทรศัพท์ รีโมทคอนโทรล หรือไม่?", score:1, domain:"daily", illus:"appliance"},
+  {id:15, text:"ถ้าไม่นับขีดจำกัดด้านร่างกาย เขาทำความสะอาดบ้านหรือซ่อมแซมของใช้ในบ้านได้ลำบากกว่าเดิมหรือไม่?", score:1, domain:"daily", illus:"housework"},
+  {id:16, text:"ถ้าไม่นับขีดจำกัดด้านร่างกาย เขาเลิกเล่นกีฬาหรืองานอดิเรกที่ทำเป็นประจำหรือไม่?", score:1, domain:"daily", illus:"hobby"},
+  {id:17, text:"เขาเริ่มหลงทางในพื้นที่ที่คุ้นเคย เช่น ในละแวกบ้าน หรือไม่?", score:2, domain:"space", illus:"neighborhood"},
+  {id:18, text:"เขาไม่เข้าใจทิศหรือจำทางไม่ได้หรือไม่?", score:1, domain:"space", illus:"direction"},
+  {id:19, text:"เขามีปัญหาในการนึกคำเรียกสิ่งต่างๆ นอกจากชื่อคน หรือไม่?", score:1, domain:"language", illus:"word"},
+  {id:20, text:"เขาสับสนในการเรียกชื่อสมาชิกในครอบครัว หรือในกลุ่มเพื่อนสนิท หรือไม่?", score:2, domain:"language", illus:"word"},
+  {id:21, text:"เขามีปัญหาในการจำชื่อคนที่คุ้นเคยหรือไม่?", score:2, domain:"language", illus:"word"},
+];
+
+const DOMAINS = {
+  memory: {name:"ความจำ", icon:"🧠", qs:[1,2,3,4,5,6], max:7, color:"#0E8A84"},
+  time:   {name:"การรับรู้เวลา", icon:"🕐", qs:[7], max:2, color:"#B8924F"},
+  space:  {name:"การรับรู้สถานที่", icon:"🗺️", qs:[8,9,17,18], max:5, color:"#7C3AED"},
+  daily:  {name:"กิจวัตรประจำวัน", icon:"🏠", qs:[10,11,12,13,14,15,16], max:8, color:"#2563EB"},
+  language:{name:"ภาษาและการสื่อสาร", icon:"💬", qs:[19,20,21], max:5, color:"#DB2777"},
+};
+
+/* ════════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════════ */
+let current = 0;
+let answers = new Array(21).fill(null);  // ค่า: 'yes' | 'no' | 'unknown' | null
+let radarChart = null;
+let currentAudio = null;                 // <audio> ที่กำลังเล่นอยู่
+let lastSummary = null;                  // ข้อมูลสรุปผล สำหรับบันทึก PNG/PDF
+const AUDIO_DIR = 'audio/';              // โฟลเดอร์ไฟล์เสียง: audio/q01.mp3 ... audio/q21.mp3
+const MAX_SCORE = 27;
+
+/* ════════════════════════════════════════════════════════════
+   ILLUSTRATIONS (SVG)
+════════════════════════════════════════════════════════════ */
+const ILLUS = {
+  memory: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="190" rx="80" ry="12" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="110" r="88" fill="#EEF9F8"/>
+    <!-- brain -->
+    <path d="M110 95 Q105 70 125 62 Q140 55 155 63 Q170 55 185 65 Q200 75 195 95 Q200 110 190 118 Q185 130 170 130 L130 130 Q112 128 108 115 Z" fill="#0E8A84" opacity=".25"/>
+    <path d="M125 65 Q130 55 140 58 M155 63 Q165 52 175 57 M190 82 Q200 88 196 100 M108 105 Q104 115 112 122" stroke="#0E8A84" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- fog cloud -->
+    <ellipse cx="108" cy="68" rx="22" ry="14" fill="#E5E7EB" opacity=".9"/>
+    <circle cx="90" cy="64" r="10" fill="#E5E7EB" opacity=".9"/>
+    <circle cx="126" cy="62" r="10" fill="#E5E7EB" opacity=".9"/>
+    <text x="96" y="73" font-size="16" font-weight="bold" fill="#9CA3AF" text-anchor="middle">?</text>
+    <!-- person -->
+    <circle cx="150" cy="158" r="22" fill="#FBBF24"/>
+    <circle cx="143" cy="154" r="3.5" fill="#374151"/>
+    <circle cx="157" cy="154" r="3.5" fill="#374151"/>
+    <path d="M143 166 Q150 162 157 166" stroke="#374151" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- swirl lines on head -->
+    <path d="M138 146 Q144 140 150 144" stroke="#F97316" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M143 141 Q149 136 155 140" stroke="#F97316" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- body -->
+    <rect x="135" y="180" width="30" height="28" rx="8" fill="#60A5FA"/>
+  </svg>`,
+
+  repeat: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="194" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF7ED"/>
+    <!-- Person -->
+    <circle cx="150" cy="155" r="22" fill="#FBBF24"/>
+    <circle cx="143" cy="151" r="3.5" fill="#374151"/>
+    <circle cx="157" cy="151" r="3.5" fill="#374151"/>
+    <path d="M143 163 Q150 168 157 163" stroke="#374151" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <rect x="135" y="177" width="30" height="26" rx="8" fill="#34D399"/>
+    <!-- speech bubble 1 -->
+    <rect x="60" y="52" width="88" height="38" rx="12" fill="#0E8A84"/>
+    <polygon points="80,90 70,105 95,90" fill="#0E8A84"/>
+    <text x="104" y="76" font-size="13" fill="white" font-weight="600" text-anchor="middle">พูดเรื่องเดิม...</text>
+    <!-- speech bubble 2 -->
+    <rect x="160" y="80" width="88" height="38" rx="12" fill="#F97316"/>
+    <polygon points="180,118 170,133 195,118" fill="#F97316"/>
+    <text x="204" y="104" font-size="13" fill="white" font-weight="600" text-anchor="middle">พูดเรื่องเดิม...</text>
+    <!-- speech bubble 3 small -->
+    <rect x="90" y="110" width="80" height="32" rx="10" fill="#A78BFA"/>
+    <polygon points="105,142 96,154 118,142" fill="#A78BFA"/>
+    <text x="130" y="131" font-size="12" fill="white" font-weight="600" text-anchor="middle">พูดเรื่องเดิม...</text>
+  </svg>`,
+
+  calendar: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="80" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF7ED"/>
+    <!-- Calendar -->
+    <rect x="80" y="55" width="140" height="110" rx="14" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <rect x="80" y="55" width="140" height="34" rx="14" fill="#0E8A84"/>
+    <rect x="80" y="72" width="140" height="17" rx="0" fill="#0E8A84"/>
+    <text x="150" y="78" font-size="14" fill="white" font-weight="700" text-anchor="middle">นัดหมาย</text>
+    <circle cx="110" cy="55" r="6" fill="#0A5F5B"/><circle cx="190" cy="55" r="6" fill="#0A5F5B"/>
+    <!-- grid -->
+    <text x="96" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">จ</text>
+    <text x="116" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">อ</text>
+    <text x="136" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">พ</text>
+    <text x="156" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">พฤ</text>
+    <text x="178" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">ศ</text>
+    <text x="198" y="108" font-size="11" fill="#9CA3AF" text-anchor="middle">ส</text>
+    <!-- X marks -->
+    <text x="96" y="128" font-size="14" fill="#EF4444" text-anchor="middle" font-weight="bold">✗</text>
+    <text x="116" y="128" font-size="14" fill="#EF4444" text-anchor="middle" font-weight="bold">✗</text>
+    <text x="136" y="128" font-size="14" fill="#374151" text-anchor="middle">15</text>
+    <text x="156" y="128" font-size="14" fill="#374151" text-anchor="middle">16</text>
+    <text x="178" y="128" font-size="14" fill="#EF4444" text-anchor="middle" font-weight="bold">✗</text>
+    <text x="198" y="128" font-size="14" fill="#374151" text-anchor="middle">18</text>
+    <!-- reminder bell -->
+    <text x="218" y="162" font-size="26">🔔</text>
+    <!-- person -->
+    <circle cx="104" cy="175" r="18" fill="#FBBF24"/>
+    <circle cx="98" cy="172" r="2.5" fill="#374151"/>
+    <circle cx="110" cy="172" r="2.5" fill="#374151"/>
+    <path d="M98 181 Q104 177 110 181" stroke="#374151" stroke-width="1.5" fill="none"/>
+  </svg>`,
+
+  misplace: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#F0FDF4"/>
+    <!-- Person searching -->
+    <circle cx="140" cy="148" r="22" fill="#FBBF24"/>
+    <circle cx="133" cy="144" r="3" fill="#374151"/>
+    <circle cx="147" cy="144" r="3" fill="#374151"/>
+    <path d="M133 158 Q140 153 147 158" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="126" y="170" width="28" height="26" rx="8" fill="#60A5FA"/>
+    <!-- arm reaching -->
+    <path d="M154 165 Q170 155 178 148" stroke="#FBBF24" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <!-- magnifying glass -->
+    <circle cx="185" cy="138" r="14" fill="none" stroke="#374151" stroke-width="3"/>
+    <circle cx="185" cy="138" r="9" fill="rgba(255,255,255,.5)"/>
+    <path d="M195 148 L205 158" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+    <!-- floating items -->
+    <text x="70" y="85" font-size="22">🔑</text>
+    <text x="210" y="95" font-size="20">👓</text>
+    <text x="100" y="115" font-size="18">👛</text>
+    <text x="195" y="130" font-size="16">📱</text>
+    <!-- question marks -->
+    <text x="58" y="115" font-size="20" fill="#9CA3AF" font-weight="bold">?</text>
+    <text x="232" y="118" font-size="20" fill="#9CA3AF" font-weight="bold">?</text>
+  </svg>`,
+
+  suspicion: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF1F2"/>
+    <!-- suspicious person -->
+    <circle cx="105" cy="150" r="24" fill="#FBBF24"/>
+    <!-- narrowed eyes -->
+    <path d="M97 146 Q105 142 113 146" stroke="#374151" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M97 152 Q105 148 113 152" stroke="#374151" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- frown -->
+    <path d="M98 164 Q105 160 112 164" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="90" y="174" width="30" height="26" rx="8" fill="#F87171"/>
+    <!-- pointing arm -->
+    <path d="M120 165 Q145 155 170 148" stroke="#FBBF24" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <polygon points="170,142 180,148 170,154" fill="#374151"/>
+    <!-- other person looking innocent -->
+    <circle cx="210" cy="152" r="20" fill="#A78BFA"/>
+    <circle cx="204" cy="148" r="3" fill="#374151"/>
+    <circle cx="216" cy="148" r="3" fill="#374151"/>
+    <path d="M204 162 Q210 166 216 162" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="197" y="172" width="26" height="24" rx="8" fill="#7C3AED"/>
+    <!-- exclamation -->
+    <text x="155" y="100" font-size="28" fill="#EF4444" font-weight="bold" text-anchor="middle">!</text>
+    <text x="60" y="108" font-size="13" fill="#EF4444" font-weight="600" text-anchor="middle">ขโมย!</text>
+  </svg>`,
+
+  clock: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF7ED"/>
+    <!-- big clock -->
+    <circle cx="150" cy="100" r="58" fill="white" stroke="#E5E7EB" stroke-width="3"/>
+    <circle cx="150" cy="100" r="52" fill="#FBF9F5"/>
+    <!-- clock face -->
+    <text x="150" y="60" font-size="11" fill="#374151" text-anchor="middle" font-weight="600">12</text>
+    <text x="196" y="104" font-size="11" fill="#374151" text-anchor="middle" font-weight="600">3</text>
+    <text x="150" y="148" font-size="11" fill="#374151" text-anchor="middle" font-weight="600">6</text>
+    <text x="104" y="104" font-size="11" fill="#374151" text-anchor="middle" font-weight="600">9</text>
+    <!-- hands pointing in weird directions -->
+    <line x1="150" y1="100" x2="150" y2="62" stroke="#0E8A84" stroke-width="3" stroke-linecap="round"/>
+    <line x1="150" y1="100" x2="184" y2="118" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="150" cy="100" r="4" fill="#374151"/>
+    <!-- question marks around clock -->
+    <text x="86" y="62" font-size="18" fill="#F97316" font-weight="bold">?</text>
+    <text x="208" y="72" font-size="18" fill="#F97316" font-weight="bold">?</text>
+    <text x="216" y="145" font-size="18" fill="#F97316" font-weight="bold">?</text>
+    <!-- calendar icon bottom -->
+    <text x="76" y="175" font-size="22">📅</text>
+    <!-- confused person -->
+    <circle cx="220" cy="172" r="18" fill="#FBBF24"/>
+    <path d="M212 168 Q220 164 228 168" stroke="#374151" stroke-width="2" fill="none"/>
+    <text x="209" y="172" font-size="10" fill="#374151">~ ~</text>
+    <path d="M213 178 Q220 182 227 178" stroke="#374151" stroke-width="1.5" fill="none"/>
+  </svg>`,
+
+  lost: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="80" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#EEF2FF"/>
+    <!-- crossroads -->
+    <rect x="136" y="95" width="28" height="100" rx="4" fill="#E5E7EB"/>
+    <rect x="70" y="130" width="160" height="24" rx="4" fill="#E5E7EB"/>
+    <!-- signs -->
+    <rect x="158" y="88" width="52" height="22" rx="6" fill="#0E8A84"/>
+    <text x="184" y="103" font-size="11" fill="white" font-weight="600" text-anchor="middle">ทางนี้?</text>
+    <rect x="90" y="88" width="52" height="22" rx="6" fill="#F97316"/>
+    <text x="116" y="103" font-size="11" fill="white" font-weight="600" text-anchor="middle">ทางนี้?</text>
+    <rect x="124" y="60" width="52" height="22" rx="6" fill="#7C3AED"/>
+    <text x="150" y="75" font-size="11" fill="white" font-weight="600" text-anchor="middle">ทางนี้?</text>
+    <!-- person at crossroads -->
+    <circle cx="150" cy="120" r="18" fill="#FBBF24"/>
+    <circle cx="144" cy="116" r="2.5" fill="#374151"/>
+    <circle cx="156" cy="116" r="2.5" fill="#374151"/>
+    <path d="M143 126 Q150 122 157 126" stroke="#374151" stroke-width="1.5" fill="none"/>
+    <rect x="138" y="138" width="24" height="20" rx="6" fill="#60A5FA"/>
+    <!-- question mark above head -->
+    <text x="150" y="107" font-size="14" fill="#EF4444" font-weight="bold" text-anchor="middle">?</text>
+  </svg>`,
+
+  money: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#F0FDF4"/>
+    <!-- cash register / counter -->
+    <rect x="75" y="120" width="150" height="60" rx="10" fill="#374151"/>
+    <rect x="82" y="127" width="136" height="40" rx="8" fill="#1F2937"/>
+    <text x="150" y="152" font-size="16" fill="#43D2C8" font-weight="bold" text-anchor="middle">฿ ???</text>
+    <!-- money bills floating -->
+    <rect x="82" y="72" width="46" height="28" rx="6" fill="#10B981" transform="rotate(-8,105,86)"/>
+    <text x="105" y="90" font-size="11" fill="white" font-weight="700" text-anchor="middle" transform="rotate(-8,105,86)">฿ 100</text>
+    <rect x="162" y="66" width="46" height="28" rx="6" fill="#10B981" transform="rotate(6,185,80)"/>
+    <text x="185" y="84" font-size="11" fill="white" font-weight="700" text-anchor="middle" transform="rotate(6,185,80)">฿ 50</text>
+    <rect x="115" y="85" width="46" height="28" rx="6" fill="#34D399" transform="rotate(2,138,99)"/>
+    <text x="138" y="103" font-size="11" fill="white" font-weight="700" text-anchor="middle" transform="rotate(2,138,99)">฿ 20</text>
+    <!-- confused person at counter -->
+    <circle cx="150" cy="172" r="16" fill="#FBBF24"/>
+    <path d="M143 168 Q150 164 157 168" stroke="#374151" stroke-width="1.5" fill="none"/>
+    <text x="136" y="170" font-size="9" fill="#374151">~  ~</text>
+    <path d="M143 176 Q150 180 157 176" stroke="#374151" stroke-width="1.5" fill="none"/>
+    <text x="150" y="158" font-size="14" fill="#EF4444" font-weight="bold" text-anchor="middle">?</text>
+  </svg>`,
+
+  bills: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF7ED"/>
+    <!-- stack of bills/papers -->
+    <rect x="95" y="140" width="110" height="44" rx="8" fill="#E5E7EB"/>
+    <rect x="92" y="130" width="110" height="44" rx="8" fill="#D1D5DB"/>
+    <rect x="89" y="120" width="110" height="44" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="144" y="138" font-size="10" fill="#6B7280" text-anchor="middle">ค่าไฟฟ้า</text>
+    <text x="144" y="150" font-size="10" fill="#EF4444" font-weight="700" text-anchor="middle">เกินกำหนด!</text>
+    <text x="144" y="158" font-size="11" fill="#374151" text-anchor="middle">฿ 3,480</text>
+    <!-- floating bills -->
+    <text x="68" y="95" font-size="22">📄</text>
+    <text x="210" y="88" font-size="22">📄</text>
+    <text x="90" y="75" font-size="18">💳</text>
+    <text x="195" y="115" font-size="18">📱</text>
+    <!-- overwhelmed person -->
+    <circle cx="150" cy="82" r="20" fill="#FBBF24"/>
+    <path d="M141 76 Q150 70 159 76" stroke="#374151" stroke-width="2" fill="none"/>
+    <text x="137" y="80" font-size="10" fill="#374151">o  o</text>
+    <path d="M141 90 Q150 86 159 90" stroke="#374151" stroke-width="2" fill="none"/>
+    <!-- sweat drops -->
+    <text x="164" y="72" font-size="10" fill="#60A5FA">💧</text>
+    <text x="170" y="82" font-size="10" fill="#60A5FA">💧</text>
+  </svg>`,
+
+  medicine: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#F0FDF4"/>
+    <!-- pill organizer -->
+    <rect x="72" y="115" width="156" height="66" rx="12" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <!-- day compartments -->
+    <rect x="80" y="123" width="28" height="26" rx="6" fill="#DCFCE7" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="114" y="123" width="28" height="26" rx="6" fill="#DCFCE7" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="148" y="123" width="28" height="26" rx="6" fill="#FEF3C7" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="182" y="123" width="28" height="26" rx="6" fill="#FEF3C7" stroke="#E5E7EB" stroke-width="1"/>
+    <!-- pills in filled ones -->
+    <ellipse cx="94" cy="136" rx="7" ry="5" fill="#10B981"/>
+    <ellipse cx="128" cy="136" rx="7" ry="5" fill="#60A5FA"/>
+    <!-- empty ones have X -->
+    <text x="162" y="140" font-size="14" fill="#EF4444" font-weight="bold" text-anchor="middle">✗</text>
+    <text x="196" y="140" font-size="14" fill="#EF4444" font-weight="bold" text-anchor="middle">✗</text>
+    <!-- day labels -->
+    <text x="94" y="158" font-size="9" fill="#6B7280" text-anchor="middle">จ</text>
+    <text x="128" y="158" font-size="9" fill="#6B7280" text-anchor="middle">อ</text>
+    <text x="162" y="158" font-size="9" fill="#EF4444" text-anchor="middle">พ</text>
+    <text x="196" y="158" font-size="9" fill="#EF4444" text-anchor="middle">พฤ</text>
+    <!-- alarm clock missed -->
+    <text x="208" y="118" font-size="24">⏰</text>
+    <text x="215" y="98" font-size="12" fill="#EF4444" font-weight="bold">ลืม!</text>
+    <!-- person -->
+    <circle cx="110" cy="88" r="20" fill="#FBBF24"/>
+    <circle cx="104" cy="84" r="3" fill="#374151"/>
+    <circle cx="116" cy="84" r="3" fill="#374151"/>
+    <path d="M104 97 Q110 93 116 97" stroke="#374151" stroke-width="2" fill="none"/>
+    <!-- pills floating -->
+    <text x="64" y="90" font-size="18">💊</text>
+    <text x="140" y="78" font-size="18">💊</text>
+  </svg>`,
+
+  driving: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="80" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#EFF6FF"/>
+    <!-- road -->
+    <rect x="60" y="148" width="180" height="30" rx="4" fill="#9CA3AF"/>
+    <rect x="60" y="160" width="22" height="6" rx="3" fill="white"/>
+    <rect x="102" y="160" width="22" height="6" rx="3" fill="white"/>
+    <rect x="144" y="160" width="22" height="6" rx="3" fill="white"/>
+    <rect x="186" y="160" width="22" height="6" rx="3" fill="white"/>
+    <!-- car body -->
+    <rect x="96" y="118" width="108" height="36" rx="8" fill="#60A5FA"/>
+    <rect x="112" y="106" width="76" height="20" rx="8" fill="#93C5FD"/>
+    <!-- windows -->
+    <rect x="116" y="108" width="30" height="14" rx="4" fill="#BFDBFE"/>
+    <rect x="154" y="108" width="30" height="14" rx="4" fill="#BFDBFE"/>
+    <!-- wheels -->
+    <circle cx="118" cy="154" r="10" fill="#374151"/>
+    <circle cx="118" cy="154" r="4" fill="#9CA3AF"/>
+    <circle cx="182" cy="154" r="10" fill="#374151"/>
+    <circle cx="182" cy="154" r="4" fill="#9CA3AF"/>
+    <!-- confused driver face -->
+    <circle cx="134" cy="112" r="7" fill="#FBBF24"/>
+    <text x="130" y="113" font-size="8" fill="#374151">~  ~</text>
+    <!-- wrong way sign -->
+    <rect x="220" y="94" width="56" height="28" rx="8" fill="#EF4444"/>
+    <text x="248" y="112" font-size="12" fill="white" font-weight="700" text-anchor="middle">ผิดทาง!</text>
+    <!-- circular arrow showing u-turn confusion -->
+    <path d="M88 100 Q72 118 88 136 Q104 154 120 136" stroke="#F97316" stroke-width="2.5" fill="none" stroke-dasharray="5,3" stroke-linecap="round"/>
+    <polygon points="120,128 116,136 124,136" fill="#F97316"/>
+  </svg>`,
+
+  appliance: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF7ED"/>
+    <!-- TV / remote -->
+    <rect x="155" y="68" width="80" height="60" rx="8" fill="#374151"/>
+    <rect x="160" y="73" width="70" height="44" rx="5" fill="#1F2937"/>
+    <text x="195" y="100" font-size="18" text-anchor="middle" fill="#43D2C8">?</text>
+    <!-- remote -->
+    <rect x="168" y="142" width="28" height="48" rx="10" fill="#6B7280"/>
+    <circle cx="182" cy="154" r="5" fill="#EF4444"/>
+    <rect x="173" y="164" width="18" height="4" rx="2" fill="#9CA3AF"/>
+    <rect x="173" y="172" width="18" height="4" rx="2" fill="#9CA3AF"/>
+    <!-- person confused -->
+    <circle cx="96" cy="130" r="24" fill="#FBBF24"/>
+    <path d="M87 124 Q96 118 105 124" stroke="#374151" stroke-width="2" fill="none"/>
+    <text x="83" y="128" font-size="11" fill="#374151">~ ~</text>
+    <path d="M87 140 Q96 144 105 140" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="80" y="154" width="32" height="28" rx="8" fill="#34D399"/>
+    <!-- arm reaching toward remote -->
+    <path d="M120 140 Q145 140 160 148" stroke="#FBBF24" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <!-- phone icon -->
+    <text x="68" y="95" font-size="22">📱</text>
+    <!-- question marks -->
+    <text x="130" y="105" font-size="20" fill="#F97316" font-weight="bold">?</text>
+    <text x="220" y="80" font-size="18" fill="#F97316" font-weight="bold">?</text>
+  </svg>`,
+
+  housework: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="80" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#F0FDF4"/>
+    <!-- house outline -->
+    <polygon points="150,55 90,95 90,175 210,175 210,95" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <polygon points="150,45 80,98 220,98" fill="#0E8A84" opacity=".8"/>
+    <!-- messy items inside -->
+    <text x="108" y="140" font-size="16">🧦</text>
+    <text x="145" y="155" font-size="14">📦</text>
+    <text x="170" y="138" font-size="14">🗑️</text>
+    <text x="125" y="170" font-size="12">📰</text>
+    <text x="158" y="168" font-size="12">🥤</text>
+    <!-- broom dropped -->
+    <line x1="194" y1="105" x2="178" y2="165" stroke="#B8924F" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="176" cy="168" rx="10" ry="5" fill="#B8924F" opacity=".7"/>
+    <!-- person looking overwhelmed -->
+    <circle cx="88" cy="140" r="20" fill="#FBBF24"/>
+    <text x="79" y="137" font-size="9" fill="#374151">o  o</text>
+    <path d="M81 148 Q88 144 95 148" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="75" y="160" width="26" height="24" rx="7" fill="#A78BFA"/>
+  </svg>`,
+
+  hobby: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF1F2"/>
+    <!-- dusty abandoned items -->
+    <!-- book closed with dust -->
+    <rect x="82" y="120" width="55" height="44" rx="6" fill="#B8924F"/>
+    <rect x="86" y="124" width="47" height="36" rx="4" fill="#D4A66A"/>
+    <text x="109" y="148" font-size="10" fill="#92400E" text-anchor="middle" font-weight="600">หนังสือ</text>
+    <!-- dust puffs -->
+    <ellipse cx="98" cy="120" rx="8" ry="5" fill="#E5E7EB" opacity=".8"/>
+    <ellipse cx="114" cy="117" rx="6" ry="4" fill="#E5E7EB" opacity=".8"/>
+    <!-- tennis racket with dust -->
+    <ellipse cx="195" cy="125" rx="20" ry="26" fill="none" stroke="#6B7280" stroke-width="3"/>
+    <line x1="195" y1="151" x2="195" y2="178" stroke="#6B7280" stroke-width="4" stroke-linecap="round"/>
+    <!-- dust on racket -->
+    <ellipse cx="205" cy="110" rx="8" ry="5" fill="#E5E7EB" opacity=".8"/>
+    <!-- cobweb on racket -->
+    <path d="M180 108 Q190 115 200 108 M182 114 Q192 108 202 114" stroke="#D1D5DB" stroke-width="1" fill="none"/>
+    <!-- "zzz" above items = abandoned/unused -->
+    <text x="130" y="88" font-size="13" fill="#9CA3AF" font-weight="bold">Z z z</text>
+    <!-- person sitting sadly -->
+    <circle cx="150" cy="162" r="20" fill="#FBBF24"/>
+    <text x="140" y="158" font-size="9" fill="#374151">- -</text>
+    <path d="M143 172 Q150 168 157 172" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="137" y="182" width="26" height="10" rx="5" fill="#60A5FA"/>
+  </svg>`,
+
+  neighborhood: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="80" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#EEF2FF"/>
+    <!-- streets -->
+    <rect x="60" y="130" width="180" height="20" rx="3" fill="#9CA3AF" opacity=".5"/>
+    <rect x="130" y="70" width="20" height="100" rx="3" fill="#9CA3AF" opacity=".5"/>
+    <!-- houses -->
+    <polygon points="90,130 70,130 80,110" fill="#0E8A84" opacity=".8"/>
+    <rect x="70" y="130" width="20" height="18" rx="2" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <polygon points="205,130 185,130 195,110" fill="#F97316" opacity=".8"/>
+    <rect x="185" y="130" width="20" height="18" rx="2" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <polygon points="165,80 145,80 155,60" fill="#7C3AED" opacity=".8"/>
+    <rect x="145" y="80" width="20" height="18" rx="2" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <!-- dotted confused path -->
+    <path d="M150 155 Q100 145 95 120 Q90 95 120 88 Q150 80 160 100 Q170 120 150 130 Q130 140 140 155" stroke="#EF4444" stroke-width="2" fill="none" stroke-dasharray="5,3"/>
+    <!-- person lost -->
+    <circle cx="150" cy="160" r="16" fill="#FBBF24"/>
+    <circle cx="144" cy="156" r="2.5" fill="#374151"/>
+    <circle cx="156" cy="156" r="2.5" fill="#374151"/>
+    <path d="M143 167 Q150 163 157 167" stroke="#374151" stroke-width="1.5" fill="none"/>
+    <!-- big question mark -->
+    <text x="163" y="148" font-size="20" fill="#EF4444" font-weight="bold">?</text>
+    <!-- "บ้าน" label -->
+    <text x="80" y="155" font-size="9" fill="#0E8A84" text-anchor="middle" font-weight="700">บ้าน</text>
+  </svg>`,
+
+  direction: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#F0FDF4"/>
+    <!-- compass -->
+    <circle cx="150" cy="100" r="54" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <circle cx="150" cy="100" r="48" fill="#FBF9F5"/>
+    <!-- compass markings -->
+    <text x="150" y="62" font-size="13" fill="#374151" text-anchor="middle" font-weight="700">N</text>
+    <text x="192" y="104" font-size="13" fill="#374151" text-anchor="middle" font-weight="700">E</text>
+    <text x="150" y="146" font-size="13" fill="#374151" text-anchor="middle" font-weight="700">S</text>
+    <text x="108" y="104" font-size="13" fill="#374151" text-anchor="middle" font-weight="700">W</text>
+    <!-- confused spinning arrow -->
+    <polygon points="150,72 144,98 156,98" fill="#EF4444" opacity=".9"/>
+    <polygon points="150,128 144,102 156,102" fill="#EF4444" opacity=".4"/>
+    <!-- rotating arrows showing confusion -->
+    <path d="M136 86 Q128 100 136 114" stroke="#F97316" stroke-width="2" fill="none" stroke-dasharray="4,2" stroke-linecap="round"/>
+    <path d="M164 86 Q172 100 164 114" stroke="#F97316" stroke-width="2" fill="none" stroke-dasharray="4,2" stroke-linecap="round"/>
+    <circle cx="150" cy="100" r="5" fill="#374151"/>
+    <!-- confused person -->
+    <circle cx="150" cy="175" r="17" fill="#FBBF24"/>
+    <text x="140" y="171" font-size="9" fill="#374151">~  ~</text>
+    <path d="M143 181 Q150 185 157 181" stroke="#374151" stroke-width="1.5" fill="none"/>
+    <text x="162" y="167" font-size="18" fill="#EF4444" font-weight="bold">?</text>
+  </svg>`,
+
+  word: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="150" cy="196" rx="78" ry="11" fill="rgba(14,34,51,.06)"/>
+    <circle cx="150" cy="108" r="88" fill="#FFF1F2"/>
+    <!-- person -->
+    <circle cx="110" cy="155" r="24" fill="#FBBF24"/>
+    <circle cx="103" cy="151" r="3.5" fill="#374151"/>
+    <circle cx="117" cy="151" r="3.5" fill="#374151"/>
+    <path d="M103 164 Q110 160 117 164" stroke="#374151" stroke-width="2" fill="none"/>
+    <rect x="96" y="179" width="28" height="14" rx="7" fill="#60A5FA"/>
+    <!-- speech bubble empty -->
+    <rect x="128" y="80" width="110" height="60" rx="16" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <polygon points="136,140 128,158 154,140" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <polygon points="136,140 128,158 154,140" fill="white"/>
+    <!-- dots in bubble -->
+    <circle cx="158" cy="110" r="7" fill="#E5E7EB"/>
+    <circle cx="183" cy="110" r="7" fill="#E5E7EB"/>
+    <circle cx="208" cy="110" r="7" fill="#E5E7EB"/>
+    <!-- fading word examples -->
+    <text x="148" y="72" font-size="11" fill="#D1D5DB" text-anchor="middle" font-weight="600">ช้อน... กุญแจ...</text>
+    <text x="240" y="100" font-size="11" fill="#D1D5DB" text-anchor="middle" font-weight="600">อะไรนะ?</text>
+    <!-- thought bubble -->
+    <circle cx="130" cy="140" r="5" fill="#FEF3C7"/>
+    <circle cx="120" cy="128" r="7" fill="#FEF3C7"/>
+    <ellipse cx="108" cy="112" rx="16" ry="12" fill="#FEF3C7"/>
+    <text x="108" y="116" font-size="14" fill="#F97316" text-anchor="middle" font-weight="bold">?</text>
+  </svg>`,
+};
+
+/* Welcome illustration */
+const WELCOME_SVG = `<svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#43D2C8" stop-opacity=".15"/>
+      <stop offset="100%" stop-color="#43D2C8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="130" r="110" fill="url(#bg-grad)"/>
+  <!-- Brain shape -->
+  <path d="M100 110 Q95 80 115 68 Q130 58 148 68 Q165 58 182 70 Q200 82 196 110 Q202 128 190 140 Q182 155 164 158 L136 158 Q115 155 106 140 Z" fill="#0E8A84" opacity=".2"/>
+  <path d="M100 110 Q95 80 115 68 Q130 58 148 68 Q165 58 182 70 Q200 82 196 110 Q202 128 190 140 Q182 155 164 158 L136 158 Q115 155 106 140 Z" fill="none" stroke="#0E8A84" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- brain grooves -->
+  <path d="M148 68 Q148 90 148 110" stroke="#0E8A84" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+  <path d="M125 75 Q120 95 125 115" stroke="#0E8A84" stroke-width="1" fill="none" stroke-dasharray="3,3"/>
+  <path d="M170 75 Q175 95 170 115" stroke="#0E8A84" stroke-width="1" fill="none" stroke-dasharray="3,3"/>
+  <!-- colorful sections like logo -->
+  <path d="M100 110 Q95 80 115 68 Q130 58 148 68 L148 110 Q130 108 115 115 Z" fill="#F97316" opacity=".3"/>
+  <path d="M148 68 Q165 58 182 70 Q200 82 196 110 L148 110 Z" fill="#EC4899" opacity=".3"/>
+  <path d="M148 110 L196 110 Q202 128 190 140 Q182 155 164 158 L148 158 Z" fill="#A78BFA" opacity=".3"/>
+  <path d="M100 110 Q115 115 148 110 L148 158 L136 158 Q115 155 106 140 Z" fill="#FBBF24" opacity=".3"/>
+  <!-- sparkles -->
+  <circle cx="76" cy="88" r="4" fill="#43D2C8"/>
+  <circle cx="224" cy="92" r="3" fill="#F97316"/>
+  <circle cx="82" cy="158" r="3.5" fill="#A78BFA"/>
+  <circle cx="218" cy="162" r="4" fill="#FBBF24"/>
+  <path d="M62 72 L66 76 M66 72 L62 76" stroke="#43D2C8" stroke-width="2" stroke-linecap="round"/>
+  <path d="M234 78 L238 82 M238 78 L234 82" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+  <!-- happy person below brain -->
+  <circle cx="150" cy="200" r="28" fill="#FBBF24"/>
+  <circle cx="140" cy="196" r="4.5" fill="#374151"/>
+  <circle cx="160" cy="196" r="4.5" fill="#374151"/>
+  <!-- big smile -->
+  <path d="M138 210 Q150 220 162 210" stroke="#374151" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="126" y="228" width="48" height="26" rx="10" fill="#0E8A84"/>
+  <!-- thinking connection lines -->
+  <path d="M148 172 Q148 185 150 172" stroke="none"/>
+  <circle cx="150" cy="168" r="3" fill="#0E8A84" opacity=".5"/>
+  <circle cx="150" cy="175" r="2" fill="#0E8A84" opacity=".4"/>
+</svg>`;
+
+/* Recommendation illustrations */
+const REC_ILLUS = {
+  ok: `<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="120" cy="95" r="80" fill="#D1FAE5"/>
+    <text x="120" y="115" font-size="64" text-anchor="middle">🌟</text>
+    <text x="120" y="175" font-size="20" text-anchor="middle" fill="#065F46" font-family="Anuphan,sans-serif" font-weight="700">ความจำปกติ</text>
+  </svg>`,
+  mci: `<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="120" cy="95" r="80" fill="#FEF3C7"/>
+    <text x="120" y="115" font-size="64" text-anchor="middle">⚠️</text>
+    <text x="120" y="175" font-size="17" text-anchor="middle" fill="#92400E" font-family="Anuphan,sans-serif" font-weight="700">ควรติดตามอาการ</text>
+  </svg>`,
+  ad: `<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="120" cy="95" r="80" fill="#FEE2E2"/>
+    <text x="120" y="115" font-size="64" text-anchor="middle">🏥</text>
+    <text x="120" y="175" font-size="17" text-anchor="middle" fill="#991B1B" font-family="Anuphan,sans-serif" font-weight="700">ควรพบแพทย์</text>
+  </svg>`,
+};
+
+const RECOMMENDATIONS = {
+  ok: {
+    banner: {cls:"banner-ok", title:"✅ ภาวะความจำปกติ (Normal Cognition)", text:"คะแนนของท่านอยู่ในระดับปกติ ซึ่งเป็นสัญญาณที่ดีมาก"},
+    tips: [
+      "หลีกเลี่ยงและควบคุมปัจจัยเสี่ยง เช่น ความดันโลหิตสูง เบาหวาน ไขมันในเลือดสูง",
+      "ออกกำลังกายสม่ำเสมอ อย่างน้อย 30 นาทีต่อวัน 5 วันต่อสัปดาห์",
+      "รับประทานอาหารที่มีประโยชน์ โดยเฉพาะอาหารเมดิเตอร์เรเนียน",
+      "ฝึกสมองด้วยการอ่านหนังสือ เล่นเกมกระตุ้นสมอง เรียนรู้สิ่งใหม่",
+      "นอนหลับพักผ่อนให้เพียงพอ 7–8 ชั่วโมงต่อคืน",
+      "รักษาความสัมพันธ์ทางสังคม พบปะพูดคุยกับผู้คน",
+    ],
+  },
+  mci: {
+    banner: {cls:"banner-mci", title:"⚠️ สงสัยมีความผิดปกติทางพุทธิปัญญาเล็กน้อย (MCI)", text:"ท่านเริ่มมีความผิดปกติของสมองเพียงเล็กน้อย ควรดำเนินการดังนี้"},
+    tips: [
+      "ค้นหาและควบคุมปัจจัยเสี่ยงโรคหลอดเลือดสมอง เช่น ความดันโลหิต เบาหวาน",
+      "ติดตามอาการอย่างสม่ำเสมอ หากมีคะแนนที่เพิ่มมากขึ้น ควรพบแพทย์",
+      "ออกกำลังกายสม่ำเสมอ เพื่อกระตุ้นการไหลเวียนเลือดสู่สมอง",
+      "ฝึกสมองอย่างสม่ำเสมอ เช่น ทำปริศนา อ่านหนังสือ เล่นดนตรี",
+      "หลีกเลี่ยงแอลกอฮอล์และบุหรี่ซึ่งทำลายเซลล์สมอง",
+      "ปรึกษาแพทย์หากพบอาการแย่ลงอย่างชัดเจน",
+    ],
+  },
+  ad: {
+    banner: {cls:"banner-ad", title:"🔴 สงสัยมีภาวะสมองเสื่อม (Alzheimer's Disease)", text:"คะแนนบ่งชี้ว่าอาจมีภาวะสมองเสื่อม ควรดำเนินการโดยเร็ว"},
+    tips: [
+      "ควรพบแพทย์ผู้เชี่ยวชาญด้านระบบประสาทโดยเร็วที่สุด เพื่อตรวจหาสาเหตุ",
+      "การตรวจวินิจฉัยแต่เร็วช่วยให้ได้รับการรักษาที่ถูกต้องและทันเวลา",
+      "บางสาเหตุของสมองเสื่อมสามารถรักษาได้หากพบในระยะต้น",
+      "วางแผนการดูแลผู้ป่วยร่วมกับครอบครัวและทีมแพทย์",
+      "ผู้ดูแลควรดูแลสุขภาพจิตตนเองด้วย เนื่องจากการดูแลผู้ป่วยอาจเป็นเรื่องที่ท้าทาย",
+      "ติดต่อสมาคมผู้ดูแลผู้ป่วยสมองเสื่อมเพื่อขอคำแนะนำและกำลังใจ",
+    ],
+  },
+};
+
+/* ════════════════════════════════════════════════════════════
+   ค่าธีม + ป้ายผลตรวจ (ใช้ร่วมกันหลายฟังก์ชัน)
+════════════════════════════════════════════════════════════ */
+const LEVELS = {
+  ok:  {badge:'🟢 ภาวะความจำปกติ (Normal)',                              cls:'badge-ok'},
+  mci: {badge:'🟡 สงสัยมีความผิดปกติทางพุทธิปัญญาเล็กน้อย (MCI)',         cls:'badge-mci'},
+  ad:  {badge:'🔴 สงสัยมีภาวะสมองเสื่อม (Alzheimer\'s)',                  cls:'badge-ad'},
+};
+const LEVEL_NOTE = {
+  ok:  'คะแนนอยู่ในระดับปกติ ควรดูแลสุขภาพสมองและควบคุมปัจจัยเสี่ยงต่อไป',
+  mci: 'เริ่มมีความผิดปกติของความจำเล็กน้อย ควรติดตามอาการและควบคุมปัจจัยเสี่ยง',
+  ad:  'คะแนนบ่งชี้ว่าอาจมีภาวะสมองเสื่อม ควรพบแพทย์เพื่อตรวจหาสาเหตุโดยเร็ว',
+};
+const pad2 = n => String(n).padStart(2, '0');
+
+/* ════════════════════════════════════════════════════════════
+   FONT SIZE
+════════════════════════════════════════════════════════════ */
+function setFs(v) {
+  document.documentElement.style.setProperty('--fs', v);
+  document.querySelectorAll('.fs-btn').forEach(b => b.classList.remove('on'));
+  const idx = v < 0.95 ? 0 : v > 1.1 ? 2 : 1;
+  document.querySelectorAll('.fs-btn')[idx].classList.add('on');
+}
+
+/* ════════════════════════════════════════════════════════════
+   SCREEN MANAGEMENT + ปุ่มย้อนกลับ
+════════════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  if (id === 'scr-rec') showRec();
+}
+
+function currentScreen() {
+  const el = document.querySelector('.scr.show');
+  return el ? el.id : 'scr-welcome';
+}
+
+/* ปุ่มย้อนกลับ — ทำงานต่างกันตามหน้าที่อยู่ */
+function goBack() {
+  stopAudio();
+  const scr = currentScreen();
+  if (scr === 'scr-question') {
+    if (current > 0) { current--; renderQuestion(); }   // กลับไปแก้ข้อก่อนหน้า
+    else { showScreen('scr-welcome'); }                 // ข้อแรก → กลับหน้าต้อนรับ
+  } else if (scr === 'scr-result') {
+    current = 20; showScreen('scr-question'); renderQuestion();  // กลับไปทบทวน/แก้ข้อสุดท้าย
+  } else if (scr === 'scr-rec') {
+    showScreen('scr-result');
+  } else if (scr === 'scr-resources') {
+    showScreen('scr-rec');
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   QUIZ LOGIC
+════════════════════════════════════════════════════════════ */
+function startQuiz() {
+  current = 0;
+  answers = new Array(21).fill(null);
+  showScreen('scr-question');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  stopAudio();
+  const q = QUESTIONS[current];
+  const pct = Math.round((current / 21) * 100);
+
+  document.getElementById('prog-label').textContent = `ข้อที่ ${current + 1} จาก 21`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `ข้อ ${q.id}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const illustKey = q.illus in ILLUS ? q.illus : 'memory';
+  document.getElementById('q-illus').innerHTML = ILLUS[illustKey];
+
+  // ไฮไลต์คำตอบเดิม (กรณีย้อนกลับมาแก้)
+  const map = {yes:'ans-yes', no:'ans-no', unknown:'ans-unknown'};
+  ['ans-yes','ans-no','ans-unknown'].forEach(id => document.getElementById(id).classList.remove('sel'));
+  const prev = answers[current];
+  const ind = document.getElementById('sel-indicator');
+  if (prev && map[prev]) {
+    document.getElementById(map[prev]).classList.add('sel');
+    const txt = {yes:'ใช่', no:'ไม่ใช่', unknown:'ไม่ทราบ'}[prev];
+    ind.innerHTML = `<span class="sel-tag">คำตอบเดิม: ${txt} — แตะเพื่อเปลี่ยน</span>`;
+  } else {
+    ind.innerHTML = '';
+  }
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function answer(val) {           // val: 'yes' | 'no' | 'unknown'
+  stopAudio();
+  answers[current] = val;
+  current++;
+  if (current >= 21) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   เสียงอ่านโจทย์ — เล่นไฟล์ audio/qXX.mp3 ก่อน, ไม่มีไฟล์ค่อยใช้ TTS
+════════════════════════════════════════════════════════════ */
+function playQuestionAudio() {
+  stopAudio();
+  const btn = document.getElementById('btn-listen');
+  const label = document.getElementById('listen-label');
+  const file = AUDIO_DIR + 'TAQ' + pad2(current + 1) + '.mp3';   // audio/TAQ01.mp3 … TAQ21.mp3
+  const audio = new Audio(file);
+  currentAudio = audio;
+  let fellBack = false;
+
+  const onStart = () => { btn.classList.add('playing'); label.textContent = '🔊 กำลังเล่นเสียง…'; };
+  const onDone  = () => { btn.classList.remove('playing'); label.textContent = 'ฟังเสียงอ่านโจทย์'; currentAudio = null; };
+  const fallback = () => {                       // ไม่มีไฟล์เสียง → ใช้เสียงสังเคราะห์
+    if (fellBack) return; fellBack = true; currentAudio = null;
+    ttsSpeak(QUESTIONS[current].text, btn, label);
+  };
+
+  audio.addEventListener('playing', onStart);
+  audio.addEventListener('ended', onDone);
+  audio.addEventListener('error', fallback);
+  audio.play().then(onStart).catch(fallback);
+}
+
+/* ฟังคำแนะนำหน้าแรก — เล่น audio/TAQ00.mp3 (ไม่มีไฟล์ค่อยใช้ TTS) */
+function playIntroAudio() {
+  stopAudio();
+  const btn = document.getElementById('btn-intro');
+  const label = document.getElementById('intro-label');
+  const introText = 'แบบสอบถามคัดกรองภาวะสมองเสื่อม สำหรับญาติและผู้ดูแล โดย นายแพทย์อดิศักดิ์ กิตติสาเรศ คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่ ให้ญาติหรือผู้ดูแลเป็นผู้ตอบคำถาม 21 ข้อ โดยสังเกตจากพฤติกรรมจริงของผู้ที่ท่านดูแล ไม่มีคำตอบถูกหรือผิด';
+  const audio = new Audio(AUDIO_DIR + 'TAQ00.mp3');
+  currentAudio = audio;
+  let fellBack = false;
+  const onStart = () => { btn.classList.add('playing'); label.textContent = '🔊 กำลังเล่นเสียง…'; };
+  const onDone  = () => { btn.classList.remove('playing'); label.textContent = 'ฟังคำแนะนำ'; currentAudio = null; };
+  const fallback = () => { if (fellBack) return; fellBack = true; currentAudio = null; ttsSpeak(introText, btn, label, 'ฟังคำแนะนำ'); };
+  audio.addEventListener('playing', onStart);
+  audio.addEventListener('ended', onDone);
+  audio.addEventListener('error', fallback);
+  audio.play().then(onStart).catch(fallback);
+}
+
+function ttsSpeak(text, btn, label, restoreLabel) {
+  const restore = restoreLabel || 'ฟังเสียงอ่านคำถาม';
+  if (!window.speechSynthesis) {
+    label.textContent = 'อุปกรณ์นี้ยังไม่รองรับเสียงอ่าน';
+    setTimeout(() => { label.textContent = restore; }, 2000);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'th-TH'; u.rate = 0.9; u.pitch = 1;
+  btn.classList.add('playing'); label.textContent = '🔊 กำลังอ่าน…';
+  u.onend   = () => { btn.classList.remove('playing'); label.textContent = restore; };
+  u.onerror = () => { btn.classList.remove('playing'); label.textContent = restore; };
+  window.speechSynthesis.speak(u);
+}
+
+function stopAudio() {
+  if (currentAudio) { try { currentAudio.pause(); } catch(e){} currentAudio = null; }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  document.querySelectorAll('.btn-listen').forEach(b => b.classList.remove('playing'));
+  const ql = document.getElementById('listen-label'); if (ql) ql.textContent = 'ฟังเสียงอ่านคำถาม';
+  const il = document.getElementById('intro-label'); if (il) il.textContent = 'ฟังคำแนะนำ';
+}
+
+/* ════════════════════════════════════════════════════════════
+   คำนวณคะแนน (นับเฉพาะ 'ใช่' — 'ไม่ทราบ' ไม่คิดคะแนน)
+════════════════════════════════════════════════════════════ */
+function computeScores() {
+  let total = 0, unknownCount = 0;
+  const domainScores = {};
+  Object.keys(DOMAINS).forEach(dk => domainScores[dk] = 0);
+
+  QUESTIONS.forEach((q, i) => {
+    if (answers[i] === 'yes') {
+      total += q.score;
+      domainScores[q.domain] += q.score;
+    } else if (answers[i] === 'unknown') {
+      unknownCount++;
+    }
+  });
+
+  const level = total <= 3 ? 'ok' : total <= 12 ? 'mci' : 'ad';
+  return { total, unknownCount, domainScores, level };
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESULTS
+════════════════════════════════════════════════════════════ */
+function showResults() {
+  const { total, unknownCount, domainScores, level } = computeScores();
+  lastSummary = { total, unknownCount, domainScores, level };
+
+  document.getElementById('res-score').textContent = total;
+  let maxLine = `จาก ${MAX_SCORE} คะแนน`;
+  if (unknownCount > 0) maxLine += `&nbsp; · &nbsp;ตอบ “ไม่ทราบ” ${unknownCount} ข้อ (ไม่คิดคะแนน)`;
+  document.getElementById('res-max').innerHTML = maxLine;
+  document.getElementById('res-badge').innerHTML =
+    `<span class="badge ${LEVELS[level].cls}">${LEVELS[level].badge}</span>`;
+
+  renderRadar(domainScores);
+  renderDomainList(domainScores);
+
+  showScreen('scr-result');
+  window._quizLevel = level;
+}
+
+function renderRadar(domainScores) {
+  if (radarChart) { radarChart.destroy(); radarChart = null; }
+  const ctx = document.getElementById('radar-chart').getContext('2d');
+  const domainKeys = Object.keys(DOMAINS);
+  const SHORT = {memory:'ความจำ', time:'เวลา', space:'สถานที่', daily:'กิจวัตร', language:'ภาษา'};
+  const labels = domainKeys.map(k => SHORT[k] || DOMAINS[k].name);
+  const dataVals = domainKeys.map(k => Math.round((domainScores[k] / DOMAINS[k].max) * 100));
+
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'ระดับปัญหา (%)',
+        data: dataVals,
+        backgroundColor: 'rgba(91,75,196,0.18)',
+        borderColor: '#5B4BC4',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#5B4BC4',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#5B4BC4',
+        pointRadius: 5,
+      }],
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 600 },
+      layout: { padding: 6 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => `${c.raw}%` } },
+      },
+      scales: {
+        r: {
+          angleLines: { color: 'rgba(36,28,77,0.10)' },
+          grid: { color: 'rgba(36,28,77,0.08)' },
+          pointLabels: { font: { family: "'Anuphan', sans-serif", size: 13, weight: '600' }, color: '#241C4D', padding: 6 },
+          ticks: { display: false },
+          min: 0, max: 100, beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+/* สี bar ตามระดับปัญหา: น้อย=เทอร์คอยส์, ปานกลาง=ทอง, มาก=ชมพูแดง */
+function barColor(pct) {
+  return pct >= 60 ? '#E5417F' : pct >= 30 ? '#C9A227' : '#10B3AC';
+}
+
+function renderDomainList(domainScores) {
+  const domList = document.getElementById('dom-list');
+  domList.innerHTML = '';
+  Object.keys(DOMAINS).forEach(dk => {
+    const d = DOMAINS[dk];
+    const s = domainScores[dk];
+    const pct = Math.round((s / d.max) * 100);
+    const item = document.createElement('div');
+    item.className = 'dom-item';
+    item.innerHTML = `
+      <div class="dom-ico">${d.icon}</div>
+      <div class="dom-info">
+        <div class="dom-head"><span class="dom-name">${d.name}</span><span class="dom-score">${s}/${d.max} (${pct}%)</span></div>
+        <div class="dom-bar-bg">
+          <div class="dom-bar" style="width:${pct}%;background:${barColor(pct)}"></div>
+        </div>
+      </div>`;
+    domList.appendChild(item);
+  });
+}
+
+/* ════════════════════════════════════════════════════════════
+   RECOMMENDATIONS
+════════════════════════════════════════════════════════════ */
+function showRec() {
+  const level = window._quizLevel || 'ok';
+  const rec = RECOMMENDATIONS[level];
+
+  document.getElementById('rec-illus').innerHTML =
+    `<div style="width:min(200px,60vw);margin:0 auto 8px">${REC_ILLUS[level]}</div>`;
+
+  document.getElementById('rec-banner').innerHTML = `
+    <div class="level-banner ${rec.banner.cls}">
+      <div class="banner-title">${rec.banner.title}</div>
+      <div class="banner-text">${rec.banner.text}</div>
+    </div>`;
+
+  const tipsHtml = rec.tips.slice(0, 4).map(t => `<li><span class="dot">✦</span><span>${t}</span></li>`).join('');
+  document.getElementById('rec-body').innerHTML = `
+    <div class="rec-card">
+      <h3>📋 คำแนะนำสำหรับท่าน</h3>
+      <ul class="rec-list">${tipsHtml}</ul>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   บันทึกผลเป็นรูปภาพ / PDF (สรุปหนึ่งหน้าจอเพื่อเอาไปให้แพทย์)
+════════════════════════════════════════════════════════════ */
+function buildSummaryCard() {
+  const s = lastSummary;
+  if (!s) return;
+  const dateStr = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+  const radarImg = radarChart ? radarChart.toBase64Image() : '';
+  const rec = RECOMMENDATIONS[s.level];
+  const topTips = rec.tips.slice(0, 4);
+
+  const domRows = Object.keys(DOMAINS).map(dk => {
+    const d = DOMAINS[dk], sc = s.domainScores[dk];
+    const pct = Math.round((sc / d.max) * 100);
+    return `<div class="sum-dom">
+      <span class="dn">${d.icon} ${d.name}</span>
+      <span class="db"><i style="width:${pct}%;background:${barColor(pct)}"></i></span>
+      <span class="ds">${sc}/${d.max} (${pct}%)</span>
+    </div>`;
+  }).join('');
+
+  const tipsLi = topTips.map(t => `<li><span class="d">✦</span><span>${t}</span></li>`).join('');
+  let unknownLine = s.unknownCount > 0
+    ? `<div style="font-size:13px;color:var(--ink-soft);margin-top:8px">* ตอบ “ไม่ทราบ” ${s.unknownCount} ข้อ (ไม่นำมาคิดคะแนน)</div>` : '';
+
+  document.getElementById('summary-capture').innerHTML = `
+    <div class="sum-head">
+      <img class="sum-logo" src="logo_header.png" alt="logo" crossorigin="anonymous">
+      <div class="sum-azq"><div class="t">Thai AZQ</div><div class="s">แบบคัดกรองภาวะสมองเสื่อม</div></div>
+    </div>
+    <div class="sum-body">
+      <div class="sum-row">
+        <div class="sum-score-box">
+          <div class="lbl">คะแนนรวม</div>
+          <div class="num">${s.total}</div>
+          <div class="max">จาก ${MAX_SCORE} คะแนน</div>
+        </div>
+        <div class="sum-diag">
+          <span class="badge ${LEVELS[s.level].cls}">${LEVELS[s.level].badge}</span>
+          <div class="diag-note">${LEVEL_NOTE[s.level]}</div>
+          ${unknownLine}
+        </div>
+      </div>
+      <div class="sum-mid">
+        <div class="sum-radar">
+          ${radarImg ? `<img src="${radarImg}" alt="radar">` : ''}
+          <div class="cap">แผนภูมิใยแมงมุม · ระดับปัญหารายด้าน</div>
+        </div>
+        <div class="sum-doms">
+          <div class="dh">ผลการประเมินรายด้าน</div>
+          ${domRows}
+        </div>
+      </div>
+      <div class="sum-recs">
+        <div class="dh">📋 คำแนะนำเบื้องต้น</div>
+        <ul>${tipsLi}</ul>
+      </div>
+      <div class="sum-foot">
+        <span>วันที่ประเมิน: <b>${dateStr}</b></span>
+        <span>โดย <b>นพ.อดิศักดิ์ กิตติสาเรศ</b> · คณะแพทยศาสตร์ ม.เชียงใหม่</span>
+      </div>
+      <div class="sum-disclaim">หมายเหตุ: แบบคัดกรองนี้เป็นเครื่องมือเบื้องต้น ไม่ใช่การวินิจฉัยทางการแพทย์ กรุณาปรึกษาแพทย์เพื่อการวินิจฉัยที่แน่นอน</div>
+    </div>`;
+}
+
+function fileStamp() {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+
+async function captureSummary() {
+  buildSummaryCard();
+  const el = document.getElementById('summary-capture');
+  // รอให้รูปโลโก้โหลดก่อน capture
+  await Promise.all(Array.from(el.querySelectorAll('img')).map(img =>
+    img.complete ? Promise.resolve() : new Promise(res => { img.onload = img.onerror = res; })
+  ));
+  return await html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+}
+
+async function downloadPNG() {
+  const btn = document.getElementById('btn-png');
+  btn.disabled = true; const orig = btn.innerHTML; btn.innerHTML = '⏳ กำลังสร้างรูป…';
+  try {
+    const canvas = await captureSummary();
+    const a = document.createElement('a');
+    a.download = `Thai-AZQ-ผลคัดกรอง-${fileStamp()}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch (e) {
+    alert('เกิดข้อผิดพลาดในการสร้างรูป กรุณาลองอีกครั้ง');
+  } finally {
+    btn.disabled = false; btn.innerHTML = orig;
+  }
+}
+
+async function downloadPDF() {
+  const btn = document.getElementById('btn-pdf');
+  btn.disabled = true; const orig = btn.innerHTML; btn.innerHTML = '⏳ กำลังสร้าง PDF…';
+  try {
+    const canvas = await captureSummary();
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);  // JPEG เพื่อลดขนาดไฟล์
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const imgW = pageW - margin * 2;
+    const imgH = imgW * canvas.height / canvas.width;
+    const y = imgH < pageH - margin * 2 ? (pageH - imgH) / 2 : margin;
+    pdf.addImage(imgData, 'JPEG', margin, y, imgW, Math.min(imgH, pageH - margin * 2));
+    pdf.save(`Thai-AZQ-ผลคัดกรอง-${fileStamp()}.pdf`);
+  } catch (e) {
+    alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองอีกครั้ง');
+  } finally {
+    btn.disabled = false; btn.innerHTML = orig;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESTART
+════════════════════════════════════════════════════════════ */
+function restartQuiz() {
+  stopAudio();
+  if (radarChart) { radarChart.destroy(); radarChart = null; }
+  showScreen('scr-welcome');
+}
+
+/* ════════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════════ */
+document.getElementById('wlc-svg-slot').innerHTML = WELCOME_SVG;
+</script>
+</body>
+</html>
