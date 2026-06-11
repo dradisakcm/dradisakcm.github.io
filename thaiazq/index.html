@@ -523,12 +523,19 @@ body{
   #scr-rec .btn-primary{padding:11px 36px}
   .backbar{padding-top:8px;margin-top:3px}
   /* หน้าแหล่งความรู้ (resources) — กระชับเพื่อพอดีจอ */
-  .res-title{font-size:calc(19px*var(--fs));margin-bottom:2px}
-  .link-row{gap:8px}
-  .link-card{padding:9px 14px;gap:11px}
-  .link-card-ico{font-size:25px}
-  .link-video .link-card-ico{font-size:22px}
-  .quote{margin-top:4px;padding:2px 10px;gap:2px}
+  #scr-resources .scr-main{gap:8px}
+  .res-title{font-size:calc(18px*var(--fs));margin-bottom:0}
+  .link-row{gap:6px}
+  .link-card{padding:7px 13px;gap:10px}
+  .link-card-ico{font-size:22px}
+  .link-video .link-card-ico{font-size:19px}
+  .link-card-title{font-size:calc(14px*var(--fs))}
+  .link-card-desc{font-size:calc(11.5px*var(--fs));line-height:1.35}
+  .share-block{padding:9px 14px}
+  .share-head{font-size:calc(13px*var(--fs));margin-bottom:7px}
+  .share-btn{padding:10px 10px;font-size:calc(14px*var(--fs))}
+  .quote{margin-top:2px;padding:0 10px;gap:1px}
+  .quote-by{font-size:calc(12.5px*var(--fs))}
 }
 @media(max-height:600px){
   .wlc-svg{width:min(92px,13vh) !important}
@@ -603,6 +610,58 @@ body{
   color:var(--ink-soft);padding:7px 18px;cursor:pointer;transition:.2s;margin-top:10px;
 }
 .btn-clear:hover{border-color:#e55;color:#e55}
+
+/* ════ SHARE — ชวนเพื่อนมาทำแบบทดสอบ ════ */
+/* บล็อกเต็ม (หน้าสุดท้าย) */
+.share-block{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:13px 16px;box-shadow:var(--shadow);text-align:center;
+}
+.share-head{
+  font-size:calc(14px*var(--fs));font-weight:700;color:var(--violet-deep);
+  margin-bottom:10px;line-height:1.4;
+}
+.share-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.share-btn{
+  flex:1 1 0;min-width:96px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Anuphan',sans-serif;font-weight:800;
+  font-size:calc(15px*var(--fs));color:#fff;
+  border:none;border-radius:14px;padding:13px 12px;cursor:pointer;
+  transition:transform .18s, box-shadow .25s;-webkit-tap-highlight-color:transparent;
+}
+.share-btn:hover{transform:translateY(-2px)}
+.share-btn svg{width:21px;height:21px;flex-shrink:0}
+.share-line{background:#06C755;box-shadow:0 8px 20px -8px rgba(6,199,85,.6)}
+.share-fb{background:#1877F2;box-shadow:0 8px 20px -8px rgba(24,119,242,.6)}
+.share-copy{background:linear-gradient(135deg,#7B61C9,#5B4BC4);box-shadow:0 8px 20px -8px rgba(91,75,196,.55)}
+.share-fb .fb-f{font-weight:900;font-size:1.25em;line-height:1;font-family:Georgia,serif}
+
+/* แถวกระชับ (หน้าแรก) */
+.wlc-share{
+  display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+}
+.wlc-share-lbl{font-size:calc(12.5px*var(--fs));color:var(--ink-soft);font-weight:600}
+.shr{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border:none;border-radius:50%;cursor:pointer;color:#fff;
+  transition:transform .18s, box-shadow .25s;-webkit-tap-highlight-color:transparent;
+}
+.shr:hover{transform:translateY(-2px)}
+.shr svg{width:22px;height:22px}
+.shr-line{background:#06C755;box-shadow:0 6px 16px -7px rgba(6,199,85,.7);font-size:11px;font-weight:900;letter-spacing:.02em}
+.shr-fb{background:#1877F2;box-shadow:0 6px 16px -7px rgba(24,119,242,.7);font-weight:900;font-size:20px;font-family:Georgia,serif}
+.shr-copy{background:linear-gradient(135deg,#7B61C9,#5B4BC4);box-shadow:0 6px 16px -7px rgba(91,75,196,.6);font-size:18px}
+
+/* toast แจ้งคัดลอก */
+.share-toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;font-family:'Anuphan',sans-serif;font-weight:600;
+  font-size:calc(14px*var(--fs));padding:11px 22px;border-radius:99px;
+  box-shadow:0 10px 30px -8px rgba(0,0,0,.4);opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;z-index:9999;
+}
+.share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -655,6 +714,12 @@ body{
       <span id="intro-label">ฟังคำแนะนำ</span>
     </button>
     <button class="btn btn-primary" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
+    <div class="wlc-share">
+      <span class="wlc-share-lbl">ชวนเพื่อนมาทำ:</span>
+      <button class="shr shr-line" onclick="shareLine()" aria-label="แชร์ทาง LINE" title="แชร์ทาง LINE">LINE</button>
+      <button class="shr shr-fb" onclick="shareFacebook()" aria-label="แชร์ทาง Facebook" title="แชร์ทาง Facebook">f</button>
+      <button class="shr shr-copy" onclick="copyShareLink(this)" aria-label="คัดลอกลิงก์" title="คัดลอกลิงก์">🔗</button>
+    </div>
   </div>
 </section>
 
@@ -805,6 +870,15 @@ body{
         </div>
         <span class="link-card-arr">›</span>
       </a>
+    </div>
+
+    <div class="share-block">
+      <div class="share-head">💚 ชวนเพื่อนหรือคนที่คุณรักมาทำแบบทดสอบ</div>
+      <div class="share-btns">
+        <button class="share-btn share-line" onclick="shareLine()"><span class="fb-f" style="font-family:'Anuphan',sans-serif;font-weight:900">LINE</span></button>
+        <button class="share-btn share-fb" onclick="shareFacebook()"><span class="fb-f">f</span> Facebook</button>
+        <button class="share-btn share-copy" onclick="copyShareLink(this)">🔗 คัดลอกลิงก์</button>
+      </div>
     </div>
 
     <blockquote class="quote">
@@ -1968,6 +2042,48 @@ function renderAnalytics() {
       </div>
       <div class="ana-note">หมายเลขผู้ใช้ล่าสุด: <b>${String(s.counter).padStart(5, '0')}</b><br>ข้อมูลรวมจากทุกอุปกรณ์ · อัปเดตแบบเรียลไทม์</div>`;
   });
+}
+
+/* ════════════════════════════════════════════════════════════
+   SHARE — ชวนเพื่อนมาทำแบบทดสอบ (LINE / Facebook / คัดลอกลิงก์)
+════════════════════════════════════════════════════════════ */
+const SHARE_URL = 'https://dradisak.com/thaiazq/';
+
+function shareLine() {
+  const u = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(SHARE_URL);
+  window.open(u, '_blank', 'noopener,width=600,height=600');
+}
+function shareFacebook() {
+  const u = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SHARE_URL);
+  window.open(u, '_blank', 'noopener,width=600,height=600');
+}
+function copyShareLink() {
+  const done = () => showShareToast('✓ คัดลอกลิงก์แล้ว — นำไปวางส่งให้เพื่อนได้เลย');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(SHARE_URL).then(done).catch(() => fallbackCopy(SHARE_URL, done));
+  } else {
+    fallbackCopy(SHARE_URL, done);
+  }
+}
+function fallbackCopy(text, cb) {
+  const t = document.createElement('textarea');
+  t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+  document.body.appendChild(t); t.focus(); t.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(t); if (cb) cb();
+}
+let shareToastTimer = null;
+function showShareToast(msg) {
+  let el = document.getElementById('share-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'share-toast'; el.className = 'share-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(shareToastTimer);
+  shareToastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
 /* ════════════════════════════════════════════════════════════
