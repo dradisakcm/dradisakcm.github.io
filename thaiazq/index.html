@@ -383,7 +383,8 @@ body{
   display:flex;flex-direction:column;gap:4px;border:none;padding:6px 10px;
 }
 .quote-text{
-  font-size:calc(21px*var(--fs));font-weight:800;line-height:1.45;
+  font-size:min(calc(21px*var(--fs)),4.9vw);font-weight:800;line-height:1.45;
+  white-space:nowrap;  /* บังคับให้อยู่บรรทัดเดียวทุกหน้าจอ */
   background:linear-gradient(95deg,#6A3FD6 0%,#4F5BE0 45%,#2E86E6 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   color:#4F5BE0;  /* fallback ถ้าเบราว์เซอร์ไม่รองรับ gradient text */
