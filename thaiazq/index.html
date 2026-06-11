@@ -131,6 +131,7 @@ body{
 }
 .wlc-sub{font-size:calc(16px*var(--fs));font-weight:700;color:var(--turq-deep)}
 .wlc-author{font-size:calc(13.5px*var(--fs));color:var(--ink-soft);line-height:1.55}
+.wlc-faculty{display:inline-block;white-space:nowrap;font-size:min(calc(13.5px*var(--fs)),3.8vw)}
 .info-box{
   background:var(--card);border:1px solid var(--line);
   border-radius:16px;padding:14px 20px;
@@ -570,6 +571,32 @@ body{
 .ana-stat .val{font-size:calc(28px*var(--fs));font-weight:800;color:var(--violet)}
 .ana-stat .lbl{font-size:calc(12px*var(--fs));color:var(--ink-soft);margin-top:4px}
 .ana-empty{text-align:center;color:var(--ink-soft);padding:30px 0;font-size:calc(14px*var(--fs))}
+/* การ์ดยอดรวม */
+.ana-total{
+  background:linear-gradient(135deg,var(--violet) 0%,var(--violet-deep) 100%);
+  color:#fff;border-radius:18px;padding:18px;text-align:center;margin-bottom:14px;
+  box-shadow:0 10px 26px -12px rgba(91,75,196,.6);
+}
+.ana-total-num{font-size:calc(40px*var(--fs));font-weight:800;line-height:1;letter-spacing:.01em}
+.ana-total-lbl{font-size:calc(13px*var(--fs));opacity:.9;margin-top:6px}
+/* การ์ดแยกกลุ่ม */
+.ana-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.ana-cat{
+  background:#fff;border-radius:14px;padding:14px 8px;text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);border-top:4px solid var(--line);
+}
+.ana-cat-ok{border-top-color:var(--turq)}
+.ana-cat-mci{border-top-color:var(--gold)}
+.ana-cat-ad{border-top-color:#E5417F}
+.ana-cat-ic{font-size:18px;line-height:1}
+.ana-cat-num{font-size:calc(26px*var(--fs));font-weight:800;color:var(--ink);margin-top:4px}
+.ana-cat-lbl{font-size:calc(11px*var(--fs));color:var(--ink-soft);margin-top:3px;line-height:1.3;min-height:2.6em;display:flex;align-items:center;justify-content:center}
+.ana-cat-pct{font-size:calc(12.5px*var(--fs));font-weight:700;color:var(--violet);margin-top:3px}
+/* แถบสัดส่วน */
+.ana-bar{display:flex;height:14px;border-radius:99px;overflow:hidden;margin-bottom:12px;background:var(--line-soft)}
+.ana-bar i{display:block;height:100%}
+.ana-note{font-size:calc(11.5px*var(--fs));color:var(--ink-soft);text-align:center;line-height:1.5}
+.ana-note b{font-variant-numeric:tabular-nums;color:var(--violet)}
 .btn-clear{
   background:none;border:1.5px solid var(--line);border-radius:99px;
   font-family:'Anuphan',sans-serif;font-size:calc(13px*var(--fs));
@@ -606,7 +633,7 @@ body{
     <div class="wlc-tag"><b>Thai AZQ</b> · Thai Alzheimer's Questionnaire</div>
     <h1 class="wlc-title">แบบสอบถามคัดกรองภาวะสมองเสื่อม</h1>
     <p class="wlc-sub">สำหรับญาติและผู้ดูแล</p>
-    <p class="wlc-author">โดย <strong>นพ.อดิศักดิ์ กิตติสาเรศ</strong> · คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+    <p class="wlc-author">โดย <strong>นพ.อดิศักดิ์ กิตติสาเรศ</strong><br><span class="wlc-faculty">คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</span></p>
     <p class="wlc-ref">Reference : The validity of Thai version of Alzheimer's questionnaire. Thai journal of neurology 2014;30(2):51</p>
     <div class="info-box">
       <div class="info-title">📋 วิธีใช้</div>
@@ -1607,7 +1634,6 @@ function showResults() {
   const { total, unknownCount, domainScores, level } = computeScores();
   lastSummary = { total, unknownCount, domainScores, level };
   recordCompletion(total, level);
-  storeResult({ total, level, domainScores });
 
   document.getElementById('res-score').textContent = total;
   document.getElementById('res-max').innerHTML = `จาก ${MAX_SCORE} คะแนน`;
@@ -1889,41 +1915,59 @@ function renderUsageCount(n) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   ANALYTICS DASHBOARD
+   ANALYTICS DASHBOARD — ดึงสถิติรวมออนไลน์จาก Supabase (ทุกอุปกรณ์)
 ════════════════════════════════════════════════════════════ */
-const HIST_KEY = 'taq_results_history';
-
-function storeResult(data) {
-  const hist = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
-  hist.push({ ...data, ts: Date.now() });
-  if (hist.length > 200) hist.splice(0, hist.length - 200);
-  localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+async function fetchStats() {
+  try {
+    const r = await sbFetch('/rest/v1/rpc/get_stats', { method: 'POST', body: '{}' });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
 }
 
 function renderAnalytics() {
-  const hist = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
   const el = document.getElementById('ana-content');
-  if (!hist.length) {
-    el.innerHTML = '<div class="ana-empty">ยังไม่มีข้อมูลการทดสอบในอุปกรณ์นี้<br>เมื่อทำแบบทดสอบเสร็จแล้ว ข้อมูลจะปรากฏที่นี่</div>';
-    return;
-  }
-  const total = hist.length;
-  const avgScore = (hist.reduce((s, h) => s + h.total, 0) / total).toFixed(1);
-  const levelCounts = { low: 0, medium: 0, high: 0 };
-  hist.forEach(h => { if (levelCounts[h.level] !== undefined) levelCounts[h.level]++; });
-
-  el.innerHTML = `
-    <div class="ana-grid">
-      <div class="ana-stat"><div class="val">${total}</div><div class="lbl">ครั้งที่ทำ (อุปกรณ์นี้)</div></div>
-      <div class="ana-stat"><div class="val">${avgScore}</div><div class="lbl">คะแนนเฉลี่ย</div></div>
-      <div class="ana-stat"><div class="val">${levelCounts.high}</div><div class="lbl">สงสัยภาวะสมองเสื่อม</div></div>
-      <div class="ana-stat"><div class="val">${levelCounts.medium}</div><div class="lbl">ความเสี่ยงปานกลาง</div></div>
-    </div>
-    <div style="font-size:calc(13px*var(--fs));color:var(--ink-soft);margin-bottom:6px">ผู้ใช้งานทั้งหมด (ทั่วโลก): <b class="js-usage-num" style="color:var(--violet)">—</b> ราย</div>
-    <div style="text-align:center;margin-top:12px">
-      <button class="btn-clear" onclick="if(confirm('ลบประวัติการทดสอบทั้งหมดในอุปกรณ์นี้?')){localStorage.removeItem('${HIST_KEY}');renderAnalytics()}">🗑 ลบประวัติในอุปกรณ์นี้</button>
-    </div>`;
-  fetchGlobalCount().then(n => { if (n) renderUsageCount(n); });
+  el.innerHTML = '<div class="ana-empty">⏳ กำลังโหลดข้อมูลจากระบบออนไลน์…</div>';
+  fetchStats().then(s => {
+    if (!s) {
+      el.innerHTML = '<div class="ana-empty">ไม่สามารถเชื่อมต่อระบบออนไลน์ได้ในขณะนี้<br>กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง</div>';
+      return;
+    }
+    if (s.counter) renderUsageCount(s.counter);
+    const total = s.total || 0;
+    const pct = n => total ? Math.round(n / total * 100) : 0;
+    el.innerHTML = `
+      <div class="ana-total">
+        <div class="ana-total-num">${total.toLocaleString('en-US')}</div>
+        <div class="ana-total-lbl">ผู้เข้ารับการคัดกรองทั้งหมด (ราย)</div>
+      </div>
+      <div class="ana-cat-grid">
+        <div class="ana-cat ana-cat-ok">
+          <div class="ana-cat-ic">🟢</div>
+          <div class="ana-cat-num">${s.ok}</div>
+          <div class="ana-cat-lbl">ความจำปกติ</div>
+          <div class="ana-cat-pct">${pct(s.ok)}%</div>
+        </div>
+        <div class="ana-cat ana-cat-mci">
+          <div class="ana-cat-ic">🟡</div>
+          <div class="ana-cat-num">${s.mci}</div>
+          <div class="ana-cat-lbl">ความเสี่ยงปานกลาง (MCI)</div>
+          <div class="ana-cat-pct">${pct(s.mci)}%</div>
+        </div>
+        <div class="ana-cat ana-cat-ad">
+          <div class="ana-cat-ic">🔴</div>
+          <div class="ana-cat-num">${s.ad}</div>
+          <div class="ana-cat-lbl">สงสัยภาวะสมองเสื่อม</div>
+          <div class="ana-cat-pct">${pct(s.ad)}%</div>
+        </div>
+      </div>
+      <div class="ana-bar">
+        <i style="width:${pct(s.ok)}%;background:var(--turq)"></i>
+        <i style="width:${pct(s.mci)}%;background:var(--gold)"></i>
+        <i style="width:${pct(s.ad)}%;background:#E5417F"></i>
+      </div>
+      <div class="ana-note">หมายเลขผู้ใช้ล่าสุด: <b>${String(s.counter).padStart(5, '0')}</b><br>ข้อมูลรวมจากทุกอุปกรณ์ · อัปเดตแบบเรียลไทม์</div>`;
+  });
 }
 
 /* ════════════════════════════════════════════════════════════
