@@ -531,9 +531,11 @@ body{
   .link-video .link-card-ico{font-size:19px}
   .link-card-title{font-size:calc(14px*var(--fs))}
   .link-card-desc{font-size:calc(11.5px*var(--fs));line-height:1.35}
-  .share-block{padding:9px 14px}
-  .share-head{font-size:calc(13px*var(--fs));margin-bottom:7px}
-  .share-btn{padding:10px 10px;font-size:calc(14px*var(--fs))}
+  #scr-resources .share-block{padding:10px 14px 11px}
+  #scr-resources .share-head{font-size:calc(12.5px*var(--fs));margin-bottom:8px}
+  #scr-resources .share-btn{padding:9px 5px 8px;gap:5px;font-size:calc(12px*var(--fs))}
+  #scr-resources .share-btn .sh-ic{width:32px;height:32px}
+  #scr-welcome .shr .sh-ic{width:36px;height:36px}
   .quote{margin-top:2px;padding:0 10px;gap:1px}
   .quote-by{font-size:calc(12.5px*var(--fs))}
 }
@@ -611,54 +613,64 @@ body{
 }
 .btn-clear:hover{border-color:#e55;color:#e55}
 
-/* ════ SHARE — ชวนเพื่อนมาทำแบบทดสอบ ════ */
+/* ════ SHARE — ชวนเพื่อนมาทำแบบทดสอบ (สไตล์การ์ดขาวเข้ากับ theme) ════ */
+/* ไอคอนวงกลมโลโก้แบรนด์ (ใช้ร่วมทั้งหน้าแรกและหน้าสุดท้าย) */
+.sh-ic{
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:50%;flex-shrink:0;
+}
+.sh-ic svg{width:58%;height:58%;display:block}
+.sh-ic-line{background:#06C755}
+.sh-ic-fb{background:#1877F2}
+.sh-ic-copy{background:linear-gradient(135deg,var(--violet) 0%,var(--violet-deep) 100%)}
+
 /* บล็อกเต็ม (หน้าสุดท้าย) */
 .share-block{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:13px 16px;box-shadow:var(--shadow);text-align:center;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:15px 16px 16px;box-shadow:var(--shadow);text-align:center;
 }
 .share-head{
-  font-size:calc(14px*var(--fs));font-weight:700;color:var(--violet-deep);
-  margin-bottom:10px;line-height:1.4;
+  font-size:calc(14px*var(--fs));font-weight:700;color:var(--ink);
+  margin-bottom:12px;line-height:1.4;
 }
-.share-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.share-head .em{color:var(--turq-deep)}
+.share-btns{display:flex;gap:10px;justify-content:center}
 .share-btn{
-  flex:1 1 0;min-width:96px;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  font-family:'Anuphan',sans-serif;font-weight:800;
-  font-size:calc(15px*var(--fs));color:#fff;
-  border:none;border-radius:14px;padding:13px 12px;cursor:pointer;
-  transition:transform .18s, box-shadow .25s;-webkit-tap-highlight-color:transparent;
+  flex:1 1 0;min-width:0;
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  font-family:'Anuphan',sans-serif;font-weight:700;
+  font-size:calc(13px*var(--fs));color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px 6px 11px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(63,50,160,.06);
+  transition:border-color .2s, transform .18s, box-shadow .25s;
+  -webkit-tap-highlight-color:transparent;
 }
-.share-btn:hover{transform:translateY(-2px)}
-.share-btn svg{width:21px;height:21px;flex-shrink:0}
-.share-line{background:#06C755;box-shadow:0 8px 20px -8px rgba(6,199,85,.6)}
-.share-fb{background:#1877F2;box-shadow:0 8px 20px -8px rgba(24,119,242,.6)}
-.share-copy{background:linear-gradient(135deg,#7B61C9,#5B4BC4);box-shadow:0 8px 20px -8px rgba(91,75,196,.55)}
-.share-fb .fb-f{font-weight:900;font-size:1.25em;line-height:1;font-family:Georgia,serif}
+.share-btn:hover{border-color:var(--violet);transform:translateY(-2px);box-shadow:var(--shadow)}
+.share-btn .sh-ic{width:40px;height:40px}
 
 /* แถวกระชับ (หน้าแรก) */
 .wlc-share{
-  display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+  display:flex;align-items:center;justify-content:center;gap:11px;flex-wrap:wrap;
 }
 .wlc-share-lbl{font-size:calc(12.5px*var(--fs));color:var(--ink-soft);font-weight:600}
 .shr{
   display:inline-flex;align-items:center;justify-content:center;
-  width:42px;height:42px;border:none;border-radius:50%;cursor:pointer;color:#fff;
-  transition:transform .18s, box-shadow .25s;-webkit-tap-highlight-color:transparent;
+  padding:0;border:none;background:none;cursor:pointer;
+  transition:transform .18s;-webkit-tap-highlight-color:transparent;
 }
 .shr:hover{transform:translateY(-2px)}
-.shr svg{width:22px;height:22px}
-.shr-line{background:#06C755;box-shadow:0 6px 16px -7px rgba(6,199,85,.7);font-size:11px;font-weight:900;letter-spacing:.02em}
-.shr-fb{background:#1877F2;box-shadow:0 6px 16px -7px rgba(24,119,242,.7);font-weight:900;font-size:20px;font-family:Georgia,serif}
-.shr-copy{background:linear-gradient(135deg,#7B61C9,#5B4BC4);box-shadow:0 6px 16px -7px rgba(91,75,196,.6);font-size:18px}
+.shr .sh-ic{
+  width:40px;height:40px;
+  box-shadow:0 5px 14px -6px rgba(63,50,160,.5);
+}
 
 /* toast แจ้งคัดลอก */
 .share-toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
   background:var(--ink);color:#fff;font-family:'Anuphan',sans-serif;font-weight:600;
   font-size:calc(14px*var(--fs));padding:11px 22px;border-radius:99px;
-  box-shadow:0 10px 30px -8px rgba(0,0,0,.4);opacity:0;pointer-events:none;
+  box-shadow:0 12px 30px -8px rgba(36,28,77,.5);opacity:0;pointer-events:none;
   transition:opacity .25s, transform .25s;z-index:9999;
 }
 .share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -716,9 +728,15 @@ body{
     <button class="btn btn-primary" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
     <div class="wlc-share">
       <span class="wlc-share-lbl">ชวนเพื่อนมาทำ:</span>
-      <button class="shr shr-line" onclick="shareLine()" aria-label="แชร์ทาง LINE" title="แชร์ทาง LINE">LINE</button>
-      <button class="shr shr-fb" onclick="shareFacebook()" aria-label="แชร์ทาง Facebook" title="แชร์ทาง Facebook">f</button>
-      <button class="shr shr-copy" onclick="copyShareLink(this)" aria-label="คัดลอกลิงก์" title="คัดลอกลิงก์">🔗</button>
+      <button class="shr" onclick="shareLine()" aria-label="แชร์ทาง LINE" title="แชร์ทาง LINE">
+        <span class="sh-ic sh-ic-line"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M12 3.2c-4.97 0-9 3.27-9 7.3 0 3.61 3.2 6.63 7.52 7.2.29.04.69.13.79.31.09.16.06.42.03.58l-.12.74c-.04.22-.18.86.76.47.94-.4 5.05-2.97 6.89-5.09 1.27-1.39 1.88-2.81 1.88-4.4 0-4.04-4.03-7.31-8.75-7.31z"/><path fill="#06C755" d="M9.3 9.05h-.63a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h.63c.1 0 .17-.08.17-.17V9.22a.17.17 0 0 0-.17-.17zM13.6 9.05h-.63a.17.17 0 0 0-.17.17v2.33l-1.8-2.43a.18.18 0 0 0-.02-.02l-.04-.02h-.68a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h.63c.1 0 .17-.08.17-.17v-2.33l1.8 2.43.04.04h.7c.1 0 .17-.08.17-.17V9.22a.17.17 0 0 0-.17-.17zM7.76 12.34H6.05V9.22a.17.17 0 0 0-.17-.17h-.63a.17.17 0 0 0-.17.17v3.92c0 .05.02.09.05.12.03.03.07.05.12.05h2.51c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17zM16.94 9.05h-2.51a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h2.51c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17h-1.71v-.66h1.71c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17h-1.71v-.66h1.71c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17z"/></svg></span>
+      </button>
+      <button class="shr" onclick="shareFacebook()" aria-label="แชร์ทาง Facebook" title="แชร์ทาง Facebook">
+        <span class="sh-ic sh-ic-fb"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M15.4 12.6l.5-3.3h-3.1V7.1c0-.9.4-1.8 1.8-1.8h1.4V2.5s-1.3-.2-2.5-.2c-2.5 0-4.2 1.5-4.2 4.3v2.4H6.5v3.3h2.8V21h3.5v-8.4h2.6z"/></svg></span>
+      </button>
+      <button class="shr" onclick="copyShareLink(this)" aria-label="คัดลอกลิงก์" title="คัดลอกลิงก์">
+        <span class="sh-ic sh-ic-copy"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1-1"/></svg></span>
+      </button>
     </div>
   </div>
 </section>
@@ -873,11 +891,20 @@ body{
     </div>
 
     <div class="share-block">
-      <div class="share-head">💚 ชวนเพื่อนหรือคนที่คุณรักมาทำแบบทดสอบ</div>
+      <div class="share-head"><span class="em">ชวนเพื่อนหรือคนที่คุณรัก</span> มาทำแบบทดสอบ</div>
       <div class="share-btns">
-        <button class="share-btn share-line" onclick="shareLine()"><span class="fb-f" style="font-family:'Anuphan',sans-serif;font-weight:900">LINE</span></button>
-        <button class="share-btn share-fb" onclick="shareFacebook()"><span class="fb-f">f</span> Facebook</button>
-        <button class="share-btn share-copy" onclick="copyShareLink(this)">🔗 คัดลอกลิงก์</button>
+        <button class="share-btn" onclick="shareLine()">
+          <span class="sh-ic sh-ic-line"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M12 3.2c-4.97 0-9 3.27-9 7.3 0 3.61 3.2 6.63 7.52 7.2.29.04.69.13.79.31.09.16.06.42.03.58l-.12.74c-.04.22-.18.86.76.47.94-.4 5.05-2.97 6.89-5.09 1.27-1.39 1.88-2.81 1.88-4.4 0-4.04-4.03-7.31-8.75-7.31z"/><path fill="#06C755" d="M9.3 9.05h-.63a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h.63c.1 0 .17-.08.17-.17V9.22a.17.17 0 0 0-.17-.17zM13.6 9.05h-.63a.17.17 0 0 0-.17.17v2.33l-1.8-2.43a.18.18 0 0 0-.02-.02l-.04-.02h-.68a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h.63c.1 0 .17-.08.17-.17v-2.33l1.8 2.43.04.04h.7c.1 0 .17-.08.17-.17V9.22a.17.17 0 0 0-.17-.17zM7.76 12.34H6.05V9.22a.17.17 0 0 0-.17-.17h-.63a.17.17 0 0 0-.17.17v3.92c0 .05.02.09.05.12.03.03.07.05.12.05h2.51c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17zM16.94 9.05h-2.51a.17.17 0 0 0-.17.17v3.92c0 .1.08.17.17.17h2.51c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17h-1.71v-.66h1.71c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17h-1.71v-.66h1.71c.1 0 .17-.08.17-.17v-.63a.17.17 0 0 0-.17-.17z"/></svg></span>
+          <span>LINE</span>
+        </button>
+        <button class="share-btn" onclick="shareFacebook()">
+          <span class="sh-ic sh-ic-fb"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M15.4 12.6l.5-3.3h-3.1V7.1c0-.9.4-1.8 1.8-1.8h1.4V2.5s-1.3-.2-2.5-.2c-2.5 0-4.2 1.5-4.2 4.3v2.4H6.5v3.3h2.8V21h3.5v-8.4h2.6z"/></svg></span>
+          <span>Facebook</span>
+        </button>
+        <button class="share-btn" onclick="copyShareLink(this)">
+          <span class="sh-ic sh-ic-copy"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1-1"/></svg></span>
+          <span>คัดลอกลิงก์</span>
+        </button>
       </div>
     </div>
 
