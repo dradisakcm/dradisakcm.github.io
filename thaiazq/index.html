@@ -507,7 +507,6 @@ body{
   .info-lead{margin-bottom:6px;line-height:1.45}
   .info-meta{padding-top:6px}
   .info-title{margin-bottom:3px}
-  .wlc-footer{padding:3px 0 0}
   #scr-welcome .btn-primary{padding:12px 40px}
   #btn-intro{padding:6px 22px 6px 6px}
   #btn-intro .listen-ico{width:30px;height:30px}
@@ -522,6 +521,13 @@ body{
   .dl-card h3{margin-bottom:7px}
   #scr-rec .btn-primary{padding:11px 36px}
   .backbar{padding-top:8px;margin-top:3px}
+  /* หน้าแหล่งความรู้ (resources) — กระชับเพื่อพอดีจอ */
+  .res-title{font-size:calc(19px*var(--fs));margin-bottom:2px}
+  .link-row{gap:8px}
+  .link-card{padding:9px 14px;gap:11px}
+  .link-card-ico{font-size:25px}
+  .link-video .link-card-ico{font-size:22px}
+  .quote{margin-top:4px;padding:2px 10px;gap:2px}
 }
 @media(max-height:600px){
   .wlc-svg{width:min(92px,13vh) !important}
@@ -531,7 +537,6 @@ body{
   .info-box{padding:8px 14px}
   .info-lead{margin-bottom:5px;line-height:1.4}
   .info-meta{padding-top:5px}
-  .wlc-footer{padding:3px 0 0}
 }
 
 /* ── WELCOME REFERENCE & COUNTER ── */
@@ -540,16 +545,18 @@ body{
   text-align:center;line-height:1.5;opacity:.75;
   margin-top:2px;
 }
-.wlc-footer{
-  flex-shrink:0;text-align:center;padding:6px 0 2px;
+/* ── ผู้ใช้บริการลำดับที่ (จางๆ ท้ายหน้าสุดท้าย) ── */
+.user-seq-foot{
+  flex-shrink:0;text-align:center;padding:4px 0 2px;
 }
-.wlc-counter{
+.user-seq{
   background:none;border:none;cursor:pointer;
-  font-family:'Anuphan',sans-serif;
-  font-size:calc(11px*var(--fs));color:var(--ink-soft);opacity:.4;
-  padding:4px 10px;border-radius:99px;transition:.2s;
+  font-family:'Anuphan',sans-serif;letter-spacing:.02em;
+  font-size:calc(10.5px*var(--fs));color:var(--ink-soft);opacity:.32;
+  padding:3px 10px;border-radius:99px;transition:.2s;
 }
-.wlc-counter:hover{opacity:.8}
+.user-seq:hover{opacity:.6}
+.user-seq .js-usage-num{font-variant-numeric:tabular-nums;font-weight:600}
 
 /* ── ANALYTICS DASHBOARD ── */
 #scr-analytics .scr-main{justify-content:flex-start;overflow-y:auto;padding-bottom:16px}
@@ -621,9 +628,6 @@ body{
       <span id="intro-label">ฟังคำแนะนำ</span>
     </button>
     <button class="btn btn-primary" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
-  </div>
-  <div class="wlc-footer">
-    <button class="wlc-counter" onclick="showScreen('scr-analytics')">ผู้ใช้งาน <span class="js-usage-num">—</span> ราย</button>
   </div>
 </section>
 
@@ -785,6 +789,9 @@ body{
   <div class="backbar backbar-rec">
     <button class="btn-back" onclick="goBack()"><span class="arr">←</span> ย้อนกลับ</button>
     <button class="btn-back btn-restart" onclick="restartQuiz()">🔄 ทำแบบทดสอบใหม่</button>
+  </div>
+  <div class="user-seq-foot">
+    <button class="user-seq" onclick="showScreen('scr-analytics')">ผู้ใช้บริการลำดับที่ <span class="js-usage-num">—</span></button>
   </div>
 </section>
 
@@ -1603,9 +1610,7 @@ function showResults() {
   storeResult({ total, level, domainScores });
 
   document.getElementById('res-score').textContent = total;
-  let maxLine = `จาก ${MAX_SCORE} คะแนน`;
-  if (unknownCount > 0) maxLine += `&nbsp; · &nbsp;ตอบ “ไม่ทราบ” ${unknownCount} ข้อ (ไม่คิดคะแนน)`;
-  document.getElementById('res-max').innerHTML = maxLine;
+  document.getElementById('res-max').innerHTML = `จาก ${MAX_SCORE} คะแนน`;
   document.getElementById('res-badge').innerHTML =
     `<span class="badge ${LEVELS[level].cls}">${LEVELS[level].badge}</span>`;
 
@@ -1734,8 +1739,6 @@ function buildSummaryCard() {
   }).join('');
 
   const tipsLi = topTips.map(t => `<li><span class="d">✦</span><span>${t}</span></li>`).join('');
-  let unknownLine = s.unknownCount > 0
-    ? `<div style="font-size:13px;color:var(--ink-soft);margin-top:8px">* ตอบ “ไม่ทราบ” ${s.unknownCount} ข้อ (ไม่นำมาคิดคะแนน)</div>` : '';
 
   document.getElementById('summary-capture').innerHTML = `
     <div class="sum-head">
@@ -1752,7 +1755,6 @@ function buildSummaryCard() {
         <div class="sum-diag">
           <span class="badge ${LEVELS[s.level].cls}">${LEVELS[s.level].badge}</span>
           <div class="diag-note">${LEVEL_NOTE[s.level]}</div>
-          ${unknownLine}
         </div>
       </div>
       <div class="sum-mid">
@@ -1880,8 +1882,9 @@ function incrementUsageCount() {
   renderUsageCount(n);
 }
 function renderUsageCount(n) {
+  const txt = String(n).padStart(5, '0');   // เลข 5 หลัก เช่น 01249
   document.querySelectorAll('.js-usage-num').forEach(el => {
-    el.textContent = String(n);
+    el.textContent = txt;
   });
 }
 
