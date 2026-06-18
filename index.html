@@ -523,13 +523,12 @@ html[lang="en"] .social-content h3{font-family:var(--f-en-head)}
 .social-arrow{margin-top:auto;font-size:14.5px;font-weight:500;display:inline-flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,.20);transition:gap .25s;position:relative;z-index:2}
 .social-card:hover .social-arrow{gap:14px}
 
-/* ===== Articles search ===== */
-.art-head-row{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:30px}
-.art-search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:11px 20px;flex:1;max-width:380px;min-width:240px;transition:.25s}
-.art-search:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px rgba(14,138,132,.08)}
-.art-search svg{color:var(--ink-soft);flex-shrink:0}
-.art-search input{flex:1;border:0;outline:0;background:transparent;font-family:inherit;font-size:14px;color:var(--ink);min-width:0}
-.art-search input::placeholder{color:var(--ink-soft);opacity:.7}
+/* ===== Knowledge CTA button ===== */
+@keyframes art-shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+.art-cta-wrap{text-align:center;margin:36px 0 12px}
+.art-cta-gold{display:inline-flex;align-items:center;gap:11px;background:linear-gradient(90deg,#8B6520 0%,#B8924F 20%,#D4AC6A 40%,#F0CC88 50%,#D4AC6A 60%,#B8924F 80%,#8B6520 100%);background-size:200% auto;color:#fff;font-weight:800;font-size:16px;letter-spacing:.03em;padding:16px 48px;border-radius:999px;animation:art-shimmer 2.4s linear infinite;box-shadow:0 6px 28px rgba(184,146,79,.5),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .2s,box-shadow .2s;text-decoration:none}
+.art-cta-gold:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(184,146,79,.65),inset 0 1px 0 rgba(255,255,255,.25)}
+.art-cta-gold:active{transform:translateY(-1px)}
 .art-card.hidden{display:none}
 /* TTS button on article cards */
 .art-read-btn{margin-top:16px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);color:#fff;border-radius:999px;padding:13px 18px;font-size:14px;font-weight:600;letter-spacing:.01em;box-shadow:0 4px 14px rgba(14,138,132,.30);transition:transform .15s,box-shadow .3s;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -1215,30 +1214,17 @@ html[lang="en"] .hours-list .day{font-family:var(--f-en-head)}
         <p class="sec-lead" data-lang="en">A library written from genuine clinical understanding — featured reads hand-picked by Dr. Adisak.</p>
       </div>
     </div>
-    <div class="art-head-row reveal">
-      <label class="art-search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="search" id="artSearch" placeholder="ค้นหาบทความ เช่น ไมเกรน สมองเสื่อม..." aria-label="ค้นหาบทความ">
-      </label>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <select id="artFilter" style="font-family:inherit;font-size:14px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2346596A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:.25s">
-          <option value="">หมวดหมู่ทั้งหมด</option>
-          <option value="สมองเสื่อม">สมองเสื่อม / ความจำ</option>
-          <option value="ไมเกรน">ไมเกรน / ปวดศีรษะ</option>
-          <option value="หลอดเลือดสมอง">หลอดเลือดสมอง</option>
-          <option value="พาร์กินสัน">พาร์กินสัน</option>
-          <option value="สุขภาพสมอง">สุขภาพสมองทั่วไป</option>
-          <option value="เส้นประสาท">เส้นประสาท</option>
-        </select>
-        <span id="artCount" style="font-size:13px;color:var(--ink-soft)"></span>
-      </div>
+    <div class="art-cta-wrap reveal">
+      <a href="/knowledge/" class="art-cta-gold" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        เข้าสู่คลังความรู้
+      </a>
     </div>
     <!-- ═══════════════════════════════════════════════════════════════════════
          ARTICLES DATA — เพิ่มบทความใหม่โดยใส่ข้อมูลในอาร์เรย์ ARTICLES_DATA
          ด้านล่างใน <script> — ไม่ต้องแก้ HTML ใดๆ
     ════════════════════════════════════════════════════════════════════════ -->
     <div class="art-grid stagger" id="artGrid"></div>
-    <div id="artEmpty" style="display:none;text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:16px">ไม่พบบทความที่ค้นหา</div>
     <div style="text-align:center;margin-top:44px" id="artLoadMore" class="reveal">
       <a href="/knowledge/" target="_blank" rel="noopener" class="btn btn-ghost" style="min-width:200px;display:inline-flex;align-items:center;gap:8px;text-decoration:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
@@ -1756,12 +1742,8 @@ function renderArticles(data, append=false) {
       </div>${closeTag}`;
   }).join('');
   grid.innerHTML = html;
-  const empty = document.getElementById('artEmpty');
-  if (empty) empty.style.display = data.length === 0 ? 'block' : 'none';
   const loadBtn = document.getElementById('artLoadMore');
   if (loadBtn) loadBtn.style.display = 'block';
-  const count = document.getElementById('artCount');
-  if (count) count.textContent = `${Math.min(artVisible, data.length)} / ${data.length} บทความ`;
   // re-trigger stagger animation
   const stagger = grid;
   stagger.classList.remove('in');
@@ -1770,18 +1752,6 @@ function renderArticles(data, append=false) {
 
 function loadMoreArticles() {
   artVisible += ARTICLES_PER_PAGE;
-  renderArticles(artCurrentData);
-}
-
-function filterArticles() {
-  const q = (document.getElementById('artSearch')?.value || '').trim().toLowerCase();
-  const cat = (document.getElementById('artFilter')?.value || '').trim();
-  artCurrentData = ARTICLES_DATA.filter(a => {
-    const matchQ = !q || a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) || a.cat.toLowerCase().includes(q);
-    const matchCat = !cat || a.cat === cat;
-    return matchQ && matchCat;
-  });
-  artVisible = ARTICLES_PER_PAGE;
   renderArticles(artCurrentData);
 }
 
@@ -1799,8 +1769,6 @@ async function loadData() {
   artCurrentData = [...ARTICLES_DATA];
   renderArticles(artCurrentData);
   renderBooks();
-  document.getElementById('artSearch')?.addEventListener('input', filterArticles);
-  document.getElementById('artFilter')?.addEventListener('change', filterArticles);
 }
 document.addEventListener('DOMContentLoaded', loadData);
 
