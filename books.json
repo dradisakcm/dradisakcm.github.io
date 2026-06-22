@@ -9,5 +9,16 @@
     "pdfUrl": "Brain Care Series เล่ม 1.pdf",
     "ready": true,
     "audioUrl": ""
+  },
+  {
+    "series": "Brain Care Series",
+    "num": "เล่ม 2",
+    "title": "เข้าใจอัลไซเมอร์ ตั้งแต่เริ่มต้น",
+    "desc": "ความรู้เชิงลึกเกี่ยวกับโรคอัลไซเมอร์และภาวะสมองเสื่อม — จากกลไกโรคสู่การดูแลรักษา เขียนโดย นพ.อดิศักดิ์ กิตติสาเรศ",
+    "gradient": "linear-gradient(145deg,#2D1060 0%,#4C1D95 100%)",
+    "readUrl": "Brain Care Series เล่ม 2 - eBook.html",
+    "pdfUrl": "Brain Care Series เล่ม 2.pdf",
+    "ready": true,
+    "audioUrl": ""
   }
 ]
