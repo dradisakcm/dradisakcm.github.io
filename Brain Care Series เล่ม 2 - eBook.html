@@ -18,7 +18,7 @@ body { font-family: 'Sarabun','TH Sarabun New','Tahoma',sans-serif; font-size:20
 .cover-series-badge { display:inline-block; border:1.5px solid rgba(253,186,116,0.6); color:rgba(253,186,116,0.9); font-size:13px; letter-spacing:4px; text-transform:uppercase; padding:7px 22px; border-radius:50px; margin-bottom:32px; font-weight:600; }
 .cover-illus { margin-bottom:28px; }
 .cover-illus svg { width:260px; height:220px; }
-.cover-title-th { font-size:56px; font-weight:800; color:#fff; line-height:1.2; margin-bottom:10px; }
+.cover-title-th { font-size:56px; font-weight:800; color:#fff; line-height:1.2; margin-bottom:10px; word-break:keep-all; overflow-wrap:normal; }
 .cover-title-en { font-size:17px; font-weight:400; color:rgba(255,255,255,0.5); letter-spacing:3px; text-transform:uppercase; margin-bottom:30px; }
 .cover-rule { width:60px; height:3px; margin:0 auto 28px; background:linear-gradient(90deg,#FDBA74,#F97316); border-radius:2px; }
 .cover-sub { font-size:20px; color:rgba(255,255,255,0.8); margin-bottom:36px; line-height:1.7; max-width:480px; }
@@ -66,7 +66,7 @@ body { font-family: 'Sarabun','TH Sarabun New','Tahoma',sans-serif; font-size:20
 .art-head { display:flex; align-items:center; justify-content:space-between; padding:44px 88px 36px; gap:36px; }
 .art-head-left { flex:1; }
 .art-num-badge { display:inline-block; font-size:14px; font-weight:700; letter-spacing:2px; padding:5px 16px; border-radius:20px; margin-bottom:16px; text-transform:uppercase; }
-.art-h1 { font-size:36px; font-weight:800; line-height:1.3; }
+.art-h1 { font-size:36px; font-weight:800; line-height:1.3; word-break:keep-all; overflow-wrap:normal; }
 .art-svg { width:150px; flex-shrink:0; }
 .art-svg svg { width:150px; height:130px; }
 
@@ -120,13 +120,14 @@ body { font-family: 'Sarabun','TH Sarabun New','Tahoma',sans-serif; font-size:20
   .sec-divider { page-break-before:always; page-break-after:always; }
   .article { page-break-before:always; }
   .art-body, .art-credit { padding-left:32px; padding-right:32px; }
-  .art-header { padding-left:32px; padding-right:32px; }
+  .art-head { padding-left:32px; padding-right:32px; }
   .art-footer { padding-left:32px; padding-right:32px; }
   .preface-page { padding:32px; }
   .preface-credit { margin-left:0; }
   .toc-page { padding:32px; }
   .fbtn-back, .fbtn-share { display:none !important; }
   a[href]::after { content:''; }
+  .about-photo { box-shadow:none; }
 }
 </style>
 </head>
@@ -137,7 +138,7 @@ body { font-family: 'Sarabun','TH Sarabun New','Tahoma',sans-serif; font-size:20
   <div class="cover-inner">
     <div class="cover-series-badge">Brain Care Series &nbsp;·&nbsp; เล่มสอง</div>
     <div class="cover-illus"><svg viewBox="0 0 280 240" xmlns="http://www.w3.org/2000/svg"><circle cx="140" cy="120" r="100" fill="rgba(255,255,255,0.04)"/><circle cx="140" cy="120" r="70" fill="rgba(255,255,255,0.05)"/><path d="M80 125 Q76 98 94 88 Q108 78 122 86 Q130 78 144 80 Q162 76 172 92 Q186 94 186 112 Q190 128 180 136 Q176 150 164 152 Q156 164 142 160 Q128 166 114 156 Q100 158 90 146 Q76 142 80 125Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/><path d="M94 88 Q102 96 98 110 Q96 120 104 128" stroke="rgba(255,255,255,0.35)" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M172 92 Q164 100 166 116 Q168 126 160 134" stroke="rgba(255,255,255,0.35)" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="133" y1="82" x2="133" y2="158" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4,3"/><circle cx="110" cy="102" r="4" fill="rgba(255,200,100,0.8)"/><circle cx="130" cy="96" r="3.5" fill="rgba(255,200,100,0.7)"/><circle cx="152" cy="100" r="4" fill="rgba(255,200,100,0.8)"/><circle cx="162" cy="118" r="3" fill="rgba(255,200,100,0.6)"/><circle cx="118" cy="132" r="3.5" fill="rgba(255,200,100,0.7)"/><circle cx="142" cy="138" r="3" fill="rgba(255,200,100,0.65)"/><line x1="110" y1="102" x2="130" y2="96" stroke="rgba(255,200,100,0.4)" stroke-width="1.5"/><line x1="130" y1="96" x2="152" y2="100" stroke="rgba(255,200,100,0.4)" stroke-width="1.5"/><line x1="152" y1="100" x2="162" y2="118" stroke="rgba(255,200,100,0.4)" stroke-width="1.5"/><line x1="118" y1="132" x2="142" y2="138" stroke="rgba(255,200,100,0.4)" stroke-width="1.5"/><line x1="110" y1="102" x2="118" y2="132" stroke="rgba(255,200,100,0.3)" stroke-width="1.5"/><line x1="162" y1="118" x2="142" y2="138" stroke="rgba(255,200,100,0.3)" stroke-width="1.5"/><circle cx="66" cy="88" r="5" fill="rgba(255,180,80,0.6)"/><circle cx="210" cy="82" r="4" fill="rgba(255,180,80,0.5)"/><circle cx="72" cy="155" r="3" fill="rgba(255,180,80,0.4)"/><circle cx="208" cy="152" r="5" fill="rgba(255,180,80,0.55)"/></svg></div>
-    <div class="cover-title-th">เข้าใจอัลไซเมอร์<br>ตั้งแต่เริ่มต้น</div>
+    <div class="cover-title-th">เข้าใจ<br>อัลไซเมอร์<br>ตั้งแต่เริ่มต้น</div>
     <div class="cover-title-en">Understanding Alzheimer's — From the Beginning</div>
     <div class="cover-rule"></div>
     <div class="cover-sub">คู่มือฉบับสมบูรณ์สำหรับครอบครัว<br>และผู้ดูแลผู้ป่วยสมองเสื่อม</div>
@@ -4593,23 +4594,9 @@ body { font-family: 'Sarabun','TH Sarabun New','Tahoma',sans-serif; font-size:20
 <!-- ABOUT AUTHOR -->
 <div class="article about-page" id="about-author">
   <div class="art-head" style="border-top:6px solid #1A1033;background:linear-gradient(135deg,#1A0533 0%,#2D1060 100%);">
-    <div class="art-head-left">
+    <div class="art-head-left" style="flex:1;text-align:center;">
       <div class="art-num-badge" style="background:rgba(255,255,255,0.15);color:white;">เกี่ยวกับผู้เขียน</div>
-      <h1 class="art-h1" style="color:white;">นพ.อดิศักดิ์ กิตติสาเรศ</h1>
-    </div>
-    <div class="art-svg author-svg">
-      <svg viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="70" cy="38" r="28" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-        <circle cx="70" cy="32" r="14" fill="rgba(255,255,255,0.25)"/>
-        <ellipse cx="70" cy="52" rx="18" ry="10" fill="rgba(255,255,255,0.2)"/>
-        <path d="M30 80 Q30 62 70 62 Q110 62 110 80 L110 95 Q70 105 30 95Z" fill="rgba(139,92,246,0.5)"/>
-        <rect x="58" y="78" width="24" height="3" rx="1.5" fill="rgba(255,255,255,0.6)"/>
-        <rect x="62" y="84" width="16" height="3" rx="1.5" fill="rgba(255,255,255,0.4)"/>
-        <circle cx="108" cy="22" r="9" fill="#FCD34D" opacity="0.85"/>
-        <line x1="108" y1="11" x2="108" y2="6" stroke="#F59E0B" stroke-width="2"/>
-        <line x1="117" y1="16" x2="121" y2="12" stroke="#F59E0B" stroke-width="2"/>
-        <line x1="117" y1="28" x2="121" y2="32" stroke="#F59E0B" stroke-width="2"/>
-      </svg>
+      <h1 class="art-h1" style="color:white;">นพ.อดิศักดิ์<br>กิตติสาเรศ</h1>
     </div>
   </div>
   <div class="art-body about-body">
