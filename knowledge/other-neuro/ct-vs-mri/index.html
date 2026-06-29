@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia) คืออะไร? สาเหตุ อาการ การรักษา — คลังความรู้โรคระบบประสาทอื่นๆ</title>
-  <meta name="description" content="ปวดใบหน้าเหมือนไฟช็อต...อาจไม่ใช่โรคฟัน รู้จักโรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia) สาเหตุ อาการ การวินิจฉัย และแนวทางการรักษา โดย นพ.อดิศักดิ์ กิตติสาเรศ">
+  <title>CT กับ MRI ต่างกันอย่างไร? เมื่อแพทย์แนะนำให้ตรวจสมอง — คลังความรู้โรคระบบประสาทอื่นๆ</title>
+  <meta name="description" content="ทำไมต้องตรวจ MRI ใช้ CT ไม่ได้เหรอ? เข้าใจความแตกต่างระหว่าง CT Scan กับ MRI หลักการทำงาน ข้อดี ข้อจำกัด และโรคที่เหมาะกับการตรวจแต่ละแบบ โดย นพ.อดิศักดิ์ กิตติสาเรศ">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -81,7 +81,7 @@
     @media(max-width:600px){.wrap{padding-left:18px;padding-right:18px}}
     /* HERO */
     .art-hero{background:linear-gradient(135deg,#0B7A75 0%,#12A89E 55%,#1BC9C0 100%);padding:108px 0 60px;position:relative;overflow:hidden}
-    .art-hero::before{content:"⚡";position:absolute;font-size:320px;opacity:.08;bottom:-50px;right:-20px;line-height:1;pointer-events:none;user-select:none}
+    .art-hero::before{content:"🧠";position:absolute;font-size:320px;opacity:.08;bottom:-50px;right:-20px;line-height:1;pointer-events:none;user-select:none}
     .art-breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:24px;flex-wrap:wrap}
     .art-breadcrumb a{color:rgba(255,255,255,.55);transition:.2s}.art-breadcrumb a:hover{color:#fff}
     .art-breadcrumb span{opacity:.4}
@@ -191,14 +191,14 @@
     .art-share-item::after{content:attr(data-tip);position:absolute;right:54px;top:50%;transform:translateY(-50%);background:#0E2233;color:#fff;font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:.15s;pointer-events:none;font-family:var(--f)}
     .art-share-item:hover::after{opacity:1}
 
-  <link rel="canonical" href="https://dradisak.com/knowledge/other-neuro/trigeminal-neuralgia/">
+  <link rel="canonical" href="https://dradisak.com/knowledge/other-neuro/ct-vs-mri/">
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://dradisak.com/knowledge/other-neuro/trigeminal-neuralgia/">
-  <meta property="og:title" content="โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia) คืออะไร? — คลังความรู้โรคระบบประสาทอื่นๆ">
+  <meta property="og:url" content="https://dradisak.com/knowledge/other-neuro/ct-vs-mri/">
+  <meta property="og:title" content="CT กับ MRI ต่างกันอย่างไร? เมื่อแพทย์แนะนำให้ตรวจสมอง — คลังความรู้โรคระบบประสาทอื่นๆ">
   <meta property="og:image" content="https://dradisak.com/og-image.jpg">
   <meta property="og:site_name" content="คลินิกรักษ์สมองหมออดิศักดิ์">
-    /* TGN EXTRA — boxes, lists */
+    /* CT/MRI EXTRA — compare table, boxes */
     .art-box{border-radius:16px;padding:22px 24px;margin:24px 0}
     .art-box-teal{background:rgba(14,138,132,.07);border:1px solid rgba(14,138,132,.18)}
     .art-box-warn{background:rgba(160,40,88,.06);border:1px solid rgba(160,40,88,.18)}
@@ -211,6 +211,15 @@
     .art-box p:last-child{margin-bottom:0}
     .art-content-img{width:100%;border-radius:16px;display:block;box-shadow:0 6px 24px rgba(14,34,51,.12);margin:8px 0 6px}
     .art-img-caption{font-size:13px;color:var(--ink-3);text-align:center;margin-bottom:28px;font-style:italic}
+    .art-compare-table{width:100%;border-collapse:collapse;margin:20px 0 28px;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(14,34,51,.08)}
+    .art-compare-table th{padding:14px 16px;font-size:14.5px;font-weight:800;text-align:center;color:#fff}
+    .art-compare-table th:nth-child(1){background:var(--teal)}
+    .art-compare-table th:nth-child(2){background:#0A5F5B}
+    .art-compare-table td{padding:13px 16px;border-bottom:1px solid var(--line-soft);vertical-align:top;font-size:15px;line-height:1.65;color:var(--ink-2);text-align:center}
+    .art-compare-table tr:last-child td{border-bottom:none}
+    .art-compare-table td:nth-child(1){background:rgba(14,138,132,.05)}
+    .art-compare-table td:nth-child(2){background:rgba(10,95,91,.06)}
+    @media(max-width:640px){.art-compare-table{font-size:13px}}
 </style>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YBY1DVCF6S"></script>
@@ -290,23 +299,23 @@
 
 <!-- HERO -->
 
-<!-- ARTICLE: TRIGEMINAL NEURALGIA -->
+<!-- ARTICLE: CT VS MRI -->
 <section class="art-hero">
   <div class="wrap">
     <div class="art-breadcrumb">
       <a href="https://dradisak.com/">หน้าหลัก</a><span>›</span>
       <a href="../../">คลังความรู้</a><span>›</span>
       <a href="../">โรคระบบประสาทอื่นๆ</a><span>›</span>
-      <span style="color:rgba(255,255,255,.75)">โรคปวดเส้นประสาทใบหน้า</span>
+      <span style="color:rgba(255,255,255,.75)">CT กับ MRI ต่างกันอย่างไร</span>
     </div>
     <div class="art-hero-badge">
-      <span class="badge-num">2</span>
-      โรคระบบประสาทอื่นๆ — เส้นประสาทใบหน้า
+      <span class="badge-num">4</span>
+      โรคระบบประสาทอื่นๆ — การตรวจวินิจฉัยทางสมอง
     </div>
-    <h1 class="art-hero-title">โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia)</h1>
-    <p class="art-hero-sub">ปวดใบหน้าเหมือนไฟช็อต...อาจไม่ใช่โรคฟัน</p>
+    <h1 class="art-hero-title">CT กับ MRI ต่างกันอย่างไร?</h1>
+    <p class="art-hero-sub">เมื่อแพทย์แนะนำให้ตรวจสมอง...ทำไมต้องตรวจ MRI ใช้ CT ไม่ได้เหรอ?</p>
     <div class="art-hero-meta">
-      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> อ่านประมาณ 8 นาที</span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> อ่านประมาณ 9 นาที</span>
       <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> นพ.อดิศักดิ์ กิตติสาเรศ</span>
     </div>
   </div>
@@ -318,100 +327,140 @@
       <article class="art-content">
 <div class="art-opening-quote">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--teal)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-<p>หลายคนเคยมีอาการปวดจี๊ดที่ใบหน้าเหมือนไฟฟ้าช็อต ปวดขึ้นมาทันทีโดยไม่มีสัญญาณเตือน บางครั้งปวดมากจนพูดไม่ได้ เคี้ยวอาหารไม่ได้ หรือแม้แต่ลมพัดเบา ๆ ก็ทำให้ปวดได้</p>
+<p>"คุณหมอครับ...ทำไมต้องตรวจ MRI? ใช้ CT ไม่ได้เหรอ?" นี่เป็นคำถามที่หมอได้ยินแทบทุกวันในห้องตรวจ</p>
 </div>
 
-<img src="tgn0.png" alt="โรคปวดเส้นประสาทใบหน้า Trigeminal Neuralgia" class="art-content-img">
-<p class="art-img-caption">เส้นประสาทสมองคู่ที่ 5 (Trigeminal nerve) ที่เกี่ยวข้องกับโรคปวดเส้นประสาทใบหน้า</p>
+<img src="ctmri0.png" alt="เปรียบเทียบการตรวจ CT Scan กับ MRI" class="art-content-img">
+<p class="art-img-caption">CT Scan และ MRI ใช้หลักการสร้างภาพที่แตกต่างกัน เหมาะกับการตรวจคนละแบบ</p>
 
-<p>ผู้ป่วยจำนวนไม่น้อยคิดว่าเป็นปัญหาฟัน ไปพบทันตแพทย์ ถอนฟัน รักษารากฟัน หรือทำฟันหลายครั้ง แต่อาการกลับไม่ดีขึ้น จนสุดท้ายจึงพบว่าสาเหตุที่แท้จริงคือ <strong>โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia)</strong></p>
-<div class="art-box art-box-warn">
-<div class="art-box-title">⚠️ อย่าคิดว่าเป็นแค่โรคฟัน</div>
-<p>โรคนี้เป็นหนึ่งในโรคที่ทำให้เกิดอาการปวดรุนแรงที่สุดโรคหนึ่ง และแม้จะพบไม่บ่อย แต่สามารถรักษาได้ หากได้รับการวินิจฉัยที่ถูกต้อง</p>
-</div>
-
-<h2 class="art-section-head">โรคปวดเส้นประสาทใบหน้า คืออะไร?</h2>
-<p>โรคนี้เกิดจากความผิดปกติของ <strong>เส้นประสาทสมองคู่ที่ 5 (Trigeminal nerve)</strong> ซึ่งเป็นเส้นประสาทที่ทำหน้าที่รับความรู้สึกจากใบหน้า หน้าผาก แก้ม ฟัน เหงือก และขากรรไกร</p>
+<p>หลายคนรู้สึกกังวลเมื่อแพทย์แนะนำให้ตรวจสมองเพิ่มเติม บางคนกลัวรังสี บางคนกลัวเครื่อง MRI เพราะดูเป็นอุโมงค์แคบ ๆ บางคนคิดว่าการตรวจครั้งเดียวจะเห็นทุกอย่างในร่างกาย</p>
 <div class="art-box art-box-teal">
-<div class="art-box-title">💡 กลไกสำคัญ</div>
-<p>เมื่อเส้นประสาทเกิดการระคายเคืองหรือถูกกดทับ จะทำให้ส่งสัญญาณผิดปกติไปยังสมอง เกิด<strong>อาการปวดรุนแรงขึ้นมาอย่างเฉียบพลัน</strong></p>
+<div class="art-box-title">💡 ความเข้าใจที่ถูกต้อง</div>
+<p>CT และ MRI ไม่ใช่เครื่องที่ใช้แทนกันได้เสมอไป เพราะแต่ละเครื่องมีข้อดี ข้อจำกัด และเหมาะกับโรคที่แตกต่างกัน เมื่อเข้าใจหลักการของทั้งสองอย่างแล้ว ความกังวลส่วนใหญ่ก็มักจะลดลง</p>
 </div>
 
-<h2 class="art-section-head">สาเหตุของโรค</h2>
-<p>สาเหตุที่พบได้ ได้แก่</p>
+<h2 class="art-section-head">CT Scan และ MRI คืออะไร?</h2>
+<p>ทั้งสองอย่างเป็นการตรวจทางรังสีวินิจฉัยที่ช่วยให้แพทย์มองเห็นอวัยวะภายในร่างกายโดยไม่ต้องผ่าตัด แต่ทั้งสองเครื่องใช้หลักการสร้างภาพที่แตกต่างกันอย่างสิ้นเชิง</p>
+
+<div class="art-num-section"><div class="art-num-badge">1</div><h3>CT Scan (Computed Tomography)</h3></div>
+<p>CT Scan ใช้ <strong>รังสีเอกซ์ (X-ray)</strong> ยิงผ่านร่างกายจากหลายทิศทาง แล้วใช้คอมพิวเตอร์ประมวลผลเป็นภาพตัดขวาง</p>
+<p>ข้อดีคือ</p>
 <ul class="art-example-list">
-<li>เส้นเลือดกดทับเส้นประสาทบริเวณก้านสมอง (เป็นสาเหตุที่พบได้บ่อยที่สุด)</li>
-<li>เนื้องอกหรือก้อนที่กดทับเส้นประสาท</li>
-<li>การบาดเจ็บของเส้นประสาทจากอุบัติเหตุหรือการผ่าตัด</li>
-<li>โรคปลอกประสาทเสื่อม (Multiple Sclerosis)</li>
+<li>ตรวจได้รวดเร็ว</li>
+<li>เหมาะกับภาวะฉุกเฉิน</li>
+<li>เห็นกระดูกและเลือดออกได้ดี</li>
+<li>ใช้เวลาตรวจประมาณ 5–15 นาที</li>
 </ul>
-<p>ในบางรายไม่สามารถหาสาเหตุที่ชัดเจนได้</p>
+<p>ข้อจำกัดคือ ผู้ป่วยจะได้รับรังสีเอกซ์ในปริมาณที่มากกว่าการเอกซเรย์ทั่วไป</p>
 
-<h2 class="art-section-head">อาการเป็นอย่างไร?</h2>
-<p>อาการที่พบได้บ่อย ได้แก่</p>
-
-<div class="art-num-section"><div class="art-num-badge">1</div><h3>ลักษณะอาการปวด</h3></div>
+<div class="art-num-section"><div class="art-num-badge">2</div><h3>MRI (Magnetic Resonance Imaging)</h3></div>
+<p>MRI ใช้ <strong>สนามแม่เหล็กกำลังสูงร่วมกับคลื่นวิทยุ</strong> เพื่อสร้างภาพ จึงไม่มีการใช้รังสีเอกซ์</p>
+<p>ข้อเด่นคือ</p>
 <ul class="art-example-list">
-<li>ปวดเหมือนไฟฟ้าช็อต หรือปวดจี๊ดรุนแรง</li>
-<li>ปวดเพียงไม่กี่วินาทีถึงประมาณ 1–2 นาที แล้วหายเอง</li>
-<li>เป็นซ้ำหลายครั้งต่อวัน</li>
-<li>มักปวดเพียงด้านเดียวของใบหน้า</li>
-<li>มักเกิดบริเวณแก้ม ขากรรไกร หรือรอบริมฝีปาก</li>
+<li>เห็นเนื้อสมองละเอียดกว่ามาก</li>
+<li>เห็นเส้นประสาท ไขสันหลัง และเนื้อเยื่ออ่อนได้ชัดเจน</li>
+<li>สามารถตรวจพบความผิดปกติบางอย่างได้ตั้งแต่ระยะเริ่มต้น</li>
 </ul>
+<p>แต่ใช้เวลาตรวจนานกว่า โดยเฉลี่ยประมาณ 30–60 นาที</p>
 
-<div class="art-num-section"><div class="art-num-badge">2</div><h3>สิ่งกระตุ้นให้ปวด</h3></div>
+<h2 class="art-section-head">เปรียบเทียบ CT กับ MRI</h2>
+<table class="art-compare-table">
+<thead>
+<tr><th>CT Scan</th><th>MRI</th></tr>
+</thead>
+<tbody>
+<tr><td>ใช้รังสีเอกซ์</td><td>ใช้สนามแม่เหล็ก</td></tr>
+<tr><td>ตรวจเร็ว 5–15 นาที</td><td>ใช้เวลา 30–60 นาที</td></tr>
+<tr><td>เหมาะกับภาวะฉุกเฉิน</td><td>เหมาะกับการวินิจฉัยรายละเอียด</td></tr>
+<tr><td>เห็นเลือดออกเฉียบพลันดี</td><td>เห็นเนื้อสมองและเส้นประสาทดีที่สุด</td></tr>
+<tr><td>ราคาถูกกว่า</td><td>ราคาสูงกว่า</td></tr>
+<tr><td>ผู้ป่วยที่มีโลหะส่วนใหญ่ตรวจได้</td><td>มีข้อจำกัดในผู้ที่มีอุปกรณ์โลหะบางชนิด</td></tr>
+</tbody>
+</table>
+
+<h2 class="art-section-head">แล้วโรคอะไรควรตรวจอะไร?</h2>
+<p>โดยทั่วไป</p>
+
+<div class="art-num-section"><div class="art-num-badge">1</div><h3>CT มักใช้ในกรณี</h3></div>
 <ul class="art-example-list">
-<li>แปรงฟัน</li>
-<li>ล้างหน้า</li>
-<li>โกนหนวด</li>
-<li>เคี้ยวอาหาร</li>
-<li>พูด หรือยิ้ม</li>
-<li>หรือแม้แต่ลมพัดเบา ๆ</li>
+<li>สงสัยเลือดออกในสมอง</li>
+<li>อุบัติเหตุศีรษะ</li>
+<li>โรคหลอดเลือดสมองเฉียบพลัน</li>
+<li>กระดูกกะโหลกแตก</li>
+<li>ภาวะฉุกเฉินที่ต้องการผลรวดเร็ว</li>
 </ul>
-<div class="art-box art-box-warn">
-<div class="art-box-title">⚠️ ผลกระทบต่อคุณภาพชีวิต</div>
-<p>ผู้ป่วยบางรายกลัวการเกิดอาการปวดจนไม่กล้ากินอาหาร ไม่กล้าพูด หรือไม่กล้าสัมผัสใบหน้า ส่งผลต่อคุณภาพชีวิตอย่างมาก</p>
-</div>
 
-<h2 class="art-section-head">ต้องตรวจอะไรบ้าง?</h2>
-<p>แพทย์จะอาศัย</p>
+<div class="art-num-section"><div class="art-num-badge">2</div><h3>MRI มักใช้ในกรณี</h3></div>
 <ul class="art-example-list">
-<li>การซักประวัติ</li>
-<li>การตรวจระบบประสาทอย่างละเอียด</li>
+<li>โรคหลอดเลือดสมองระยะเริ่มต้น</li>
+<li>เนื้องอกสมอง</li>
+<li>โรคสมองเสื่อม</li>
+<li>โรคลมชัก</li>
+<li>โรคปลอกประสาทเสื่อม (Multiple sclerosis)</li>
+<li>เวียนศีรษะเรื้อรัง</li>
+<li>ปวดศีรษะที่สงสัยโรคในสมอง</li>
+<li>ความผิดปกติของเส้นประสาทสมอง</li>
+<li>โรคของไขสันหลัง</li>
 </ul>
-<p>หากพบว่ามีอาการผิดปกติอื่นร่วมด้วย เช่น ชาบริเวณใบหน้า กล้ามเนื้ออ่อนแรง อายุยังน้อย หรืออาการไม่ตอบสนองต่อการรักษา อาจจำเป็นต้องตรวจ <strong>MRI สมอง</strong> เพื่อค้นหาสาเหตุ เช่น เส้นเลือดกดทับ เนื้องอก หรือโรคอื่น ๆ ที่อาจซ่อนอยู่</p>
 
-<h2 class="art-section-head">รักษาอย่างไร?</h2>
+<h2 class="art-section-head">การตรวจอันตรายหรือไม่?</h2>
 <div class="art-box art-box-teal">
-<div class="art-box-title">🎉 ข่าวดี!</div>
-<p>ผู้ป่วยส่วนใหญ่สามารถควบคุมอาการได้ด้วยยา</p>
+<div class="art-box-title">☢️ CT Scan</div>
+<p>การตรวจ CT มีการใช้รังสีเอกซ์ แต่ปริมาณรังสีอยู่ในระดับที่แพทย์พิจารณาแล้วว่าคุ้มค่ากับประโยชน์ในการวินิจฉัยโรค จึงไม่ควรหลีกเลี่ยงการตรวจ หากแพทย์เห็นว่าจำเป็น</p>
+</div>
+<div class="art-box art-box-warn">
+<div class="art-box-title">🧲 MRI</div>
+<p>MRI ไม่มีรังสี แต่เนื่องจากใช้สนามแม่เหล็กกำลังสูง จึงต้องแจ้งแพทย์ทุกครั้ง หากมี</p>
+<ul style="margin:8px 0 0 18px;color:var(--ink-2);font-size:15.5px;line-height:1.7">
+<li>เครื่องกระตุ้นหัวใจ (Pacemaker)</li>
+<li>เครื่องกระตุ้นสมอง (Deep Brain Stimulator)</li>
+<li>ประสาทหูเทียม</li>
+<li>โลหะฝังในร่างกาย</li>
+<li>คลิปหนีบหลอดเลือดสมองบางชนิด</li>
+<li>เศษโลหะจากอุบัติเหตุ</li>
+<li>อุปกรณ์ฝังทางการแพทย์อื่น ๆ</li>
+</ul>
+</div>
+<p>ปัจจุบันอุปกรณ์หลายชนิดสามารถเข้าตรวจ MRI ได้ แต่จำเป็นต้องตรวจสอบรุ่นก่อนเสมอ</p>
+
+<h2 class="art-section-head">เรื่องการฉีดสี (Contrast)</h2>
+<p>บางครั้งแพทย์อาจแนะนำให้ฉีดสารเพิ่มความคมชัดของภาพ — CT ใช้สารทึบรังสีที่มีไอโอดีน ส่วน MRI ใช้สารแกโดลิเนียม (Gadolinium)</p>
+<div class="art-box art-box-warn">
+<div class="art-box-title">⚠️ ก่อนฉีดสีควรแจ้งแพทย์หาก</div>
+<ul style="margin:0 0 0 18px;color:var(--ink-2);font-size:15.5px;line-height:1.7">
+<li>เคยแพ้สารทึบรังสี</li>
+<li>มีโรคไต</li>
+<li>กำลังตั้งครรภ์</li>
+<li>เคยมีอาการแพ้รุนแรงจากการฉีดสี</li>
+</ul>
 </div>
 
-<div class="art-num-section"><div class="art-num-badge">1</div><h3>ยาที่ใช้บ่อย</h3></div>
-<ul class="art-example-list">
-<li>Carbamazepine</li>
-<li>Oxcarbazepine</li>
-<li>Gabapentin</li>
-<li>Pregabalin</li>
-<li>Baclofen</li>
-</ul>
-<p>การเลือกชนิดยาและการปรับขนาดยาควรอยู่ภายใต้การดูแลของแพทย์ เนื่องจากยากลุ่มนี้อาจมีผลข้างเคียง เช่น ง่วงนอน เวียนศีรษะ หรือมีผลต่อการทำงานของตับและเม็ดเลือดในบางราย จึงต้องมีการติดตามอย่างเหมาะสม</p>
+<h2 class="art-section-head">ถ้ากลัวที่แคบ ทำอย่างไร?</h2>
+<p>ผู้ป่วยจำนวนไม่น้อยรู้สึกกังวลเมื่อต้องเข้าตรวจ MRI หากมีอาการกลัวที่แคบ (Claustrophobia) ควรแจ้งเจ้าหน้าที่ก่อนตรวจ เพราะอาจมีการเตรียมยาเพื่อช่วยให้ผ่อนคลาย หรือวางแผนการตรวจให้เหมาะสม</p>
 
-<div class="art-num-section"><div class="art-num-badge">2</div><h3>การรักษาเพิ่มเติม</h3></div>
-<p>หากใช้ยาแล้วอาการยังไม่ดีขึ้น หรือพบว่ามีเส้นเลือดกดทับเส้นประสาทอย่างชัดเจน อาจพิจารณาการรักษาเพิ่มเติม เช่น</p>
+<h2 class="art-section-head">แพทย์เลือกตรวจจากอะไร?</h2>
+<div class="art-box art-box-gold">
+<div class="art-box-title">❓ ในฐานะแพทย์ระบบประสาท</div>
+<p>ไม่มีเครื่องไหนดีที่สุดสำหรับทุกโรค แต่มีเพียงเครื่องที่<strong>เหมาะสมที่สุดสำหรับผู้ป่วยแต่ละคน</strong> บางครั้ง CT ให้คำตอบได้ดีที่สุด บางครั้ง MRI ให้ข้อมูลที่ CT มองไม่เห็น</p>
+<p style="font-weight:700;color:#9A7830">การเลือกตรวจจึงไม่ได้ขึ้นอยู่กับราคา แต่ขึ้นอยู่กับว่าแพทย์กำลังหาคำตอบของโรคอะไร เพื่อให้ผู้ป่วยได้รับการวินิจฉัยที่ถูกต้องและรักษาได้ตรงจุด</p>
+</div>
+
+<h2 class="art-section-head">เมื่อไหร่ควรถามแพทย์เพิ่มเติม?</h2>
+<p>หากแพทย์แนะนำให้ตรวจ CT หรือ MRI อย่าลังเลที่จะสอบถาม เช่น</p>
 <ul class="art-example-list">
-<li>การผ่าตัดแยกเส้นเลือดออกจากเส้นประสาท (Microvascular Decompression)</li>
-<li>การจี้เส้นประสาทด้วยความร้อน (Radiofrequency Ablation)</li>
-<li>การรักษาด้วยรังสีแกมมา (Gamma Knife Radiosurgery)</li>
+<li>ทำไมจึงเลือกตรวจเครื่องนี้</li>
+<li>จำเป็นต้องฉีดสีหรือไม่</li>
+<li>หากมีโลหะในร่างกายสามารถตรวจได้หรือไม่</li>
+<li>ผลตรวจจะช่วยเปลี่ยนแผนการรักษาอย่างไร</li>
 </ul>
-<p class="art-emph">แพทย์จะเลือกแนวทางที่เหมาะสมตามสาเหตุ อายุ และสุขภาพของผู้ป่วยแต่ละคน</p>
+<p class="art-emph">การเข้าใจเหตุผลของการตรวจ จะช่วยให้ตัดสินใจได้อย่างมั่นใจมากขึ้น</p>
 
 <div class="art-summary-box" style="background:linear-gradient(135deg,#042E2B,#0A5F5B);color:#fff;border-radius:20px;padding:32px 30px;margin:40px 0">
-<h3 style="font-size:20px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px">📋 อย่าคิดว่าเป็นแค่โรคฟัน</h3>
+<h3 style="font-size:20px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px">📋 สิ่งสำคัญที่สุด</h3>
 <ul style="list-style:none;margin:0;padding:0">
-<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>ผู้ป่วยจำนวนไม่น้อยรักษาฟันหลายครั้งก่อนจะพบสาเหตุที่แท้จริง ทำให้ต้องทนปวดเป็นเวลานานโดยไม่จำเป็น</li>
-<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>หากมีอาการปวดใบหน้าเหมือนไฟช็อต ปวดเป็นพัก ๆ ปวดเวลาพูด เคี้ยวอาหาร หรือแปรงฟัน โดยเฉพาะเมื่ออาการเกิดซ้ำในตำแหน่งเดิม ควรรีบพบแพทย์ผู้เชี่ยวชาญด้านระบบประสาทเพื่อรับการวินิจฉัยที่ถูกต้อง</li>
-<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>การรักษาตั้งแต่ระยะแรกมักได้ผลดี และช่วยให้กลับมาใช้ชีวิตประจำวันได้อย่างมีคุณภาพอีกครั้ง</li>
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>หลายครั้งความกังวลไม่ได้เกิดจากเครื่อง CT หรือ MRI แต่เกิดจากการไม่รู้ว่ากำลังจะเจอกับอะไร</li>
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>เมื่อเราเข้าใจว่าแต่ละเครื่องทำงานอย่างไร เหมาะกับโรคแบบไหน และมีข้อควรระวังอะไร การตรวจสมองก็จะไม่ใช่เรื่องน่ากลัวอีกต่อไป</li>
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#7EEAE6;font-weight:800">✓</span>แต่เป็นก้าวสำคัญที่จะช่วยให้แพทย์ค้นหาสาเหตุของโรค และวางแผนการรักษาที่เหมาะสมที่สุดสำหรับผู้ป่วยแต่ละคน</li>
 </ul>
 </div>
 
@@ -433,13 +482,13 @@
           <div class="art-sidebar-title">บทความในหมวดนี้</div>
           <nav class="art-toc">
 <a href="../bells-palsy/" target="_blank" rel="noopener">1. เส้นประสาทสมองคู่ที่ 7 อักเสบ (Bell's palsy)</a>
-<a href="../trigeminal-neuralgia/" target="_blank" rel="noopener" class="active">2. โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia)</a>
+<a href="../trigeminal-neuralgia/" target="_blank" rel="noopener">2. โรคปวดเส้นประสาทใบหน้า (Trigeminal Neuralgia)</a>
 <a href="../postherpetic-neuralgia/" target="_blank" rel="noopener">3. อาการปวดประสาทหลังเป็นงูสวัด (Postherpetic Neuralgia)</a>
-<a href="../ct-vs-mri/" target="_blank" rel="noopener">4. CT กับ MRI ต่างกันอย่างไร</a>
+<a href="../ct-vs-mri/" target="_blank" rel="noopener" class="active">4. CT กับ MRI ต่างกันอย่างไร</a>
           </nav>
         </div>
         <div class="art-sidebar-cta">
-          <h4>มีอาการปวดใบหน้ากังวลใจ?</h4>
+          <h4>ไม่แน่ใจว่าควรตรวจอะไร?</h4>
           <p>นัดหมายปรึกษาแพทย์เฉพาะทางประสาทวิทยา<br>เพื่อตรวจวินิจฉัยและรักษาอย่างถูกต้อง</p>
           <a href="https://m.me/250128068679567" target="_blank" rel="noopener">นัดหมายเลย →</a>
         </div>
