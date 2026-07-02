@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>คลังความรู้โรคพาร์กินสัน — คลินิกรักษ์สมองหมออดิศักดิ์</title>
-  <meta name="description" content="รวมความรู้เกี่ยวกับโรคพาร์กินสันและความผิดปกติของการเคลื่อนไหว ตั้งแต่อาการสั่น การวินิจฉัย ไปจนถึงการรักษาและดูแลระยะยาว โดย นพ.อดิศักดิ์ กิตติสาเรศ">
+  <title>คลังความรู้โรคปวดศีรษะ — คลินิกรักษ์สมองหมออดิศักดิ์</title>
+  <meta name="description" content="รวมความรู้เกี่ยวกับโรคปวดศีรษะและไมเกรน ตั้งแต่ปวดหัวจากความเครียด ไมเกรน สัญญาณอันตราย ไปจนถึงยารักษาและยาป้องกัน โดย นพ.อดิศักดิ์ กิตติสาเรศ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --teal:#0E8A84;--teal-deep:#0A5F5B;--teal-light:#E8F7F6;
-      --gold:#C49A10;--gold-deep:#8A6D0B;--ink:#0E2233;--ink-2:rgba(14,34,51,.6);--ink-3:rgba(14,34,51,.38);
+      --pink:#D4366B;--pink-deep:#8A1F44;--ink:#0E2233;--ink-2:rgba(14,34,51,.6);--ink-3:rgba(14,34,51,.38);
       --paper:#FDFBF7;--paper-2:#F5F0E8;
       --line:rgba(14,34,51,.12);--line-soft:rgba(14,34,51,.06);
       --shadow-sm:0 2px 12px rgba(14,34,51,.06);
@@ -90,9 +90,9 @@
     @media(max-width:760px){.azq-navbtn{display:none}.lang-toggle{padding:8px;gap:0}.lang-toggle #langLabel,.lang-toggle .chev{display:none}}
     @media(max-width:600px){.wrap{padding-left:18px;padding-right:18px}.nav-inner{gap:10px}a.nav-appt{display:none}.nav-logo img{height:34px}}
 
-    /* ── HERO (gold/parkinson theme) ── */
-    .dem-hero{background:linear-gradient(155deg,#3D2E04 0%,#8A6D0B 50%,#C49A10 100%);padding:112px 0 90px;position:relative;overflow:hidden}
-    .dem-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 40%,rgba(245,224,150,.1),transparent)}
+    /* ── HERO (pink/headache theme) ── */
+    .dem-hero{background:linear-gradient(155deg,#4A0F26 0%,#8A1F44 50%,#D4366B 100%);padding:112px 0 90px;position:relative;overflow:hidden}
+    .dem-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 40%,rgba(245,180,200,.1),transparent)}
     .dem-hero::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,var(--paper))}
     .dem-hero-inner{position:relative;z-index:1}
     .dem-breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:28px;flex-wrap:wrap}
@@ -101,10 +101,10 @@
     .dem-breadcrumb span{opacity:.35}
     .dem-hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 16px;font-size:12.5px;color:rgba(255,255,255,.85);letter-spacing:.05em;font-weight:600;margin-bottom:22px}
     .dem-hero h1{font-size:clamp(26px,4.2vw,50px);font-weight:800;color:#fff;line-height:1.22;margin-bottom:20px;letter-spacing:-.02em}
-    .dem-hero h1 em{font-style:normal;color:#F5E0A0}
+    .dem-hero h1 em{font-style:normal;color:#F5C0D4}
     .dem-hero-desc{font-size:clamp(15px,1.5vw,17px);color:rgba(255,255,255,.72);max-width:580px;line-height:1.8;margin-bottom:40px}
     .dem-stats{display:flex;gap:36px;flex-wrap:wrap}
-    .dem-stat-num{font-size:34px;font-weight:800;color:#F5E0A0;display:block;line-height:1}
+    .dem-stat-num{font-size:34px;font-weight:800;color:#F5C0D4;display:block;line-height:1}
     .dem-stat-label{font-size:13px;color:rgba(255,255,255,.55);margin-top:5px}
 
     /* ── CONTENT ── */
@@ -120,24 +120,28 @@
     .dem-cat-desc{font-size:14.5px;line-height:1.7;color:var(--ink-2)}
     .dem-cat-count{flex-shrink:0;align-self:flex-start;font-size:12px;font-weight:700;padding:5px 13px;border-radius:999px;margin-top:4px}
 
-    .s1 .dem-cat-ic{background:rgba(196,154,16,.12)}.s1 .dem-cat-eyebrow{color:var(--gold)}.s1 .dem-cat-title{color:#5C4708}.s1 .dem-cat-count{background:rgba(196,154,16,.12);color:var(--gold-deep)}
+    .s1 .dem-cat-ic{background:rgba(212,54,107,.12)}.s1 .dem-cat-eyebrow{color:var(--pink)}.s1 .dem-cat-title{color:#6B1538}.s1 .dem-cat-count{background:rgba(212,54,107,.12);color:var(--pink-deep)}
+    .s2 .dem-cat-ic{background:rgba(142,68,173,.12)}.s2 .dem-cat-eyebrow{color:#8E44AD}.s2 .dem-cat-title{color:#3D1A52}.s2 .dem-cat-count{background:rgba(142,68,173,.12);color:#5B2C75}
 
     .dem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .dem-card{background:#fff;border-radius:18px;border:1px solid var(--line-soft);border-left:3px solid var(--c,var(--gold));padding:22px 22px 18px;display:flex;flex-direction:column;gap:0;transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s;position:relative}
+    .dem-card{background:#fff;border-radius:18px;border:1px solid var(--line-soft);border-left:3px solid var(--c,var(--pink));padding:22px 22px 18px;display:flex;flex-direction:column;gap:0;transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s;position:relative}
     .dem-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
     .dem-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px}
-    .dem-card-num{min-width:34px;height:34px;border-radius:10px;background:var(--c,var(--gold));color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0 7px;letter-spacing:-.01em}
-    .dem-card-arrow{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(var(--cr,196,154,16),.08);color:var(--c,var(--gold));transition:.25s;opacity:.7;flex-shrink:0;margin-top:2px}
-    .dem-card:hover .dem-card-arrow{opacity:1;background:rgba(var(--cr,196,154,16),.16);transform:translateX(3px)}
-    .dem-card-title{font-size:18px;font-weight:800;line-height:1.4;color:var(--c,var(--gold-deep));flex:1;margin-bottom:0}
+    .dem-card-num{min-width:34px;height:34px;border-radius:10px;background:var(--c,var(--pink));color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0 7px;letter-spacing:-.01em}
+    .dem-card-arrow{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(var(--cr,212,54,107),.08);color:var(--c,var(--pink));transition:.25s;opacity:.7;flex-shrink:0;margin-top:2px}
+    .dem-card:hover .dem-card-arrow{opacity:1;background:rgba(var(--cr,212,54,107),.16);transform:translateX(3px)}
+    .dem-card-title{font-size:18px;font-weight:800;line-height:1.4;color:var(--c,var(--pink-deep));flex:1;margin-bottom:0}
     .dem-card-desc{font-size:14.5px;line-height:1.7;color:var(--ink-2);flex:1}
+    .dem-card.soon{opacity:.5;pointer-events:none;border-left-color:var(--ink-3)}
+    .dem-card.soon .dem-card-num{background:var(--ink-3)}
+    .dem-card.soon .dem-card-title{color:var(--ink-2)}
 
-    .dem-cta{background:linear-gradient(135deg,#3D2E04,#8A6D0B);border-radius:28px;padding:56px 52px;text-align:center;position:relative;overflow:hidden;margin-bottom:0}
+    .dem-cta{background:linear-gradient(135deg,#4A0F26,#8A1F44);border-radius:28px;padding:56px 52px;text-align:center;position:relative;overflow:hidden;margin-bottom:0}
     .dem-cta::before{content:"🧠";position:absolute;font-size:200px;opacity:.04;bottom:-30px;right:-20px;line-height:1;pointer-events:none}
     .dem-cta h2{font-size:clamp(20px,2.8vw,28px);font-weight:800;color:#fff;margin-bottom:13px}
     .dem-cta p{color:rgba(255,255,255,.68);font-size:16px;margin-bottom:34px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.75}
     .dem-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .dem-btn-w{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--gold-deep);font-weight:700;padding:14px 28px;border-radius:999px;font-size:15px;font-family:var(--f);border:0;cursor:pointer;transition:.25s}
+    .dem-btn-w{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--pink-deep);font-weight:700;padding:14px 28px;border-radius:999px;font-size:15px;font-family:var(--f);border:0;cursor:pointer;transition:.25s}
     .dem-btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
     .dem-btn-t{display:inline-flex;align-items:center;gap:8px;background:#0E8A84;color:#fff;border:1.5px solid #0E8A84;font-weight:700;padding:14px 28px;border-radius:999px;font-size:15px;transition:.25s}
     .dem-btn-t:hover{background:#0FA89F;border-color:#0FA89F;transform:translateY(-2px);box-shadow:0 8px 24px rgba(14,138,132,.35)}
@@ -159,20 +163,20 @@
     .foot-bar a:hover{color:var(--glow)}
 
     .dem-back-wrap{text-align:center;margin-top:44px;padding-bottom:8px}
-    .dem-back-btn{display:inline-flex;align-items:center;gap:9px;padding:12px 28px;border-radius:40px;border:1.5px solid rgba(196,154,16,.32);color:var(--gold-deep);font-size:15px;font-weight:600;text-decoration:none;transition:.22s;background:rgba(196,154,16,.05)}
+    .dem-back-btn{display:inline-flex;align-items:center;gap:9px;padding:12px 28px;border-radius:40px;border:1.5px solid rgba(212,54,107,.32);color:var(--pink-deep);font-size:15px;font-weight:600;text-decoration:none;transition:.22s;background:rgba(212,54,107,.05)}
     .dem-back-btn svg{transition:.22s}
-    .dem-back-btn:hover{background:rgba(196,154,16,.12);border-color:var(--gold);transform:translateX(-2px)}
+    .dem-back-btn:hover{background:rgba(212,54,107,.12);border-color:var(--pink);transform:translateX(-2px)}
     .dem-back-btn:hover svg{transform:translateX(-3px)}
     @media(max-width:960px){.dem-grid{grid-template-columns:1fr}}
     @media(max-width:1100px){.foot-inner{grid-template-columns:1fr 1fr;gap:28px}}
     @media(max-width:768px){.dem-cat-hdr{gap:14px}.dem-cat-ic{width:42px;height:42px;font-size:20px}.dem-cta{padding:40px 28px}.dem-cat-count{display:none}}
     @media(max-width:580px){.dem-stats{gap:22px}.dem-stat-num{font-size:28px}.foot-inner{grid-template-columns:1fr}.dem-cta-btns{flex-direction:column;align-items:stretch}}
     @media(max-width:480px){.wrap{padding-left:16px;padding-right:16px}}
-  <link rel="canonical" href="https://dradisak.com/knowledge/parkinson/">
+  <link rel="canonical" href="https://dradisak.com/knowledge/headache/">
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://dradisak.com/knowledge/parkinson/">
-  <meta property="og:title" content="คลังความรู้โรคพาร์กินสัน — คลินิกรักษ์สมองหมออดิศักดิ์">
+  <meta property="og:url" content="https://dradisak.com/knowledge/headache/">
+  <meta property="og:title" content="คลังความรู้โรคปวดศีรษะ — คลินิกรักษ์สมองหมออดิศักดิ์">
   <meta property="og:image" content="https://dradisak.com/og-image.jpg">
   <meta property="og:site_name" content="คลินิกรักษ์สมองหมออดิศักดิ์">
 </style>
@@ -265,16 +269,17 @@
     <nav class="dem-breadcrumb" aria-label="breadcrumb">
       <a href="https://dradisak.com/">หน้าหลัก</a><span>›</span>
       <a href="../">คลังความรู้</a><span>›</span>
-      <span style="color:rgba(255,255,255,.88)">พาร์กินสัน</span>
+      <span style="color:rgba(255,255,255,.88)">ปวดศีรษะ</span>
     </nav>
     <div class="dem-hero-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12c1.5 0 1.5-3 3-3s1.5 6 3 6 1.5-8 3-8 1.5 5 3 5 1.5-2 3-2"/></svg>
-      คลังความรู้ด้านพาร์กินสัน
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="11" r="7"/><path d="M12 4V2M5 6 3.5 4.5M19 6l1.5-1.5"/><path d="M9 11c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5"/></svg>
+      คลังความรู้ด้านปวดศีรษะ
     </div>
-    <h1>เข้าใจ<em>โรคพาร์กินสัน</em><br>และความผิดปกติของการเคลื่อนไหว</h1>
-    <p class="dem-hero-desc">รวมความรู้เกี่ยวกับโรคพาร์กินสันและความผิดปกติของการเคลื่อนไหว — ตั้งแต่อาการสั่น การวินิจฉัย ไปจนถึงการรักษาและดูแลระยะยาว โดย นพ.อดิศักดิ์ กิตติสาเรศ</p>
+    <h1>เข้าใจ<em>อาการปวดศีรษะ</em><br>และไมเกรนอย่างถูกต้อง</h1>
+    <p class="dem-hero-desc">รวมความรู้เกี่ยวกับโรคปวดศีรษะและไมเกรน — แยกแบบธรรมดากับอันตราย สิ่งกระตุ้น ยารักษาและยาป้องกัน ไปจนถึงการดูแลในกลุ่มผู้หญิง เด็ก และผู้สูงอายุ โดย นพ.อดิศักดิ์ กิตติสาเรศ</p>
     <div class="dem-stats">
-      <div class="dem-stat"><span class="dem-stat-num">5</span><div class="dem-stat-label">บทความ</div></div>
+      <div class="dem-stat"><span class="dem-stat-num">21</span><div class="dem-stat-label">บทความ</div></div>
+      <div class="dem-stat"><span class="dem-stat-num">2</span><div class="dem-stat-label">หมวดย่อย</div></div>
       <div class="dem-stat"><span class="dem-stat-num">10+</span><div class="dem-stat-label">ปีประสบการณ์</div></div>
     </div>
   </div>
@@ -284,38 +289,60 @@
 <main class="dem-content">
   <div class="wrap">
 
-    <!-- ══ หมวด 1 ══ -->
+    <!-- ══ หมวด 1 — ปวดศีรษะ ══ -->
     <section class="dem-section s1" id="cat1">
       <div class="dem-cat-hdr">
-        <div class="dem-cat-ic">🖐️</div>
+        <div class="dem-cat-ic">🤕</div>
         <div class="dem-cat-body">
           <div class="dem-cat-eyebrow">หมวดที่ 1</div>
-          <div class="dem-cat-title">อาการสั่นและพาร์กินสัน</div>
-          <div class="dem-cat-desc">ความรู้เกี่ยวกับอาการสั่นและโรคพาร์กินสัน ตั้งแต่การแยกอาการ การวินิจฉัย ไปจนถึงการรักษา</div>
+          <div class="dem-cat-title">ปวดศีรษะ</div>
+          <div class="dem-cat-desc">เข้าใจอาการปวดหัวทั่วไป แยกแบบธรรมดากับอันตราย ปวดศีรษะเรื้อรัง และการใช้ยาแก้ปวดอย่างปลอดภัย</div>
         </div>
-        <div class="dem-cat-count">5 บทความ</div>
+        <div class="dem-cat-count">2 บทความ</div>
       </div>
       <div class="dem-grid">
-        <a href="tremor-vs-parkinson/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A6D0B;--cr:138,109,11">
-          <div class="dem-card-head"><span class="dem-card-num">1</span><div class="dem-card-title">มือสั่น เป็นโรคอะไร? ใช่พาร์กินสันหรือไม่</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-          <div class="dem-card-desc">มือสั่นไม่ได้แปลว่าเป็นพาร์กินสันเสมอไป รู้จัก Essential Tremor จุดสังเกตแยกจากพาร์กินสัน และแนวทางการรักษา</div>
+        <a href="tension-headache/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A1F44;--cr:138,31,68">
+          <div class="dem-card-head"><span class="dem-card-num">1</span><div class="dem-card-title">ปวดหัวจากความเครียด (Tension-Type Headache) คืออะไร?</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+          <div class="dem-card-desc">ปวดหัวแทบทุกวันแต่ไม่ตุบ ๆ แบบไมเกรน — รู้จักโรคปวดศีรษะที่พบบ่อยที่สุดในโลก ต่างจากไมเกรนอย่างไร และรักษาอย่างไร</div>
         </a>
-        <a href="essential-tremor/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A6D0B;--cr:138,109,11">
-          <div class="dem-card-head"><span class="dem-card-num">2</span><div class="dem-card-title">ภาวะสั่นไม่ทราบสาเหตุ (Essential Tremor)</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-          <div class="dem-card-desc">มือสั่นเวลาหยิบของ...อาจไม่ใช่พาร์กินสัน สาเหตุ กลไกการเกิดโรค อาการ และแนวทางการรักษาทุกขั้นตอน</div>
+        <a href="daily-headache/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A1F44;--cr:138,31,68">
+          <div class="dem-card-head"><span class="dem-card-num">2</span><div class="dem-card-title">ปวดหัวทุกวัน...แน่ใจหรือว่าเป็นไมเกรน?</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+          <div class="dem-card-desc">อาการที่เคยเป็นครั้งคราว ค่อย ๆ กลายเป็นปวดแทบทุกวัน — ไมเกรนเรื้อรัง ปวดศีรษะจากการใช้ยาเกิน หรือความเครียดเรื้อรังกันแน่</div>
         </a>
-        <a href="restless-legs-syndrome/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A6D0B;--cr:138,109,11">
-          <div class="dem-card-head"><span class="dem-card-num">3</span><div class="dem-card-title">โรคขาอยู่ไม่สุข (Restless Legs Syndrome)</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-          <div class="dem-card-desc">พอถึงเวลานอน ขาจะรู้สึกแปลก ๆ ต้องขยับตลอด นอนไม่หลับ...สาเหตุ อาการ 4 ข้อวินิจฉัย และการรักษา</div>
-        </a>
-        <a href="medication-adjustment/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A6D0B;--cr:138,109,11">
-          <div class="dem-card-head"><span class="dem-card-num">4</span><div class="dem-card-title">การปรับยาพาร์กินสันอย่างเข้าใจ</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-          <div class="dem-card-desc">กินยาให้ถูกเวลา ปรับยาให้เหมาะ รู้จักยาพาร์กินสันแต่ละกลุ่ม และแนวทางปรับยาให้เข้ากับทุกระยะของโรค</div>
-        </a>
-        <a href="know-parkinson/" class="dem-card" target="_blank" rel="noopener" style="--c:#8A6D0B;--cr:138,109,11">
-          <div class="dem-card-head"><span class="dem-card-num">5</span><div class="dem-card-title">มือสั่น…ใช่โรคพาร์กินสันหรือเปล่า?</div><div class="dem-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-          <div class="dem-card-desc">รู้จักโรคพาร์กินสันตั้งแต่ต้น สาเหตุ อาการ Resting tremor และ Non-motor symptoms ที่อาจเกิดก่อนมือสั่นหลายปี</div>
-        </a>
+      </div>
+    </section>
+
+    <!-- ══ หมวด 2 — ไมเกรน ══ -->
+    <section class="dem-section s2" id="cat2">
+      <div class="dem-cat-hdr">
+        <div class="dem-cat-ic">⚡</div>
+        <div class="dem-cat-body">
+          <div class="dem-cat-eyebrow">หมวดที่ 2</div>
+          <div class="dem-cat-title">ไมเกรน</div>
+          <div class="dem-cat-desc">รู้จักไมเกรนให้ลึกขึ้น สิ่งกระตุ้น ยารักษาและยาป้องกัน ไปจนถึงการดูแลในกลุ่มผู้หญิง เด็ก และผู้สูงอายุ</div>
+        </div>
+        <div class="dem-cat-count">19 บทความ</div>
+      </div>
+      <div class="dem-grid">
+        <a href="migraine-or-not/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">3</span><div class="dem-card-title">ปวดหัวแบบนี้...ไมเกรนหรือเปล่า</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-triggers/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">4</span><div class="dem-card-title">12 สิ่งกระตุ้นไมเกรนที่หลายคนไม่เคยรู้</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="painkiller-frequency/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">5</span><div class="dem-card-title">ยาแก้ปวดกินบ่อยแค่ไหน</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="when-to-start-prevention/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">6</span><div class="dem-card-title">ปวดไมเกรนบ่อยแค่ไหน...ถึงควรเริ่มยาป้องกัน</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="danger-signs-headache/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">7</span><div class="dem-card-title">เมื่อไหร่ปวดหัวเป็นสัญญาณอันตรายของสมอง</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-curable/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">8</span><div class="dem-card-title">ไมเกรนรักษาหายไหม?</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-acute-medications/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">9</span><div class="dem-card-title">ยารักษาอาการปวดไมเกรนมีกี่ชนิด</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-preventive-medications/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">10</span><div class="dem-card-title">ยาป้องกันไมเกรนมีกี่ชนิด</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="botox-for-migraine/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">11</span><div class="dem-card-title">โบท็อกซ์รักษาไมเกรน คืออะไร</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="anti-cgrp/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">12</span><div class="dem-card-title">ยากลุ่ม Anti-CGRP</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-dizziness/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">13</span><div class="dem-card-title">ไมเกรนทำให้เวียนหัวได้หรือไม่</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-aura/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">14</span><div class="dem-card-title">Aura คืออะไร</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-stroke-link/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">15</span><div class="dem-card-title">ไมเกรนกับโรคหลอดเลือดสมองเกี่ยวข้องกันไหม</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-women-menstrual/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">16</span><div class="dem-card-title">ไมเกรนในผู้หญิง ทำไมช่วงมีประจำเดือนถึงปวดมากขึ้น</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="sleep-and-migraine/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">17</span><div class="dem-card-title">การนอนกับไมเกรน</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-elderly/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">18</span><div class="dem-card-title">ไมเกรนในผู้สูงอายุ ต่างจากคนอายุน้อยอย่างไร</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-children/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">19</span><div class="dem-card-title">ไมเกรนในเด็ก ปวดหัวไม่ใช่เรื่องเล็ก</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="exercise-and-migraine/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">20</span><div class="dem-card-title">ออกกำลังกายช่วยไมเกรนได้ไหม</div></div><div class="dem-card-desc">ไมเกรน</div></a>
+        <a href="migraine-food-triggers/" class="dem-card" target="_blank" rel="noopener" style="--c:#6B2F8C;--cr:107,47,140"><div class="dem-card-head"><span class="dem-card-num">21</span><div class="dem-card-title">อาหารที่กระตุ้นไมเกรน มีจริงหรือไม่</div></div><div class="dem-card-desc">ไมเกรน</div></a>
       </div>
     </section>
 
@@ -370,9 +397,9 @@
         <h4>คลังความรู้</h4>
         <a href="../">บทความทั้งหมด</a>
         <a href="/knowledge/dementia/">โรคสมองเสื่อม</a>
-        <a href="/knowledge/#ไมเกรน">ปวดศีรษะ & ไมเกรน</a>
+        <a href="/knowledge/headache/" style="color:#4DD8D2">ปวดศีรษะ & ไมเกรน</a>
         <a href="/knowledge/#หลอดเลือดสมอง">หลอดเลือดสมอง</a>
-        <a href="/knowledge/parkinson/" style="color:#4DD8D2">พาร์กินสัน</a>
+        <a href="/knowledge/parkinson/">พาร์กินสัน</a>
         <a href="/knowledge/other-neuro/">โรคระบบประสาทอื่นๆ</a>
       </div>
       <div class="foot-col">

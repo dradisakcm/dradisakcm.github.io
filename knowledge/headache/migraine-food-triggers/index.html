@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>อาหารที่กระตุ้นไมเกรน มีจริงหรือไม่ — คลังความรู้โรคปวดศีรษะ</title>
+  <meta name="description" content="อาหารอะไรกระตุ้นไมเกรนได้จริง? ช็อกโกแลต กาแฟ ชีส ผงชูรส ต้องงดทั้งหมดไหม? รวมวิตามินและอาหารเสริมที่มีงานวิจัยสนับสนุน โดย นพ.อดิศักดิ์ กิตติสาเรศ">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--teal:#0E8A84;--teal-deep:#042E2B;--violet:#8E44AD;--violet-deep:#3D1A52;--gold:#B8924F;--ink:#0E2233;--ink-2:rgba(14,34,51,.6);--ink-3:rgba(14,34,51,.38);--paper:#FDFBF5;--paper-2:#F5F0E8;--line-soft:rgba(14,34,51,.08);--f:'Sarabun',sans-serif}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--f);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
+    .wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s,border-color .3s;border-bottom:1px solid transparent;-webkit-transform:translateZ(0);transform:translateZ(0)}
+    .nav.scrolled{background:rgba(251,249,245,.94);-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px);border-color:var(--line-soft);box-shadow:0 4px 20px -12px rgba(14,34,51,.3)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:74px;gap:16px}
+    .nav-logo{display:flex;align-items:center;flex-shrink:0;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:14px;padding:4px 14px 4px 8px;transition:background .3s}
+    .nav.scrolled .nav-logo{background:transparent;padding:4px 8px 4px 4px}
+    .nav-logo img{height:38px;width:auto;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 1px 0 rgba(255,255,255,.6));transition:transform .3s}
+    .nav-logo:hover img{transform:scale(1.03)}
+    .nav-logo .logo-full{display:block}
+    .nav-logo .logo-mark{display:none;height:40px;width:auto;flex-shrink:0;filter:none}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:14.5px;color:var(--ink);font-weight:400;position:relative;opacity:.82;transition:opacity .2s;white-space:nowrap}
+    .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1.5px;background:var(--teal);transition:width .3s}
+    .nav-links a:hover{opacity:1}.nav-links a:hover::after{width:100%}
+    .nav-links a.nav-active{opacity:1;color:var(--teal);font-weight:600}
+    .nav-links a.nav-active::after{width:100%}
+    .azq-dd{position:relative;display:inline-flex;align-items:center}
+    .azq-dd-toggle{display:inline-flex;align-items:center;gap:5px;background:none;border:0;cursor:pointer;font-family:var(--f);font-size:14.5px;color:var(--ink);opacity:.82;font-weight:400;padding:0;transition:opacity .2s;white-space:nowrap}
+    .azq-dd-toggle:hover{opacity:1}
+    .azq-dd-toggle.nav-active{opacity:1;color:var(--teal);font-weight:600}
+    .azq-dd-chev{transition:transform .25s}
+    .azq-dd:hover .azq-dd-chev,.azq-dd.open .azq-dd-chev{transform:rotate(180deg)}
+    .azq-dd-menu{position:absolute;top:calc(100% + 10px);right:0;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(14,34,51,.12),0 2px 8px rgba(14,34,51,.06);padding:8px;min-width:160px;display:none;flex-direction:column;gap:2px;border:1px solid var(--line-soft)}
+    .azq-dd:hover .azq-dd-menu,.azq-dd.open .azq-dd-menu{display:flex}
+    .azq-dd-menu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+    .azq-dd-menu a{font-size:13.5px;padding:10px 14px;border-radius:10px;color:var(--ink);transition:background .15s;white-space:nowrap}
+    .azq-dd-menu a:hover{background:var(--paper-2)}
+    .azq-dd-menu a.dd-active{color:var(--teal);font-weight:600;background:rgba(14,138,132,.06)}
+    .azq-mgroup{padding:6px 0;border-bottom:1px solid var(--line-soft)}
+    .azq-mgroup-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);padding:8px 16px 4px}
+    .azq-msub{display:block;font-size:15px;padding:10px 16px;color:var(--ink);border-bottom:1px solid var(--line-soft)}
+    .azq-msub:last-child{border-bottom:none}
+    .azq-msub.nav-active{color:var(--teal);font-weight:600}
+    .nav-links a.azq-navbtn{display:inline-flex;align-items:center;gap:7px;opacity:1!important;background:linear-gradient(135deg,#EBD3A0,#B8924F);color:#0E2233!important;font-weight:800;padding:8px 14px;border-radius:999px;box-shadow:0 10px 24px -10px rgba(184,146,79,.65);transition:transform .22s,box-shadow .25s}
+    .nav-links a.azq-navbtn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -10px rgba(184,146,79,.85)}
+    .nav-links a.azq-navbtn::after{display:none!important}
+    .azq-navbtn-ico{width:17px;height:17px;flex-shrink:0}
+    .nav-cta-group{display:flex;align-items:center;gap:10px;flex-shrink:0}
+    .lang-picker{position:relative}
+    .lang-toggle{font-size:12.5px;font-weight:600;letter-spacing:.08em;color:var(--ink);background:transparent;border:1px solid var(--line);padding:8px 12px;border-radius:999px;cursor:pointer;transition:.25s;display:inline-flex;align-items:center;gap:7px;font-family:var(--f)}
+    .lang-toggle:hover{border-color:var(--teal);color:var(--teal)}
+    .lang-toggle .globe{opacity:.7}
+    .lang-toggle .chev{opacity:.5;transition:transform .2s}
+    .lang-picker.open .chev{transform:rotate(180deg)}
+    .lang-menu{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px;min-width:170px;box-shadow:0 4px 20px rgba(14,34,51,.1);display:none;z-index:60}
+    .lang-menu.open{display:block}
+    .lang-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:0;background:transparent;font-size:14px;color:var(--ink);text-align:left;border-radius:8px;cursor:pointer;transition:background .15s;font-family:inherit}
+    .lang-menu button .flag{font-size:16px}
+    .lang-menu button:hover{background:var(--paper-2)}
+    .lang-menu button.active{background:rgba(14,138,132,.10);color:var(--teal-deep);font-weight:600}
+    .lang-menu button.active::after{content:"✓";margin-left:auto;color:var(--teal)}
+    a.nav-appt{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1BC9C0,#0B7A75);color:#fff!important;padding:10px 18px;font-size:13.5px;font-weight:600;border-radius:999px;white-space:nowrap;box-shadow:0 3px 12px rgba(14,138,132,.22),inset 0 1px 0 rgba(255,255,255,.18);transition:transform .25s,box-shadow .3s;animation:navCtaGlow 3.5s ease-in-out infinite;font-family:var(--f)}
+    a.nav-appt:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(14,138,132,.42)}
+    @keyframes navCtaGlow{0%,100%{box-shadow:0 3px 12px rgba(14,138,132,.2)}50%{box-shadow:0 4px 18px rgba(14,138,132,.38)}}
+    .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:8px;flex-shrink:0}
+    .burger span{width:24px;height:2px;background:var(--ink);transition:.3s;border-radius:2px}
+    .mob-menu{display:none;position:fixed;inset:74px 0 0;z-index:49;background:var(--paper);padding:28px 24px;flex-direction:column;gap:2px;overflow-y:auto}
+    .mob-menu.open{display:flex}
+    .mob-menu a{font-family:var(--f);font-size:18px;padding:12px 0;border-bottom:1px solid var(--line-soft);color:var(--ink)}
+    .mob-menu a.nav-active{color:var(--teal)}
+    .mob-assess{margin-top:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#F5E6C8,#EDD28A);color:#5C3A1E;border-radius:999px;padding:14px;font-size:15px;font-weight:700}
+    .mob-cta{margin-top:10px;background:var(--teal);color:#fff;text-align:center;border-radius:999px;padding:14px;font-size:15px;font-weight:600}
+    @media(min-width:1321px){.nav-links{gap:8px}.nav-links a{font-size:12.5px}.nav-links .azq-dd-toggle{font-size:12.5px}}
+    @media(max-width:1320px){.nav-links{display:none!important}.burger{display:flex}}
+    @media(max-width:760px){.azq-navbtn{display:none}.lang-toggle{padding:8px;gap:0}.lang-toggle #langLabel,.lang-toggle .chev{display:none}}
+    @media(max-width:600px){.wrap{padding-left:18px;padding-right:18px}}
+    /* HERO */
+    .art-hero{background:linear-gradient(135deg,#3D1A52 0%,#6B2F8C 55%,#8E44AD 100%);padding:108px 0 60px;position:relative;overflow:hidden}
+    .art-hero::before{content:"⚡";position:absolute;font-size:280px;opacity:.08;bottom:-50px;right:-20px;line-height:1;pointer-events:none;user-select:none}
+    .art-breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:24px;flex-wrap:wrap}
+    .art-breadcrumb a{color:rgba(255,255,255,.55);transition:.2s}.art-breadcrumb a:hover{color:#fff}
+    .art-breadcrumb span{opacity:.4}
+    .art-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 14px;font-size:12.5px;color:rgba(255,255,255,.85);font-weight:600;letter-spacing:.04em;margin-bottom:20px}
+    .art-hero-badge .badge-num{background:#8E44AD;color:#fff;border-radius:999px;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+    .art-hero-title{font-size:clamp(28px,4.5vw,50px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:18px;max-width:760px}
+    .art-hero-sub{font-size:clamp(15px,1.8vw,19px);color:rgba(255,255,255,.72);max-width:600px;line-height:1.7;margin-bottom:30px}
+    .art-hero-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+    .art-hero-meta span{font-size:13px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:6px}
+    /* LAYOUT */
+    .art-main{padding:72px 0 88px}
+    .art-layout{display:grid;grid-template-columns:1fr 290px;gap:60px;align-items:start}
+    @media(max-width:960px){.art-layout{grid-template-columns:1fr;gap:40px}}
+    /* CONTENT TYPOGRAPHY */
+    .art-content{font-size:17px;line-height:1.9;color:var(--ink-2)}
+    .art-content p{margin-bottom:20px}
+    .art-content strong{color:var(--ink);font-weight:700}
+    .art-content ul{margin:0 0 22px 22px}
+    .art-content li{margin-bottom:10px;line-height:1.8}
+    /* OPENING QUOTE */
+    .art-opening-quote{display:flex;gap:14px;align-items:flex-start;background:rgba(142,68,173,.07);border-radius:20px;padding:28px 28px 28px 24px;margin-bottom:32px;border:1px solid rgba(142,68,173,.18)}
+    .art-opening-quote svg{flex-shrink:0;margin-top:4px}
+    .art-opening-quote p{font-size:18px;font-weight:600;color:var(--violet-deep);line-height:1.75;font-style:italic;margin:0}
+    /* SECTION HEADER */
+    .art-section-head{font-size:clamp(19px,2.2vw,25px);font-weight:800;color:var(--ink);margin:48px 0 20px;padding-bottom:14px;border-bottom:2px solid rgba(142,68,173,.3);display:flex;align-items:center;gap:0}
+    .art-section-head::before{content:"";display:inline-block;width:4px;height:24px;background:linear-gradient(to bottom,#8E44AD,#6B2F8C);border-radius:99px;margin-right:12px;flex-shrink:0}
+    /* NUMBERED SECTION */
+    .art-num-section{display:flex;gap:16px;align-items:flex-start;margin:32px 0 14px}
+    .art-num-badge{min-width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8E44AD,#6B2F8C);color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;box-shadow:0 4px 12px rgba(142,68,173,.3)}
+    .art-num-section h3{font-size:clamp(17px,2vw,21px);font-weight:800;color:var(--ink);line-height:1.35}
+    /* EMPHASIS LINE */
+    .art-emph{font-size:17px;font-weight:600;color:var(--violet-deep);margin:8px 0;opacity:.92}
+    /* EXAMPLE LIST */
+    .art-example-list{list-style:none;margin:12px 0 22px;padding:0;display:flex;flex-direction:column;gap:8px}
+    .art-example-list li{padding:10px 16px;background:#fff;border-radius:10px;border-left:3px solid var(--violet);font-size:16px;color:var(--ink-2);box-shadow:0 1px 4px rgba(14,34,51,.06)}
+    /* PULLQUOTE */
+    .art-pullquote{border-left:4px solid #8E44AD;background:rgba(142,68,173,.06);padding:20px 24px;border-radius:0 14px 14px 0;font-size:18px;font-weight:700;color:var(--violet-deep);line-height:1.7;margin:32px 0;font-style:italic}
+    /* CLOSING BOX */
+    .art-closing-box{background:linear-gradient(135deg,rgba(142,68,173,.1),rgba(142,68,173,.05));border:1px solid rgba(142,68,173,.2);border-radius:20px;padding:32px;margin:40px 0}
+    .art-closing-box h3{font-size:20px;font-weight:800;color:var(--violet-deep);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .art-closing-box ul{margin:0 0 0 18px}
+    .art-closing-box li{font-size:16px;line-height:1.8;margin-bottom:8px;color:var(--ink-2)}
+    /* SIGNATURE */
+    .art-signature{margin-top:48px;padding-top:28px;border-top:1px solid var(--line-soft);display:flex;align-items:center;gap:16px}
+    .art-sig-avatar{width:52px;height:52px;border-radius:14px;flex-shrink:0;overflow:hidden;display:flex}
+    .art-sig-name{font-size:16px;font-weight:800;color:var(--ink)}
+    .art-sig-role{font-size:13px;color:var(--ink-3);margin-top:2px}
+    /* NAV */
+    .art-nav{display:flex;gap:14px;margin-top:56px;flex-wrap:wrap}
+    .art-nav-btn{display:flex;align-items:center;gap:12px;padding:18px 22px;border-radius:16px;border:1.5px solid var(--line-soft);background:#fff;transition:.22s;flex:1;min-width:200px}
+    .art-nav-btn:hover{border-color:#8E44AD;box-shadow:0 4px 16px rgba(142,68,173,.1)}
+    .art-nav-next{justify-content:flex-end;text-align:right}
+    .art-nav-btn svg{color:var(--violet);flex-shrink:0}
+    .art-nav-btn span{display:flex;flex-direction:column;gap:3px}
+    .art-nav-btn small{font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .art-nav-btn span > *:last-child{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.4}
+    .art-back-wrap{text-align:center;margin-top:24px}
+    .art-back-btn{display:inline-flex;align-items:center;gap:9px;padding:11px 26px;border-radius:40px;border:1.5px solid rgba(142,68,173,.36);color:var(--violet-deep);font-size:15px;font-weight:600;transition:.22s;background:rgba(142,68,173,.06)}
+    .art-back-btn:hover{background:rgba(142,68,173,.1);border-color:var(--violet)}
+    /* SIDEBAR */
+    .art-sidebar{position:sticky;top:90px}
+    .art-sidebar-box{background:#fff;border:1px solid var(--line-soft);border-radius:18px;padding:22px;margin-bottom:20px}
+    .art-sidebar-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+    .art-toc a{display:block;font-size:14px;color:var(--ink-2);padding:8px 0;border-bottom:1px solid var(--line-soft);transition:.2s;line-height:1.5}
+    .art-toc a:last-child{border-bottom:0}
+    .art-toc a:hover{color:var(--violet);padding-left:4px}
+    .art-toc a.active{color:var(--violet);font-weight:700;padding-left:4px;border-left:2px solid var(--violet)}
+    .art-sidebar-cta{background:linear-gradient(135deg,#6B2F8C,#8E44AD);border-radius:18px;padding:24px;color:#fff}
+    .art-sidebar-cta h4{font-size:16px;font-weight:800;margin-bottom:8px}
+    .art-sidebar-cta p{font-size:13.5px;color:rgba(255,255,255,.68);margin-bottom:18px;line-height:1.65}
+    .art-sidebar-cta a{display:block;text-align:center;background:var(--gold);color:#fff;font-weight:700;font-size:13.5px;padding:11px 16px;border-radius:999px;transition:.2s}
+    .art-sidebar-cta a:hover{background:#C9A35E}
+
+    @media(max-width:768px){.art-main{padding:48px 0 60px}.art-content{font-size:16px}}
+    @media(max-width:480px){.wrap{padding-left:16px;padding-right:16px}}
+    /* FOOTER */
+    .foot{background:#071825;color:rgba(234,242,242,.5);padding:52px 0 36px}
+    .foot-inner{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:40px}
+    .foot-brand .lk{display:flex;align-items:center;gap:14px}
+    .foot-brand .lk img{width:50px}
+    .foot-brand .lk b{font-family:var(--f);color:#fff;font-size:18px;font-weight:600;line-height:1.3}
+    .foot-brand p{font-size:13px;line-height:1.75;max-width:210px;margin-top:12px}
+    .foot-social{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .foot-social a{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;transition:.25s}
+    .foot-social a:hover{background:var(--teal);border-color:var(--teal);transform:translateY(-3px)}
+    .foot-col h4{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,242,242,.3);margin-bottom:14px}
+    .foot-col a{display:block;font-size:13.5px;padding:4px 0;color:rgba(234,242,242,.5);transition:color .2s}
+    .foot-col a:hover{color:var(--glow)}
+    .foot-bar{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px}
+    .foot-bar a{color:rgba(234,242,242,.28);transition:color .2s}
+    .foot-bar a:hover{color:var(--glow)}
+    @media(max-width:1100px){.foot-inner{grid-template-columns:1fr 1fr;gap:28px}}
+    @media(max-width:580px){.foot-inner{grid-template-columns:1fr}}
+
+    /* SHARE FAB */
+    .art-share-fab{position:fixed;bottom:24px;right:22px;z-index:200;display:flex;flex-direction:column-reverse;align-items:center;gap:10px}
+    .art-share-main{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#12A89E,#0B7A75);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(14,138,132,.45);transition:.25s;flex-shrink:0}
+    .art-share-main:hover{transform:scale(1.08)}
+    .art-share-opts{display:flex;flex-direction:column;gap:9px;align-items:center;opacity:0;transform:translateY(12px) scale(.92);pointer-events:none;transition:opacity .22s,transform .22s}
+    .art-share-opts.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+    .art-share-item{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18);transition:transform .18s,box-shadow .18s;text-decoration:none;border:none;position:relative}
+    .art-share-item:hover{transform:scale(1.12);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+    .art-share-fb{background:#1877F2;color:#fff}
+    .art-share-line{background:#06C755;color:#fff}
+    .art-share-copy{background:#fff;color:var(--ink);border:1.5px solid var(--line-soft)!important}
+    .art-share-copy.copied{background:var(--teal);color:#fff;border-color:var(--teal)!important}
+    .art-share-item::after{content:attr(data-tip);position:absolute;right:54px;top:50%;transform:translateY(-50%);background:#0E2233;color:#fff;font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:.15s;pointer-events:none;font-family:var(--f)}
+    .art-share-item:hover::after{opacity:1}
+
+  /* EXTRA boxes */
+    .art-box{border-radius:16px;padding:22px 24px;margin:24px 0}
+    .art-box-teal{background:rgba(142,68,173,.07);border:1px solid rgba(142,68,173,.18)}
+    .art-box-warn{background:rgba(107,47,140,.06);border:1px solid rgba(107,47,140,.18)}
+    .art-box-gold{background:rgba(184,146,79,.08);border:1px solid rgba(184,146,79,.2)}
+    .art-box-title{font-weight:800;font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .art-box-teal .art-box-title{color:var(--violet-deep)}
+    .art-box-warn .art-box-title{color:#6B2F8C}
+    .art-box-gold .art-box-title{color:#9A7830}
+    .art-box p{margin-bottom:8px;font-size:15.5px;line-height:1.7;color:var(--ink-2)}
+    .art-box p:last-child{margin-bottom:0}
+    .art-content-img{width:100%;border-radius:16px;display:block;box-shadow:0 6px 24px rgba(14,34,51,.12);margin:8px 0 6px}
+    .art-img-caption{font-size:13px;color:var(--ink-3);text-align:center;margin-bottom:28px;font-style:italic}
+  </style>
+  <link rel="canonical" href="https://dradisak.com/knowledge/headache/migraine-food-triggers/">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dradisak.com/knowledge/headache/migraine-food-triggers/">
+  <meta property="og:title" content="อาหารที่กระตุ้นไมเกรน มีจริงหรือไม่ — คลังความรู้โรคปวดศีรษะ">
+  <meta property="og:image" content="https://dradisak.com/og-image.jpg">
+  <meta property="og:site_name" content="คลินิกรักษ์สมองหมออดิศักดิ์">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YBY1DVCF6S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YBY1DVCF6S');
+</script>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="https://dradisak.com/" class="nav-logo" aria-label="คลินิกรักษ์สมองหมออดิศักดิ์">
+      <img class="logo-full" src="/logo_header.png" alt="คลินิกรักษ์สมองหมออดิศักดิ์">
+      <img class="logo-mark" src="/logo_brain.png" alt="คลินิกรักษ์สมองหมออดิศักดิ์">
+    </a>
+    <div class="nav-links">
+      <a href="https://dradisak.com/#services">บริการของเรา</a>
+      <a href="https://dradisak.com/#why">ทำไมต้องที่นี่</a>
+      <a href="https://dradisak.com/#doctor">แพทย์ผู้ดูแล</a>
+      <a href="https://dradisak.com/#visit">สถานที่</a>
+      <div class="azq-dd" id="navDd">
+        <button type="button" class="azq-dd-toggle nav-active" id="navDdBtn">
+          คลังความรู้
+          <svg class="azq-dd-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="azq-dd-menu" id="navDdMenu">
+          <a href="../../" class="dd-active">บทความ</a>
+          <a href="https://dradisak.com/#books">หนังสือ</a>
+          <a href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener">YouTube</a>
+        </div>
+      </div>
+      <a href="https://dradisak.com/#follow">ติดตามเรา</a>
+      <a href="https://dradisak.com/#contact">ติดต่อ</a>
+      <a href="https://dradisak.com/#faq">FAQ</a>
+      <a href="/thaiazq/" class="azq-navbtn" target="_blank" rel="noopener">
+        ประเมินความจำ
+        <svg class="azq-navbtn-ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#5C3A1E" stroke-width="1.7"/><path d="M7.4 12.4l3 3 6.1-6.5" stroke="#5C3A1E" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="nav-cta-group">
+      <div class="lang-picker" id="langPicker">
+        <button class="lang-toggle" id="langToggle" aria-label="ภาษา">
+          <svg class="globe" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="langLabel">TH</span>
+          <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <button data-lang="th" class="active"><span class="flag">🇹🇭</span>ภาษาไทย</button>
+          <button data-lang="en"><span class="flag">🇬🇧</span>English</button>
+          <button data-lang="zh"><span class="flag">🇨🇳</span>中文</button>
+          <button data-lang="ja"><span class="flag">🇯🇵</span>日本語</button>
+          <button data-lang="de"><span class="flag">🇩🇪</span>Deutsch</button>
+        </div>
+      </div>
+    <button class="burger" id="burger" aria-label="เมนู"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://dradisak.com/#services">บริการของเรา</a>
+  <a href="https://dradisak.com/#why">ทำไมต้องที่นี่</a>
+  <a href="https://dradisak.com/#doctor">แพทย์ผู้ดูแล</a>
+  <a href="https://dradisak.com/#visit">สถานที่</a>
+  <div class="azq-mgroup">
+    <div class="azq-mgroup-title">คลังความรู้</div>
+    <a href="../../" class="azq-msub nav-active">บทความ</a>
+    <a href="https://dradisak.com/#books" class="azq-msub">หนังสือ</a>
+    <a href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener" class="azq-msub">YouTube</a>
+  </div>
+  <a href="https://dradisak.com/#follow">ติดตามเรา</a>
+  <a href="https://dradisak.com/#contact">ติดต่อ</a>
+  <a href="https://dradisak.com/#faq">FAQ</a>
+  <a href="/thaiazq/" class="mob-assess" target="_blank" rel="noopener">ประเมินความจำ <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#5C3A1E" stroke-width="1.7"/><path d="M7.4 12.4l3 3 6.1-6.5" stroke="#5C3A1E" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a href="https://m.me/250128068679567" target="_blank" rel="noopener" class="mob-cta">นัดหมายปรึกษาแพทย์</a>
+</div>
+
+<!-- ARTICLE: MIGRAINE FOOD TRIGGERS -->
+<section class="art-hero">
+  <div class="wrap">
+    <div class="art-breadcrumb">
+      <a href="https://dradisak.com/">หน้าหลัก</a><span>›</span>
+      <a href="../../">คลังความรู้</a><span>›</span>
+      <a href="../">ปวดศีรษะ</a><span>›</span>
+      <span style="color:rgba(255,255,255,.75)">อาหารกระตุ้นไมเกรน</span>
+    </div>
+    <div class="art-hero-badge">
+      <span class="badge-num">21</span>
+      ไมเกรน
+    </div>
+    <h1 class="art-hero-title">อาหารที่กระตุ้นไมเกรน มีจริงหรือไม่</h1>
+    <p class="art-hero-sub">กินอะไรได้ อะไรควรหลีกเลี่ยง รวมวิตามินและอาหารเสริมที่มีงานวิจัยสนับสนุน</p>
+    <div class="art-hero-meta">
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> อ่านประมาณ 12 นาที</span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> นพ.อดิศักดิ์ กิตติสาเรศ</span>
+    </div>
+  </div>
+</section>
+
+<main class="art-main">
+  <div class="wrap">
+    <div class="art-layout">
+      <article class="art-content">
+
+<div class="art-opening-quote">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--violet)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+<p>"หมอครับ เป็นไมเกรนห้ามกินช็อกโกแลตจริงไหม?" "กาแฟทำให้ไมเกรนเป็นมากขึ้นหรือเปล่า?" "ต้องงดชีส งดผงชูรส งดของหมักดองทั้งหมดเลยไหม?" "แล้วมีวิตามินอะไรที่ช่วยป้องกันไมเกรนได้จริงหรือเปล่า?"</p>
+</div>
+
+<p>คำถามเหล่านี้เป็นคำถามที่ผู้ป่วยไมเกรนถามบ่อยมากในห้องตรวจ หลายคนพยายามค้นหาว่า "อาหารชนิดไหนเป็นตัวการ" และเริ่มงดอาหารทีละอย่าง บางคนถึงกับงดกาแฟ งดช็อกโกแลต งดชีส งดผลไม้ หรือแม้แต่งดอาหารทะเล ทั้งที่ไม่แน่ใจว่าอาหารเหล่านั้นเป็นสาเหตุจริงหรือไม่</p>
+
+<p>ความจริงคือ <strong>อาหารบางชนิดอาจกระตุ้นไมเกรนได้ในผู้ป่วยบางคน แต่ไม่มีอาหารชนิดใดที่ทำให้ผู้ป่วยไมเกรนทุกคนมีอาการ</strong></p>
+
+<p>ในทางกลับกัน สิ่งที่แพทย์พบได้บ่อยกว่าคือ ผู้ป่วยอดอาหาร ดื่มน้ำน้อย นอนดึก หรือมีความเครียด ซึ่งล้วนเป็นปัจจัยกระตุ้นไมเกรนที่สำคัญกว่าการรับประทานอาหารบางชนิดเสียอีก ดังนั้น การดูแลเรื่องอาหารจึงไม่ใช่การงดทุกอย่าง แต่คือการเรียนรู้ว่าร่างกายของเราตอบสนองต่ออาหารชนิดใด และเลือกรับประทานอย่างเหมาะสม</p>
+
+<h2 class="art-section-head">อาหารทำให้เกิดไมเกรนได้อย่างไร?</h2>
+<p>ไมเกรนเป็นโรคของระบบประสาทที่เกิดจากหลายปัจจัยร่วมกัน ทั้งพันธุกรรม การเปลี่ยนแปลงของสารสื่อประสาท ฮอร์โมน ความเครียด การนอน และสิ่งแวดล้อม <strong>อาหารเป็นเพียง "ตัวกระตุ้น" (Trigger) ไม่ใช่ "สาเหตุ" ของโรค</strong></p>
+
+<div class="art-box art-box-teal">
+<div class="art-box-title">💡 เปรียบเหมือนแก้วน้ำที่เต็มล้น</div>
+<p>ลองนึกภาพว่าสมองของผู้ป่วยไมเกรนเปรียบเสมือนแก้วน้ำ ความเครียด การอดนอน ฮอร์โมน การอดอาหาร และอาหารบางชนิด ต่างก็เป็นน้ำที่ค่อย ๆ เติมลงในแก้ว เมื่อปัจจัยหลายอย่างเกิดขึ้นพร้อมกันจนแก้วเต็ม ไมเกรนก็จะกำเริบ ดังนั้น หากคืนก่อนอดนอน เช้าวันรุ่งขึ้นไม่รับประทานอาหาร และดื่มไวน์ในตอนเย็น โอกาสเกิดไมเกรนย่อมมากกว่าการรับประทานไวน์เพียงอย่างเดียว</p>
+</div>
+
+<p class="art-emph">ไม่มีอาหารชนิดใดที่ผู้ป่วยไมเกรนทุกคนต้องงด — แนวทางการรักษาในปัจจุบันจึงไม่แนะนำให้งดอาหารหลายชนิดตั้งแต่แรก แต่แนะนำให้สังเกตว่ามีอาหารชนิดใดที่สัมพันธ์กับอาการของตนเองจริง</p>
+
+<h2 class="art-section-head">อาหารที่อาจกระตุ้นไมเกรน</h2>
+
+<div class="art-num-section"><div class="art-num-badge">1</div><h3>เครื่องดื่มแอลกอฮอล์</h3></div>
+<p>แอลกอฮอล์เป็นอาหารที่มีข้อมูลสนับสนุนมากที่สุดชนิดหนึ่งว่าอาจกระตุ้นไมเกรนได้ โดยเฉพาะ</p>
+<ul class="art-example-list">
+<li>ไวน์แดง และไวน์ขาว</li>
+<li>เบียร์ และแชมเปญ</li>
+<li>สุราบางชนิด</li>
+</ul>
+<p>สาเหตุอาจเกิดจากหลายปัจจัยร่วมกัน เช่น การขยายตัวของหลอดเลือด ภาวะขาดน้ำ การรบกวนคุณภาพการนอน และสารประกอบบางชนิดในเครื่องดื่ม ผู้ป่วยหลายคนสังเกตว่าไมเกรนเกิดขึ้นภายในไม่กี่ชั่วโมงหลังดื่มแอลกอฮอล์ อย่างไรก็ตาม บางคนสามารถดื่มได้โดยไม่มีอาการ ดังนั้นจึงไม่จำเป็นต้องงดทุกคน</p>
+
+<div class="art-num-section"><div class="art-num-badge">2</div><h3>คาเฟอีน</h3></div>
+<p>คาเฟอีนเป็นหนึ่งในเรื่องที่สร้างความสับสนมากที่สุด หลายคนคิดว่า "กาแฟทำให้ไมเกรน" แต่ในความเป็นจริง คาเฟอีนมีได้ทั้งข้อดีและข้อเสีย</p>
+<ul class="art-example-list">
+<li><strong>ข้อดี:</strong> ช่วยเพิ่มประสิทธิภาพของยาแก้ปวดบางชนิด บรรเทาอาการไมเกรนในผู้ป่วยบางราย และผู้ป่วยบางคนรู้สึกดีขึ้นหลังดื่มกาแฟเมื่อเริ่มมีอาการ</li>
+<li><strong>ข้อเสีย:</strong> ดื่มมากเกินไปหรือดื่มไม่สม่ำเสมออาจกระตุ้นไมเกรน และการหยุดกาแฟทันทีในผู้ที่ดื่มเป็นประจำ อาจเกิด Caffeine withdrawal headache</li>
+</ul>
+<p>หากคุณดื่มกาแฟวันละ 1 แก้วเป็นประจำและไม่เคยมีอาการ ก็ไม่จำเป็นต้องเลิก แต่ไม่ควรเพิ่มปริมาณกาแฟมากขึ้นเพื่อหวังรักษาไมเกรน</p>
+
+<div class="art-num-section"><div class="art-num-badge">3</div><h3>ช็อกโกแลต</h3></div>
+<p>ช็อกโกแลตมักถูกกล่าวหาว่าเป็นตัวกระตุ้นไมเกรน แต่การศึกษาหลายฉบับกลับพบข้อเท็จจริงที่น่าสนใจ — ผู้ป่วยจำนวนมากเริ่มอยากรับประทานของหวานหรือช็อกโกแลต<strong>ก่อนเกิดไมเกรนหลายชั่วโมง</strong> จึงเป็นไปได้ว่า <strong>ความอยากช็อกโกแลตอาจเป็นอาการเตือนของไมเกรน</strong> มากกว่าช็อกโกแลตเป็นสาเหตุของไมเกรน หากรับประทานช็อกโกแลตแล้วไม่เคยมีอาการ ก็ไม่จำเป็นต้องงด</p>
+
+<div class="art-num-section"><div class="art-num-badge">4</div><h3>ชีสและอาหารหมักบ่ม</h3></div>
+<p>อาหารประเภทนี้ เช่น ชีสที่ผ่านการบ่ม ซาลามี แฮม เปปเปอโรนี และไส้กรอกบางชนิด มีสาร <strong>Tyramine</strong> ซึ่งอาจกระตุ้นไมเกรนในผู้ป่วยบางราย อย่างไรก็ตาม ผู้ป่วยส่วนใหญ่สามารถรับประทานได้ตามปกติ จึงไม่ควรงดทั้งหมดตั้งแต่แรก</p>
+
+<div class="art-num-section"><div class="art-num-badge">5</div><h3>อาหารที่มีผงชูรส (MSG) และเนื้อสัตว์แปรรูป</h3></div>
+<p>หลายคนเชื่อว่าผงชูรสเป็นสาเหตุของไมเกรน แต่ข้อมูลทางการแพทย์ในปัจจุบันยังไม่พบหลักฐานชัดเจนว่า MSG ทำให้เกิดไมเกรนในผู้ป่วยส่วนใหญ่ สำหรับเนื้อสัตว์แปรรูป เช่น ไส้กรอก เบคอน แฮม ฮอตดอก อาจมีไนเตรตหรือไนไตรต์ ซึ่งอาจกระตุ้นไมเกรนในผู้ป่วยบางราย นอกจากนี้ สารให้ความหวานแทนน้ำตาล โดยเฉพาะ <strong>Aspartame</strong> มีรายงานว่าสามารถกระตุ้นไมเกรนได้ในผู้ป่วยบางราย แต่หลักฐานยังไม่เพียงพอที่จะบอกว่าผู้ป่วยไมเกรนทุกคนควรงด</p>
+
+<h2 class="art-section-head">สิ่งที่สำคัญกว่าอาหาร: การอดอาหารและการขาดน้ำ</h2>
+
+<div class="art-box art-box-warn">
+<div class="art-box-title">⚠️ ระวัง: อดอาหารคือตัวกระตุ้นที่พบบ่อยกว่าการแพ้อาหาร</div>
+<p>ในฐานะแพทย์ประสาทวิทยา สิ่งที่ผมพบในห้องตรวจบ่อยกว่าการแพ้อาหาร คือผู้ป่วยไม่รับประทานอาหารตรงเวลา เช่น ไม่กินอาหารเช้า ทำงานจนลืมกินข้าว ลดน้ำหนักแบบอดอาหาร หรือทำ Intermittent Fasting แล้วไมเกรนกำเริบ เมื่อระดับน้ำตาลในเลือดลดลง สมองจะตอบสนองต่อความเครียดได้ง่ายขึ้น และกระตุ้นให้เกิดไมเกรน สำหรับผู้ป่วยจำนวนมาก การรับประทานอาหารให้ตรงเวลามีประโยชน์มากกว่าการงดอาหารหลายชนิดเสียอีก</p>
+</div>
+
+<p>ภาวะขาดน้ำเป็นอีกสาเหตุหนึ่งที่พบได้บ่อยมาก หลายคนมีอาการในวันที่อากาศร้อน เดินทาง ออกกำลังกาย หรือทำงานจนลืมดื่มน้ำ การขาดน้ำเพียงเล็กน้อยก็อาจทำให้สมองไวต่อการกระตุ้นมากขึ้น คำแนะนำง่าย ๆ คือ</p>
+<ul class="art-example-list">
+<li>ดื่มน้ำให้เพียงพอตลอดวัน อย่ารอให้กระหายน้ำแล้วค่อยดื่ม</li>
+<li>หากออกกำลังกายหรืออยู่กลางแจ้ง ควรดื่มน้ำเพิ่ม</li>
+<li>หลีกเลี่ยงการดื่มแอลกอฮอล์ในปริมาณมากโดยไม่ดื่มน้ำร่วมด้วย</li>
+</ul>
+<p>ผู้ป่วยหลายคนพบว่า เพียงแค่ปรับพฤติกรรมการดื่มน้ำ ก็ช่วยลดจำนวนครั้งของไมเกรนได้อย่างชัดเจน</p>
+
+<h2 class="art-section-head">จะรู้ได้อย่างไรว่าอาหารอะไรเป็นตัวกระตุ้นของเรา?</h2>
+<p>วิธีที่ดีที่สุดคือ <strong>การจด Migraine Diary</strong> เพราะการคาดเดาจากความรู้สึกเพียงอย่างเดียวมักไม่แม่นยำ ผู้ป่วยจำนวนไม่น้อยเข้าใจว่าตนเองแพ้อาหารบางชนิด แต่เมื่อจดบันทึกจริงกลับพบว่าสิ่งที่เกิดขึ้นก่อนมีอาการคือการอดนอน ความเครียด หรือการอดอาหาร มากกว่าตัวอาหารเอง</p>
+<p>ควรจดข้อมูล เช่น</p>
+<ul class="art-example-list">
+<li>วันที่และเวลาที่เริ่มปวดศีรษะ ความรุนแรงของอาการ ระยะเวลาที่ปวด</li>
+<li>อาหารและเครื่องดื่มที่รับประทานในช่วง 24 ชั่วโมงก่อนหน้า</li>
+<li>เวลานอนและเวลาตื่น ระดับความเครียด การออกกำลังกาย</li>
+<li>การดื่มแอลกอฮอล์ ปริมาณคาเฟอีน การใช้ยาแก้ปวด</li>
+<li>รอบเดือน (ในผู้หญิง)</li>
+</ul>
+<p>เมื่อจดต่อเนื่องประมาณ <strong>2–3 เดือน</strong> มักจะเริ่มเห็นรูปแบบของปัจจัยกระตุ้นได้ชัดเจนกว่าการอาศัยความจำ นี่เป็นเหตุผลที่แพทย์มักแนะนำให้ผู้ป่วยจดบันทึกก่อนตัดสินใจงดอาหารชนิดใดชนิดหนึ่ง</p>
+
+<h2 class="art-section-head">ควรรับประทานอาหารแบบไหนจึงดีต่อผู้ป่วยไมเกรน?</h2>
+<p>แม้จะไม่มี "อาหารรักษาไมเกรน" โดยตรง แต่การรับประทานอาหารที่สมดุลช่วยให้สมองทำงานได้อย่างมีประสิทธิภาพ และลดโอกาสเกิดไมเกรนได้ หลักการง่าย ๆ ได้แก่</p>
+<ul class="art-example-list">
+<li>รับประทานอาหารให้ตรงเวลา ไม่อดอาหาร</li>
+<li>ดื่มน้ำให้เพียงพอ</li>
+<li>รับประทานผักและผลไม้หลากหลายสี</li>
+<li>เลือกโปรตีนคุณภาพดี เช่น ปลา ไก่ ไข่ ถั่ว</li>
+<li>เลือกธัญพืชไม่ขัดสี ลดอาหารแปรรูปและอาหารที่มีน้ำตาลสูง</li>
+<li>จำกัดแอลกอฮอล์หากสังเกตว่าเป็นตัวกระตุ้น</li>
+<li>ดื่มกาแฟในปริมาณสม่ำเสมอหากไม่มีข้อห้าม</li>
+</ul>
+<p>เป้าหมายไม่ใช่การรับประทานอาหารแบบเคร่งครัด แต่คือการสร้างรูปแบบการกินที่สม่ำเสมอและสมดุล</p>
+
+<h2 class="art-section-head">วิตามินและอาหารเสริมช่วยป้องกันไมเกรนได้หรือไม่?</h2>
+<p>คำตอบคือ มีบางชนิดที่มีหลักฐานทางการแพทย์สนับสนุนว่าสามารถช่วยลดความถี่ของไมเกรนได้ในผู้ป่วยบางราย อย่างไรก็ตาม <strong>อาหารเสริมไม่ใช่ยารักษาไมเกรน</strong> และไม่สามารถใช้ทดแทนยาป้องกันในผู้ที่มีข้อบ่งชี้ได้ โดยทั่วไปควรทดลองรับประทานต่อเนื่องประมาณ <strong>2–3 เดือน</strong> ก่อนประเมินผล</p>
+
+<div class="art-num-section"><div class="art-num-badge">1</div><h3>Magnesium</h3></div>
+<p>Magnesium เป็นอาหารเสริมที่มีข้อมูลสนับสนุนมากที่สุดชนิดหนึ่งในการป้องกันไมเกรน เชื่อว่าผู้ป่วยไมเกรนบางรายมีระดับแมกนีเซียมในสมองต่ำกว่าปกติ และการเสริมแมกนีเซียมช่วยลดการกระตุ้นของเซลล์ประสาทที่เกี่ยวข้องกับไมเกรน อาจเหมาะกับผู้ที่เป็นไมเกรนร่วมกับประจำเดือน มี Migraine with aura เป็นตะคริวบ่อย หรือรับประทานผักใบเขียวหรือถั่วน้อย ขนาดที่ใช้ในการศึกษาส่วนใหญ่ <strong>Elemental Magnesium 400–600 มิลลิกรัมต่อวัน</strong> ผลข้างเคียงที่อาจพบ ได้แก่ ถ่ายเหลว ปวดท้อง ท้องเสีย ผู้ป่วยโรคไตเรื้อรังควรปรึกษาแพทย์ก่อนรับประทาน และควรอ่านฉลากก่อนซื้อเนื่องจากผลิตภัณฑ์แต่ละยี่ห้อมีปริมาณ Elemental Magnesium ไม่เท่ากัน</p>
+
+<div class="art-num-section"><div class="art-num-badge">2</div><h3>Riboflavin (Vitamin B2)</h3></div>
+<p>Vitamin B2 มีข้อมูลสนับสนุนว่าช่วยเพิ่มประสิทธิภาพการสร้างพลังงานของเซลล์สมอง ซึ่งอาจช่วยลดความถี่ของไมเกรนได้ ขนาดที่ใช้ในการศึกษาส่วนใหญ่ <strong>400 มิลลิกรัมต่อวัน</strong> ควรรับประทานหลังอาหาร ข้อดีคือราคาไม่แพง ผลข้างเคียงน้อย ใช้ต่อเนื่องได้ โดยผลข้างเคียงที่พบคือปัสสาวะสีเหลืองเข้ม ซึ่งเป็นเรื่องปกติ ไม่ใช่อาการอันตราย</p>
+
+<div class="art-num-section"><div class="art-num-badge">3</div><h3>Coenzyme Q10</h3></div>
+<p>Coenzyme Q10 เป็นสารที่เกี่ยวข้องกับการสร้างพลังงานของเซลล์ เชื่อว่าในผู้ป่วยบางรายการทำงานของไมโทคอนเดรียอาจผิดปกติ และการเสริม CoQ10 อาจช่วยลดความถี่ของไมเกรนได้ ขนาดที่ใช้ในการศึกษาส่วนใหญ่ <strong>100 มิลลิกรัม วันละ 3 ครั้ง (รวมประมาณ 300 มิลลิกรัมต่อวัน)</strong> ผลข้างเคียงพบไม่บ่อย เช่น คลื่นไส้ ปวดท้อง ถ่ายเหลว ข้อเสียคือราคาสูงกว่าวิตามินชนิดอื่น</p>
+
+<div class="art-num-section"><div class="art-num-badge">4</div><h3>Melatonin</h3></div>
+<p>มีการศึกษาพบว่า Melatonin อาจช่วยลดความถี่ของไมเกรน โดยเฉพาะในผู้ที่มีปัญหานอนไม่หลับร่วมด้วย ขนาดที่ใช้ในการศึกษาส่วนใหญ่ <strong>3 มิลลิกรัม ก่อนนอน</strong> ผลข้างเคียง ได้แก่ ง่วงตอนเช้า ฝันมากขึ้น เวียนศีรษะเล็กน้อย Melatonin ไม่ใช่ยานอนหลับ และไม่ควรซื้อรับประทานต่อเนื่องเองหากมีปัญหานอนไม่หลับเรื้อรัง เพราะอาจมีสาเหตุอื่นที่ต้องได้รับการรักษา</p>
+
+<div class="art-num-section"><div class="art-num-badge">5</div><h3>Vitamin D</h3></div>
+<p>มีการศึกษาพบว่าผู้ป่วยไมเกรนบางรายมีระดับวิตามินดีต่ำกว่าปกติ ผลการศึกษาการเสริมวิตามินดียังไม่สม่ำเสมอ — บางการศึกษาพบว่าช่วยลดจำนวนวันที่ปวดศีรษะได้ แต่บางการศึกษาไม่พบความแตกต่าง จึงยังไม่มีหลักฐานเพียงพอที่จะแนะนำให้ผู้ป่วยไมเกรนทุกคนรับประทาน อย่างไรก็ตาม หากตรวจพบว่าขาดวิตามินดี แพทย์อาจแนะนำให้รับประทานเพื่อรักษาภาวะดังกล่าว</p>
+<div class="art-box art-box-warn">
+<div class="art-box-title">⚠️ ไม่ควรซื้อวิตามินดีขนาดสูงรับประทานเอง</div>
+<p>เพราะอาจทำให้ระดับแคลเซียมในเลือดสูง เกิดนิ่วในไต หรือมีผลต่อไตได้</p>
+</div>
+
+<div class="art-num-section"><div class="art-num-badge">6</div><h3>Omega-3 (Fish Oil)</h3></div>
+<p>Omega-3 เป็นกรดไขมันที่มีบทบาทในการลดการอักเสบของร่างกาย มีงานวิจัยบางส่วนพบว่าอาจช่วยลดความถี่หรือความรุนแรงของไมเกรนในผู้ป่วยบางราย แต่ผลการศึกษายังไม่สม่ำเสมอ <strong>จึงยังไม่ถือเป็นอาหารเสริมมาตรฐานในการรักษาไมเกรน</strong> หากรับประทานเพื่อสุขภาพหัวใจหรือได้รับคำแนะนำจากแพทย์ ก็สามารถรับประทานได้ตามความเหมาะสม ผู้ที่รับประทานยาต้านการแข็งตัวของเลือดหรือยาต้านเกล็ดเลือด ควรปรึกษาแพทย์ก่อนใช้ในขนาดสูง</p>
+
+<div class="art-num-section"><div class="art-num-badge">7</div><h3>Butterbur — ไม่แนะนำในปัจจุบัน</h3></div>
+<p>Butterbur เป็นสมุนไพรที่เคยได้รับความนิยมในการป้องกันไมเกรน แต่ปัจจุบันหลายสมาคมวิชาชีพไม่แนะนำให้ใช้เป็นประจำ เนื่องจากผลิตภัณฑ์บางชนิดอาจมีสาร Pyrrolizidine alkaloids (PA) ซึ่งสามารถทำให้เกิดตับอักเสบ ตับวาย และพิษต่อตับได้ แม้ว่าจะมีผลิตภัณฑ์ที่กำจัดสารดังกล่าวแล้ว แต่การควบคุมคุณภาพในแต่ละประเทศแตกต่างกัน จึงควรปรึกษาแพทย์ก่อนตัดสินใจซื้อ</p>
+
+<h2 class="art-section-head">จะเลือกอาหารเสริมอย่างไร?</h2>
+<p>หากต้องการลองใช้อาหารเสริมเพื่อช่วยป้องกันไมเกรน และไม่มีข้อห้ามทางการแพทย์ โดยทั่วไปสามารถพิจารณาได้ดังนี้</p>
+<ul class="art-example-list">
+<li><strong>ตัวเลือกแรก:</strong> Magnesium และ Vitamin B2 (Riboflavin) — มีหลักฐานสนับสนุนค่อนข้างดี ราคาไม่สูง ผลข้างเคียงน้อย ใช้ได้ในผู้ป่วยส่วนใหญ่</li>
+<li><strong>ตัวเลือกที่น่าสนใจ:</strong> Coenzyme Q10 — เหมาะสำหรับผู้ที่ต้องการลองอาหารเสริมเพิ่มเติม</li>
+<li><strong>เหมาะกับบางคน:</strong> Melatonin — สำหรับผู้ที่นอนหลับยาก หลับไม่สนิท หรือไมเกรนสัมพันธ์กับการนอน</li>
+<li><strong>ยังไม่ใช่มาตรฐาน:</strong> Vitamin D และ Omega-3 — อาจมีประโยชน์แต่ยังไม่มีหลักฐานเพียงพอ</li>
+<li><strong>ไม่แนะนำ:</strong> Butterbur — ข้อกังวลเรื่องความปลอดภัยมากกว่าประโยชน์</li>
+</ul>
+
+<div class="art-box art-box-teal">
+<div class="art-box-title">💡 ไม่จำเป็นต้องรับประทานหลายชนิดพร้อมกัน</div>
+<p>หลายคนซื้ออาหารเสริมหลายชนิดมารับประทานพร้อมกัน เพราะคิดว่ายิ่งมากยิ่งดี แต่ในความเป็นจริงยังไม่มีหลักฐานชัดเจนว่าการรับประทานหลายชนิดพร้อมกันให้ผลดีกว่า และยังเพิ่มค่าใช้จ่าย โอกาสเกิดผลข้างเคียง และทำให้ไม่ทราบว่าผลที่ดีขึ้นเกิดจากอาหารเสริมชนิดใด โดยทั่วไปควรเริ่มทีละชนิดและติดตามอาการประมาณ 2–3 เดือน</p>
+</div>
+
+<h2 class="art-section-head">คำถามที่พบบ่อย (FAQ)</h2>
+
+<div class="art-num-section"><div class="art-num-badge">Q</div><h3>ถ้าเป็นไมเกรน ต้องงดกาแฟตลอดชีวิตหรือไม่?</h3></div>
+<p>ไม่จำเป็น หากดื่มกาแฟในปริมาณสม่ำเสมอและไม่เคยมีอาการหลังดื่ม ก็ไม่จำเป็นต้องเลิก สิ่งที่ควรหลีกเลี่ยงคือดื่มมากเกินไป ดื่มไม่เป็นเวลา หรือหยุดกาแฟทันทีหลังดื่มเป็นประจำ</p>
+
+<div class="art-num-section"><div class="art-num-badge">Q</div><h3>การอดอาหารทำให้ไมเกรนจริงหรือไม่?</h3></div>
+<p>จริง และเป็นปัจจัยที่พบได้บ่อยกว่าการแพ้อาหารเสียอีก การรับประทานอาหารให้ตรงเวลามีความสำคัญมากกว่าการงดอาหารหลายชนิด</p>
+
+<div class="art-num-section"><div class="art-num-badge">Q</div><h3>อาหารเสริมต้องรับประทานนานแค่ไหน?</h3></div>
+<p>โดยทั่วไปควรทดลองประมาณ <strong>2–3 เดือน</strong> หากรับประทานเพียง 1–2 สัปดาห์แล้วหยุด มักเร็วเกินกว่าจะประเมินผลได้ หากอาการดีขึ้นต่อเนื่อง อาจพิจารณาลดหรือหยุดภายใต้คำแนะนำของแพทย์ ไม่จำเป็นต้องรับประทานตลอดชีวิต</p>
+
+<div class="art-num-section"><div class="art-num-badge">Q</div><h3>ผู้ป่วยตั้งครรภ์สามารถรับประทานอาหารเสริมได้หรือไม่?</h3></div>
+<p>ควรปรึกษาแพทย์ก่อนทุกครั้ง แม้อาหารเสริมหลายชนิดจะมีความปลอดภัย แต่การตั้งครรภ์เป็นภาวะที่ต้องพิจารณาเป็นรายบุคคล</p>
+
+<div class="art-num-section"><div class="art-num-badge">Q</div><h3>ถ้าใช้ยาป้องกันไมเกรนอยู่ ยังรับประทานอาหารเสริมได้หรือไม่?</h3></div>
+<p>ในผู้ป่วยส่วนใหญ่สามารถรับประทานร่วมกันได้ และในเวชปฏิบัติ แพทย์หลายท่านใช้ร่วมกับยาป้องกันไมเกรนเป็นประจำ อย่างไรก็ตาม ควรแจ้งแพทย์ทุกครั้งว่ากำลังรับประทานอาหารเสริมชนิดใดอยู่ เพราะบางชนิดอาจมีปฏิกิริยากับยาหรือไม่เหมาะกับโรคประจำตัวบางอย่าง</p>
+
+<div class="art-summary-box" style="background:linear-gradient(135deg,#3D1A52,#6B2F8C);color:#fff;border-radius:20px;padding:32px 30px;margin:40px 0">
+<h3 style="font-size:20px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px">📋 สรุปสิ่งที่ควรรู้</h3>
+<ul style="list-style:none;margin:0;padding:0">
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#D9B8E8;font-weight:800">✓</span>อาหารบางชนิดอาจกระตุ้นไมเกรนได้จริง แต่ไม่มีอาหารชนิดใดที่ผู้ป่วยทุกคนจำเป็นต้องงด สิ่งสำคัญคือการสังเกตว่าร่างกายของตนเองตอบสนองต่ออาหารชนิดใด และจด Migraine Diary เป็นเวลา 2–3 เดือนก่อนตัดสินใจงดอาหารชนิดใด</li>
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#D9B8E8;font-weight:800">✓</span>การรับประทานอาหารให้ตรงเวลา ดื่มน้ำให้เพียงพอ และดูแลสุขภาพโดยรวม มีความสำคัญต่อการป้องกันไมเกรนมากกว่าการงดอาหารหลายชนิดโดยไม่มีเหตุผล</li>
+<li style="padding:7px 0 7px 28px;position:relative;font-size:15.5px;line-height:1.7;opacity:.95"><span style="position:absolute;left:0;color:#D9B8E8;font-weight:800">✓</span>สำหรับอาหารเสริม Magnesium และ Vitamin B2 มีหลักฐานสนับสนุนมากที่สุด ขณะที่ CoQ10 และ Melatonin อาจมีประโยชน์ในผู้ป่วยบางราย หากอาการรบกวนการใช้ชีวิต ควรปรึกษาแพทย์เพื่อพิจารณาการรักษาที่เหมาะสม</li>
+</ul>
+</div>
+
+<div class="art-signature">
+  <div class="art-sig-avatar"><svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="rgba(142,68,173,.12)"/><path d="M22 12a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 14c-5.5 0-10 2.5-10 5.5V33h20v-1.5c0-3-4.5-5.5-10-5.5z" fill="var(--violet)"/></svg></div>
+  <div>
+    <div class="art-sig-name">นพ.อดิศักดิ์ กิตติสาเรศ</div>
+    <div class="art-sig-role">อายุรแพทย์สาขาประสาทวิทยา — คลินิกรักษ์สมอง</div>
+  </div>
+</div>
+
+<div class="art-back-wrap">
+  <a href="../" class="art-back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> กลับไปคลังความรู้ปวดศีรษะ</a>
+</div>
+      </article>
+      <aside class="art-sidebar">
+        <div class="art-sidebar-box">
+          <div class="art-sidebar-title">บทความในหมวดนี้</div>
+          <nav class="art-toc">
+<span style="display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:10px 0 2px;margin-top:6px">🤕 ปวดศีรษะ</span>
+<a href="/knowledge/headache/tension-headache/">1. ปวดหัวจากความเครียด (Tension-Type Headache)</a>
+<a href="/knowledge/headache/daily-headache/">2. ปวดหัวทุกวัน...แน่ใจหรือว่าเป็นไมเกรน?</a>
+<span style="display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:10px 0 2px;margin-top:6px">⚡ ไมเกรน</span>
+<a href="/knowledge/headache/migraine-or-not/">3. ปวดหัวแบบนี้...ไมเกรนหรือเปล่า</a>
+<a href="/knowledge/headache/migraine-triggers/">4. 12 สิ่งกระตุ้นไมเกรนที่หลายคนไม่เคยรู้</a>
+<a href="/knowledge/headache/painkiller-frequency/">5. ยาแก้ปวดกินบ่อยแค่ไหน</a>
+<a href="/knowledge/headache/when-to-start-prevention/">6. ปวดไมเกรนบ่อยแค่ไหน...ถึงควรเริ่มยาป้องกัน</a>
+<a href="/knowledge/headache/danger-signs-headache/">7. เมื่อไหร่ปวดหัวเป็นสัญญาณอันตรายของสมอง</a>
+<a href="/knowledge/headache/migraine-curable/">8. ไมเกรนรักษาหายไหม?</a>
+<a href="/knowledge/headache/migraine-acute-medications/">9. ยารักษาอาการปวดไมเกรนมีกี่ชนิด</a>
+<a href="/knowledge/headache/migraine-preventive-medications/">10. ยาป้องกันไมเกรนมีกี่ชนิด</a>
+<a href="/knowledge/headache/botox-for-migraine/">11. โบท็อกซ์รักษาไมเกรน คืออะไร</a>
+<a href="/knowledge/headache/anti-cgrp/">12. ยากลุ่ม Anti-CGRP</a>
+<a href="/knowledge/headache/migraine-dizziness/">13. ไมเกรนทำให้เวียนหัวได้หรือไม่</a>
+<a href="/knowledge/headache/migraine-aura/">14. Aura คืออะไร</a>
+<a href="/knowledge/headache/migraine-stroke-link/">15. ไมเกรนกับโรคหลอดเลือดสมองเกี่ยวข้องกันไหม</a>
+<a href="/knowledge/headache/migraine-women-menstrual/">16. ไมเกรนในผู้หญิง ทำไมช่วงมีประจำเดือนถึงปวดมากขึ้น</a>
+<a href="/knowledge/headache/sleep-and-migraine/">17. การนอนกับไมเกรน</a>
+<a href="/knowledge/headache/migraine-elderly/">18. ไมเกรนในผู้สูงอายุ ต่างจากคนอายุน้อยอย่างไร</a>
+<a href="/knowledge/headache/migraine-children/">19. ไมเกรนในเด็ก ปวดหัวไม่ใช่เรื่องเล็ก</a>
+<a href="/knowledge/headache/exercise-and-migraine/">20. ออกกำลังกายช่วยไมเกรนได้ไหม</a>
+<a href="/knowledge/headache/migraine-food-triggers/" class="active">21. อาหารที่กระตุ้นไมเกรน มีจริงหรือไม่</a>
+          </nav>
+        </div>
+        <div class="art-sidebar-cta">
+          <h4>มีอาการปวดหัวกังวลใจ?</h4>
+          <p>นัดหมายปรึกษาแพทย์เฉพาะทางประสาทวิทยา<br>เพื่อตรวจวินิจฉัยและรักษาอย่างถูกต้อง</p>
+          <a href="https://m.me/250128068679567" target="_blank" rel="noopener">นัดหมายเลย →</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <p>คลินิกเฉพาะทางด้านระบบประสาทและสุขภาพสมอง โดย นพ.อดิศักดิ์ กิตติสาเรศ — 10 ปีแห่งความเชื่อมั่น ดูแลผู้ป่วยทางระบบประสาทในจังหวัดเชียงใหม่ ตั้งแต่ปี 2016</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/share/1JFowoTzjH/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3.5 1.5-3.5 3.5V11H8v3h2.5v7h3v-7H16l.5-3h-3V9.5C13.5 9 13.7 9 14 9Z"/></svg></a>
+          <a href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 7.5c-.2-1-.9-1.7-1.9-2C17.8 5 12 5 12 5s-5.8 0-7.6.5c-1 .3-1.7 1-1.9 2C2 9.3 2 12 2 12s0 2.7.5 4.5c.2 1 .9 1.7 1.9 2C6.2 19 12 19 12 19s5.8 0 7.6-.5c1-.3 1.7-1 1.9-2C22 14.7 22 12 22 12s0-2.7-.5-4.5ZM10 15V9l5 3-5 3Z"/></svg></a>
+          <a href="https://lin.ee/OUNz8ob" target="_blank" rel="noopener" aria-label="LINE"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 4 3.6 7.3 8.5 7.9.3.1.8.2.9.5.1.3 0 .8 0 1.1l-.1.9c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.1-6C21.5 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8Z"/></svg></a>
+          <a href="https://m.me/250128068679567" target="_blank" rel="noopener" aria-label="Messenger"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6 2 11c0 2.8 1.4 5.3 3.6 6.9V22l3.3-1.8c1 .3 2 .4 3.1.4 5.5 0 10-4 10-9s-4.5-9.6-10-9.6Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>เว็บไซต์หลัก</h4>
+        <a href="https://dradisak.com/">หน้าแรก</a>
+        <a href="https://dradisak.com/#services">บริการของเรา</a>
+        <a href="https://dradisak.com/#doctor">แพทย์ผู้ดูแล</a>
+        <a href="https://dradisak.com/#visit">สถานที่ & เวลา</a>
+        <a href="https://dradisak.com/#faq">FAQ</a>
+      </div>
+      <div class="foot-col">
+        <h4>คลังความรู้</h4>
+        <a href="../../">บทความทั้งหมด</a>
+        <a href="/knowledge/dementia/">โรคสมองเสื่อม</a>
+        <a href="/knowledge/headache/" style="color:#4DD8D2">ปวดศีรษะ & ไมเกรน</a>
+        <a href="/knowledge/#หลอดเลือดสมอง">หลอดเลือดสมอง</a>
+        <a href="/knowledge/parkinson/">พาร์กินสัน</a>
+        <a href="/knowledge/other-neuro/">โรคระบบประสาทอื่นๆ</a>
+      </div>
+      <div class="foot-col">
+        <h4>ติดต่อ</h4>
+        <a href="https://m.me/250128068679567" target="_blank" rel="noopener">Messenger</a>
+        <a href="https://lin.ee/OUNz8ob" target="_blank" rel="noopener">LINE Official</a>
+        <a href="tel:+66932244626">093-224-4626</a>
+        <a href="https://youtube.com/@dradisakkittisares" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.facebook.com/share/1JFowoTzjH/" target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>© 2024 คลินิกรักษ์สมองหมออดิศักดิ์ · นพ.อดิศักดิ์ กิตติสาเรศ · เชียงใหม่</span>
+      <a href="https://dradisak.com/">dradisak.com</a>
+    </div>
+  </div>
+</footer>
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  const burger = document.getElementById('burger');
+  const mobMenu = document.getElementById('mobMenu');
+  burger.addEventListener('click', () => mobMenu.classList.toggle('open'));
+  mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobMenu.classList.remove('open')));
+  const navDd = document.getElementById('navDd');
+  const navDdBtn = document.getElementById('navDdBtn');
+  navDdBtn.addEventListener('click', e => { e.stopPropagation(); navDd.classList.toggle('open'); });
+  document.addEventListener('click', () => navDd.classList.remove('open'));
+  const langPicker = document.getElementById('langPicker');
+  const langToggle = document.getElementById('langToggle');
+  const langMenu = document.getElementById('langMenu');
+  const langLabel = document.getElementById('langLabel');
+  const LL = {th:'TH',en:'EN',zh:'中',ja:'JA',de:'DE'};
+  langToggle.addEventListener('click', e => { e.stopPropagation(); langPicker.classList.toggle('open'); langMenu.classList.toggle('open'); });
+  document.addEventListener('click', e => { if (!e.target.closest('#langPicker')) { langPicker.classList.remove('open'); langMenu.classList.remove('open'); } });
+  langMenu.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      document.documentElement.lang = lang;
+      langLabel.textContent = LL[lang] || lang.toUpperCase();
+      langMenu.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      langPicker.classList.remove('open'); langMenu.classList.remove('open');
+    });
+  });
+</script>
+
+<div class="art-share-fab" id="shareFab">
+  <button class="art-share-main" id="shareMain" aria-label="แชร์บทความ">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+  </button>
+  <div class="art-share-opts" id="shareOpts">
+    <a class="art-share-item art-share-copy" id="shareCopy" data-tip="คัดลอกลิงก์" role="button" tabindex="0">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </a>
+    <a class="art-share-item art-share-line" id="shareLine" data-tip="แชร์ LINE" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 40 40" fill="#fff"><path d="M20 4C11.16 4 4 10.27 4 18c0 5.27 3.3 9.86 8.27 12.44-.28 1.05-1 3.8-1.15 4.39-.18.73.27.72.57.52.23-.15 3.68-2.5 5.17-3.52.97.14 1.97.21 3 .21 8.84 0 16-6.27 16-14S28.84 4 20 4zm-4.6 17.43H12.5a.7.7 0 0 1-.7-.7v-7.9a.7.7 0 0 1 1.4 0v7.2h2.2a.7.7 0 0 1 0 1.4zm3.1 0a.7.7 0 0 1-1.4 0v-7.9a.7.7 0 0 1 1.4 0v7.9zm7.5 0a.7.7 0 0 1-.48-.19l-4.02-4.5v3.99a.7.7 0 0 1-1.4 0v-7.9a.7.7 0 0 1 1.23-.46l4.02 4.5v-3.74a.7.7 0 0 1 1.4 0v7.9a.7.7 0 0 1-.75.4z"/></svg>
+    </a>
+    <a class="art-share-item art-share-fb" id="shareFb" data-tip="แชร์ Facebook" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+  </div>
+</div>
+<script>
+  (function(){
+    const fab = document.getElementById('shareFab');
+    const main = document.getElementById('shareMain');
+    const opts = document.getElementById('shareOpts');
+    const fb = document.getElementById('shareFb');
+    const line = document.getElementById('shareLine');
+    const copy = document.getElementById('shareCopy');
+    const url = location.href;
+    main.addEventListener('click', function(e){ e.stopPropagation(); opts.classList.toggle('open'); });
+    fb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    line.href = 'https://line.me/R/msg/text/?' + encodeURIComponent(url);
+    copy.addEventListener('click', function(){
+      navigator.clipboard.writeText(url).then(function(){
+        copy.classList.add('copied');
+        copy.setAttribute('data-tip','คัดลอกแล้ว!');
+        setTimeout(function(){ copy.classList.remove('copied'); copy.setAttribute('data-tip','คัดลอกลิงก์'); }, 2200);
+      });
+    });
+    document.addEventListener('click', function(e){
+      if (!fab.contains(e.target)) opts.classList.remove('open');
+    });
+  })();
+</script>
+</body>
+</html>

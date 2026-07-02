@@ -1,13 +1,19 @@
 # คลินิกรักษ์สมองหมออดิศักดิ์ — Website Project
 
 ## ไฟล์หลัก
-- **หน้าเว็บหลัก**: `dist/home/index.html` — ไฟล์เดียว single-page website ทั้งหมด
-- **Admin Analytics**: `dist/home/admin-analytics.html` — dashboard ดูสถิติผู้เยี่ยมชม (localStorage)
+ไฟล์ที่ใช้งานจริงอยู่ที่ **root ของโปรเจกต์** (deploy ผ่าน GitHub Pages จาก repo `dradisakcm/dradisakcm.github.io` โดย serve ตรงจาก root ของ branch main — ไม่มี build process):
+- **หน้าเว็บหลัก**: `index.html` (ที่ root) — ไฟล์เดียว single-page website ทั้งหมด
+- **คลังความรู้**: `knowledge/` — บทความทั้งหมด (38 บทความ ใน `knowledge/dementia/`)
+- **หน้าแบบทดสอบสมอง (Thai AZQ)**: `thaiazq/index.html`
+- **Admin Analytics**: `admin-analytics.html` (ที่ root) — dashboard ดูสถิติผู้เยี่ยมชม (localStorage)
+- **sitemap.xml / robots.txt**: อยู่ที่ root
 - **Preview server config**: `.claude/launch.json` — รัน `npx serve -p 4200`
+
+⚠️ **อย่าแก้ไฟล์ใน `dist/`** — เคยมีโฟลเดอร์ `dist/` ที่เป็นสำเนาเก่า/ไม่ได้ใช้งานจริง (ลบไปแล้ว) ถ้าเจอโฟลเดอร์แบบนี้กลับมาอีกให้ระวัง ของจริงคือไฟล์ที่ root เท่านั้น
 
 ## วิธีรัน preview
 เปิด preview server ชื่อ `taq-app` ผ่าน Claude Code preview tools
-URL: `http://localhost:4200/dist/home/index.html`
+URL: `http://localhost:4200/index.html`
 
 ## โครงสร้างเว็บ
 - **ภาษา**: รองรับ TH / EN / ZH / JA / DE — ใช้ `data-lang` attribute + `html[lang]` CSS selector
